@@ -28,12 +28,12 @@
   --envolver-light:#FEFAE8;
   --relacionar:#27AE60;
   --relacionar-light:#E8F8EF;
-  --ofertar:#1B7FD4;
-  --ofertar-light:#E8F4FD;
+  --ofertar:#FF3B30;
+  --ofertar-light:#FFECEB;
   --fidelizar:#8E44AD;
   --fidelizar-light:#F4E8FD;
-  --humanizar:#95A5A6;
-  --humanizar-light:#F2F3F4;
+  --humanizar:#1B7FD4;
+  --humanizar-light:#E8F4FD;
 
   --r-sm:6px;
   --r-md:10px;
@@ -93,7 +93,7 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
 .hint-dourado{font-size:11px;color:#8B6914;margin-top:6px;line-height:1.5;padding:8px 12px;background:#FEF9E7;border-radius:var(--r-sm);border-left:3px solid var(--dourado)}
 
 /* ══ BOTÕES ══ */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:var(--r-md);font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all .15s}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:var(--r-md);font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:'Inter','Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',sans-serif;transition:all .15s}
 .btn-primary{background:var(--azul);color:var(--branco)}
 .btn-primary:hover{background:var(--azul-escuro)}
 .btn-secondary{background:var(--branco);color:var(--azul);border:1px solid var(--azul)}
@@ -110,7 +110,7 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
 .badge-relacionar{background:var(--relacionar-light);color:var(--relacionar)}
 .badge-ofertar{background:var(--ofertar-light);color:var(--ofertar)}
 .badge-fidelizar{background:var(--fidelizar-light);color:var(--fidelizar)}
-.badge-humanizar{background:var(--humanizar-light);color:#4A5568}
+.badge-humanizar{background:var(--humanizar-light);color:var(--humanizar)}
 
 /* ══ BADGES FUNIL ══ */
 .badge-funil{display:inline-flex;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
@@ -142,9 +142,9 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
 .objetivo-card.atrair{background:var(--atrair-light);border-color:#FDDBB8}
 .objetivo-card.envolver{background:var(--envolver-light);border-color:#FCF0A0}
 .objetivo-card.relacionar{background:var(--relacionar-light);border-color:#A9ECC6}
-.objetivo-card.ofertar{background:var(--ofertar-light);border-color:#BDE0F8}
+.objetivo-card.ofertar{background:var(--ofertar-light);border-color:#FFBDB9}
 .objetivo-card.fidelizar{background:var(--fidelizar-light);border-color:#D9B8F8}
-.objetivo-card.humanizar{background:var(--humanizar-light);border-color:#D5DBDB}
+.objetivo-card.humanizar{background:var(--humanizar-light);border-color:#BDE0F8}
 .objetivo-nome{font-size:13px;font-weight:700;margin-bottom:2px}
 .objetivo-desc{font-size:11px;color:var(--cinza);line-height:1.4}
 .objetivo-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px}
@@ -205,7 +205,7 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
 <div id="splash">
   <img id="splash-logo" src="data:image/webp;base64,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" alt="Cubo Mágico">
   <h1>Construa sua linha editorial com método, intenção e clareza.</h1>
-  <p>O Cubo Mágico é um método lógico — ele funciona independente de onde você está na sua comunicação. Você pode montar o cubo agora mesmo, produzir e distribuir. Mas os resultados reais de conexão com a sua audiência só vão acontecer quando a sua comunicação estiver alinhada com quem você é e com quem você fala.</p>
+  <p>O Cubo Mágico é um método lógico. Ele funciona independente de onde você está na sua comunicação. Você pode montar o cubo agora mesmo, produzir e distribuir. Mas os resultados reais de conexão com a sua audiência só vão acontecer quando a sua comunicação estiver alinhada com quem você é e com quem você fala.</p>
   <button class="btn-splash" onclick="entrar()">Quero montar minha linha editorial agora</button>
 </div>
 
@@ -215,7 +215,7 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
     <img id="header-logo" src="data:image/webp;base64,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" alt="Cubo Mágico" style="height:32px">
     <nav class="nav-pills">
       <button class="nav-pill active" onclick="goTo('identidade',this)">Identidade</button>
-      <button class="nav-pill" onclick="goTo('audiencia',this)">Audiência</button>
+      <button class="nav-pill" onclick="goTo('topicos',this)">Tópicos</button>
       <button class="nav-pill" onclick="goTo('cubo',this)">Montar Cubo</button>
       <button class="nav-pill" onclick="goTo('producao',this)">Produzir</button>
       <button class="nav-pill" onclick="goTo('distribuir',this)">Distribuir</button>
@@ -229,10 +229,19 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
     <div id="panel-identidade" class="panel active">
       <div class="page-header">
         <div class="page-title">Identidade Editorial</div>
-        <div class="page-sub">Quem você é como criadora — seu norte estratégico</div>
+        <div class="page-sub">Tudo sobre você e sua audiência — alimenta todos os prompts gerados</div>
       </div>
+
+      <!-- SEÇÃO: QUEM SOU EU -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <div style="height:1px;flex:1;background:var(--cinza-borda)"></div>
+        <span style="font-size:12px;font-weight:700;color:var(--azul);text-transform:uppercase;letter-spacing:1px">Quem sou eu</span>
+        <div style="height:1px;flex:1;background:var(--cinza-borda)"></div>
+      </div>
+
       <div class="hint-dourado" style="margin-bottom:20px">✨ Sua identidade editorial nasce junto do seu assunto principal — esses dois caminham juntos. Se você ainda não tem clareza sobre seu assunto principal, a Caverna pode te ajudar a construir e alinhar o seu posicionamento.</div>
-      <div class="grid-2">
+
+      <div class="grid-2" style="margin-bottom:24px">
         <div class="card">
           <div class="card-header"><span class="card-title">Sua marca</span></div>
           <div class="card-body">
@@ -278,19 +287,17 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
           </div>
         </div>
       </div>
-      <div style="margin-top:16px;display:flex;justify-content:flex-end">
-        <button class="btn btn-primary btn-lg" onclick="salvarIdentidade()">Salvar identidade →</button>
-      </div>
-    </div>
 
-    <!-- ══ PERFIL DA AUDIÊNCIA ══ -->
-    <div id="panel-audiencia" class="panel">
-      <div class="page-header">
-        <div class="page-title">Perfil da Audiência</div>
-        <div class="page-sub">Quem você fala — alimenta todos os prompts gerados</div>
+      <!-- SEÇÃO: QUEM É MINHA AUDIÊNCIA -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <div style="height:1px;flex:1;background:var(--cinza-borda)"></div>
+        <span style="font-size:12px;font-weight:700;color:var(--azul);text-transform:uppercase;letter-spacing:1px">Quem é minha audiência</span>
+        <div style="height:1px;flex:1;background:var(--cinza-borda)"></div>
       </div>
+
       <div class="hint-azul" style="margin-bottom:20px">💡 Ter certeza do seu público principal vai te dar mais chances do seu conteúdo trazer os resultados que você deseja. Use o prompt de pesquisa de audiência fora desta ferramenta para descobrir essas informações e cole aqui.</div>
-      <div class="grid-2">
+
+      <div class="grid-2" style="margin-bottom:24px">
         <div class="card">
           <div class="card-header"><span class="card-title">Quem ela é</span></div>
           <div class="card-body">
@@ -328,8 +335,55 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
           </div>
         </div>
       </div>
-      <div style="margin-top:16px;display:flex;justify-content:flex-end">
-        <button class="btn btn-primary btn-lg" onclick="salvarAudiencia()">Salvar perfil →</button>
+
+      <div style="display:flex;justify-content:flex-end">
+        <button class="btn btn-primary btn-lg" onclick="salvarIdentidade();salvarAudiencia()">💾 Salvar tudo →</button>
+      </div>
+    </div>
+
+    <!-- ══ TÓPICOS ══ -->
+    <div id="panel-topicos" class="panel">
+      <div class="page-header">
+        <div class="page-title">Tópicos</div>
+        <div class="page-sub">Os 12 assuntos estruturais da sua linha editorial</div>
+      </div>
+
+      <!-- ASSUNTO PRINCIPAL -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-header"><span class="card-title">Assunto Principal</span></div>
+        <div class="card-body">
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">Qual é o seu assunto principal?</label>
+            <textarea class="form-input" id="top-assunto" placeholder="Ex: Empreendedorismo digital para mulheres 35+" oninput="atualizarPromptTopicos()" style="min-height:60px"></textarea>
+            <div class="hint-azul" style="margin-top:8px">💡 Se você ainda não tem clareza sobre seu assunto principal, o programa <strong>12 Semanas no AR</strong> pode te ajudar a construir e alinhar toda a sua comunicação editorial e projeto digital. Fale com o suporte.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROMPT AUTOMÁTICO -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-header">
+          <span class="card-title">📋 Prompt para extrair seus tópicos</span>
+          <button class="btn btn-primary btn-sm" onclick="copiarPromptTopicos()">Copiar prompt</button>
+        </div>
+        <div class="card-body">
+          <div class="hint" style="margin-bottom:12px">Cole este prompt no Claude.ai ou ChatGPT, pegue os 12 tópicos sugeridos e cadastre-os abaixo.</div>
+          <div id="prompt-topicos-preview" style="background:var(--cinza-light);border:1px solid var(--cinza-borda);border-radius:var(--r-md);padding:14px;font-size:13px;color:var(--texto);line-height:1.8">
+            <em style="color:var(--cinza)">Digite seu assunto principal acima para gerar o prompt...</em>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 TÓPICOS -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Seus 12 Tópicos</span>
+          <button class="btn btn-primary btn-sm" onclick="salvarTopicosAssunto()">💾 Salvar</button>
+        </div>
+        <div class="card-body">
+          <div class="hint-azul" style="margin-bottom:16px">💡 Os tópicos nascem do seu assunto principal. Cole aqui os tópicos que a IA sugeriu e edite como quiser.</div>
+          <div id="topicos-lista"></div>
+        </div>
       </div>
     </div>
 
@@ -337,26 +391,57 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
     <div id="panel-cubo" class="panel">
       <div class="page-header">
         <div class="page-title">Montar o Cubo</div>
-        <div class="page-sub">Seus 12 tópicos + 6 objetivos — a estrutura da sua linha editorial</div>
+        <div class="page-sub">6 objetivos + formatos — a estrutura da sua produção de conteúdo</div>
       </div>
 
-      <!-- TÓPICOS -->
+      <!-- GERADOR DE TEMAS -->
       <div class="card" style="margin-bottom:20px">
         <div class="card-header">
-          <span class="card-title">Seus 12 Tópicos</span>
-          <button class="btn btn-ghost btn-sm" onclick="limparTopicos()">Limpar</button>
+          <span class="card-title">📋 Gerar temas por objetivo</span>
+          <button class="btn btn-primary btn-sm" id="btn-copiar-temas" onclick="copiarPromptTemas()" style="display:none">Copiar prompt</button>
         </div>
         <div class="card-body">
-          <div class="hint-azul" style="margin-bottom:16px">💡 Os tópicos nascem do seu assunto principal. Se você ainda não tem certeza sobre ele, seus tópicos podem não ficar com a comunicação 100% alinhada. Use a IA para extrair seus tópicos e cole aqui.</div>
-          <div id="topicos-lista"></div>
+          <div class="hint-azul" style="margin-bottom:14px">💡 Selecione um objetivo, copie o prompt gerado e cole na sua IA. Ela vai sugerir 1 tema para cada tópico. Depois cole os temas ao lado de cada tópico abaixo.</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="obj-temas-btns">
+            <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('atrair',this)" style="border-color:var(--atrair);color:var(--atrair)">🟠 Atrair</button>
+            <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('envolver',this)" style="border-color:#B8860B;color:#B8860B">🟡 Envolver</button>
+            <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('relacionar',this)" style="border-color:var(--relacionar);color:var(--relacionar)">🟢 Relacionar</button>
+            <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('ofertar',this)" style="border-color:var(--ofertar);color:var(--ofertar)">🔴 Ofertar</button>
+            <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('fidelizar',this)" style="border-color:var(--fidelizar);color:var(--fidelizar)">🟣 Fidelizar</button>
+            <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('humanizar',this)" style="border-color:var(--humanizar);color:var(--humanizar)">🔵 Humanizar</button>
+          </div>
+          <div id="prompt-temas-preview" style="display:none;background:var(--cinza-light);border:1px solid var(--cinza-borda);border-radius:var(--r-md);padding:14px;font-size:13px;color:var(--texto);line-height:1.8"></div>
         </div>
       </div>
 
-      <!-- RODADA DE PRODUÇÃO -->
+      <!-- TÓPICOS COM TEMA -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-header">
+          <span class="card-title">Seus Tópicos</span>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-ghost btn-sm" onclick="limparTemas()" style="color:var(--coral)">🗑️ Limpar temas</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:8px;padding:0 4px">
+            <span style="font-size:11px;font-weight:600;color:var(--cinza);text-transform:uppercase;letter-spacing:.5px">Tema do conteúdo</span>
+            <span style="font-size:11px;font-weight:600;color:var(--cinza);text-transform:uppercase;letter-spacing:.5px">Tópico de referência</span>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:16px;align-items:flex-start">
+            <div style="flex:1">
+              <textarea id="colar-temas-input" class="form-input" rows="2" placeholder="Cole aqui os 12 temas sugeridos pela IA, todos numerados..." style="font-size:12px;resize:vertical;min-height:60px"></textarea>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="distribuirTemas()" style="white-space:nowrap;margin-top:2px">Distribuir ↓</button>
+          </div>
+          <div id="topicos-montagem"></div>
+        </div>
+      </div>
+
+      <!-- MONTAGEM -->
       <div class="card">
         <div class="card-header">
           <span class="card-title">Montagem do Cubo</span>
-          <button class="btn btn-primary btn-sm" onclick="openModal('modal-nova-rodada')">+ Novo objetivo</button>
+          <button class="btn btn-primary btn-sm" onclick="openModal('modal-nova-rodada')">⚡ Gerar estoque</button>
         </div>
         <div class="card-body">
           <div id="rodadas-lista">
@@ -370,43 +455,64 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
     <div id="panel-producao" class="panel">
       <div class="page-header">
         <div class="page-title">Produzir</div>
-        <div class="page-sub">Escolha um estoque e gere os prompts para produzir em escala</div>
+        <div class="page-sub">Acompanhe e gerencie sua produção por objetivo</div>
       </div>
-      <div class="card" style="margin-bottom:16px">
-        <div class="card-body">
-          <div class="form-group" style="margin-bottom:0">
-            <label class="form-label">Selecione o estoque de produção</label>
-            <select class="form-input" id="prod-rodada" onchange="carregarRodadaProducao()">
-              <option value="">— Selecione —</option>
-            </select>
-          </div>
+
+      <!-- TEXTO EXPLICATIVO -->
+      <div class="hint-azul" style="margin-bottom:24px">
+        💡 Selecione um objetivo para ver seus estoques e acompanhar o progresso da produção. Uma linha editorial equilibrada trabalha todos os objetivos juntos — não só vender, não só atrair. É o conjunto que faz o sistema funcionar.
+      </div>
+
+      <!-- CARDS DOS 6 OBJETIVOS -->
+      <div id="prod-objetivos-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px"></div>
+
+      <!-- ESTOQUES DO OBJETIVO SELECIONADO -->
+      <div id="prod-objetivo-detalhe" style="display:none">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+          <button class="btn btn-ghost btn-sm" onclick="voltarObjetivos()">← Voltar</button>
+          <div style="height:1px;flex:1;background:var(--cinza-borda)"></div>
+          <span id="prod-objetivo-titulo" style="font-size:13px;font-weight:700;color:var(--azul-dark)"></span>
+          <div style="height:1px;flex:1;background:var(--cinza-borda)"></div>
         </div>
+        <div id="prod-estoques-lista"></div>
       </div>
-      <div id="prod-conteudo">
-        <div class="empty"><div class="empty-icon">⚡</div><div class="empty-text">Selecione um estoque para começar a produzir.</div></div>
-      </div>
+
+      <!-- CONTEÚDO DO ESTOQUE SELECIONADO -->
+      <div id="prod-conteudo"></div>
     </div>
 
     <!-- ══ DISTRIBUIR ══ -->
     <div id="panel-distribuir" class="panel">
       <div class="page-header">
         <div class="page-title">Distribuir</div>
-        <div class="page-sub">12 blocos com sequência lógica — o Cubo Mágico embaralhado</div>
+        <div class="page-sub">Cronograma e planejamento mensal dos seus estoques</div>
       </div>
-      <div class="card" style="margin-bottom:16px">
-        <div class="card-body" style="display:flex;gap:12px;align-items:flex-end">
-          <div class="form-group" style="flex:1;margin-bottom:0">
-            <label class="form-label">Selecione o estoque para distribuir</label>
-            <select class="form-input" id="dist-rodada" onchange="gerarDistribuicao()">
-              <option value="">— Selecione —</option>
-            </select>
-          </div>
-          <button class="btn btn-secondary" onclick="copiarDistribuicao()">📋 Copiar plano</button>
+
+      <!-- CRONOGRAMA VISUAL -->
+      <div class="card" style="margin-bottom:24px">
+        <div class="card-header">
+          <span class="card-title">📊 Cubo Embaralhado <span style="font-size:12px;font-weight:400;color:var(--cinza)">(Cronograma Visual)</span></span>
+          <span style="font-size:11px;color:var(--cinza)">Distribuição na vertical · 12 blocos estruturais</span>
+        </div>
+        <div class="card-body">
+          <div class="hint-azul" style="margin-bottom:16px">💡 O cronograma exibe 1 estoque ativo por objetivo. Quando você completar um estoque, o próximo entra automaticamente.</div>
+          <div id="cronograma-grid"></div>
         </div>
       </div>
-      <div id="dist-conteudo">
-        <div class="empty"><div class="empty-icon">🔀</div><div class="empty-text">Selecione um estoque para ver a sequência de distribuição.</div></div>
+
+      <!-- DIVISOR -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+        <div style="height:1px;flex:1;background:var(--cinza-borda)"></div>
+        <span style="font-size:12px;font-weight:700;color:var(--cinza);text-transform:uppercase;letter-spacing:1px">Planejamento Mensal</span>
+        <div style="height:1px;flex:1;background:var(--cinza-borda)"></div>
       </div>
+
+      <div class="hint-azul" style="margin-bottom:24px">
+        💡 O mês atual é o seu ponto de partida. Os meses seguintes são suas janelas de planejamento — cada estoque que você criar já vai para o mês que você escolheu.
+      </div>
+
+      <div id="dist-meses-grid"></div>
+      <div id="dist-mes-detalhe" style="display:none"></div>
     </div>
 
     <!-- ══ BANCO DE MODELOS ══ -->
@@ -432,13 +538,16 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
           <div>
             <select class="form-input" style="width:auto;font-size:12px;padding:7px 12px" id="filtro-formato" onchange="renderBancoModelos()">
               <option value="">Todos os modelos</option>
-              <option value="antes-depois">Antes e Depois</option>
-              <option value="comparacao">Comparação</option>
-              <option value="autoridade">Autoridade</option>
-              <option value="narrativa">Narrativa</option>
-              <option value="analise">Análise</option>
-              <option value="conexao">Conexão</option>
-              <option value="inspiracional">Inspiracional</option>
+              <option value="antes-depois">Carrossel Antes e Depois</option>
+              <option value="comparacao">Carrossel Comparação</option>
+              <option value="autoridade">Carrossel Autoridade</option>
+              <option value="narrativa">Carrossel Narrativa</option>
+              <option value="analise">Carrossel Análise</option>
+              <option value="conexao">Carrossel Conexão</option>
+              <option value="inspiracional">Carrossel Inspiracional</option>
+              <option value="live">Formato Live</option>
+              <option value="estatico">Formato Estático</option>
+            <option value="reels">Formato Reels</option>
             </select>
           </div>
         </div>
@@ -470,22 +579,14 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
 <div class="modal-overlay" id="modal-nova-rodada">
   <div class="modal" style="max-width:680px">
     <div class="modal-header">
-      <span class="modal-title">Novo Objetivo de Produção</span>
+      <span class="modal-title">Novo Estoque</span>
       <button class="modal-close" onclick="closeModal('modal-nova-rodada')">✕</button>
     </div>
     <div class="modal-body">
 
-      <!-- 1. NOME -->
+      <!-- 1. OBJETIVO -->
       <div class="form-group">
-        <label class="form-label">Dê um nome para o estoque da série</label>
-        <input class="form-input" id="rod-nome" placeholder="Ex: Carrosséis de Atração — Jan 2025">
-      </div>
-
-      <div class="divider"></div>
-
-      <!-- 2. OBJETIVO -->
-      <div class="form-group">
-        <label class="form-label">Objetivo</label>
+        <label class="form-label">Confirme seu objetivo</label>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px" id="rod-objetivos">
           <div class="objetivo-card atrair" onclick="selecionarObjetivo('atrair',this)">
             <div class="objetivo-nome" style="color:var(--atrair)">🟠 Atrair</div>
@@ -500,7 +601,7 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
             <div class="objetivo-desc">Meio — posiciona e dá opinião</div>
           </div>
           <div class="objetivo-card ofertar" onclick="selecionarObjetivo('ofertar',this)">
-            <div class="objetivo-nome" style="color:var(--ofertar)">🔵 Ofertar</div>
+            <div class="objetivo-nome" style="color:var(--ofertar)">🔴 Ofertar</div>
             <div class="objetivo-desc">Fundo — converte e gera decisão</div>
           </div>
           <div class="objetivo-card fidelizar" onclick="selecionarObjetivo('fidelizar',this)">
@@ -508,7 +609,7 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
             <div class="objetivo-desc">Fundo — retém e aprofunda relação</div>
           </div>
           <div class="objetivo-card humanizar" onclick="selecionarObjetivo('humanizar',this)">
-            <div class="objetivo-nome" style="color:var(--cinza)">⚪ Humanizar</div>
+            <div class="objetivo-nome" style="color:var(--cinza)">🔵 Humanizar</div>
             <div class="objetivo-desc">Livre — conteúdo espontâneo e pessoal</div>
           </div>
         </div>
@@ -516,7 +617,24 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
 
       <div class="divider"></div>
 
-      <!-- 3. FORMATO -->
+      <!-- 2. NOME -->
+      <div class="form-group">
+        <label class="form-label">Dê um nome para o estoque da série</label>
+        <input class="form-input" id="rod-nome" placeholder="Ex: Carrosséis de Atração — Jan 2025">
+      </div>
+
+      <!-- 3. MÊS DE DISTRIBUIÇÃO -->
+      <div class="form-group">
+        <label class="form-label">📅 Mês de distribuição</label>
+        <div class="hint" style="margin-bottom:8px">Em qual mês este estoque será distribuído?</div>
+        <select class="form-input" id="rod-mes">
+          <option value="">— Selecione o mês —</option>
+        </select>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 4. FORMATO -->
       <div class="form-group">
         <label class="form-label">Formato</label>
         <div style="display:flex;gap:8px;flex-wrap:wrap" id="rod-formatos">
@@ -530,21 +648,24 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
 
       <div class="divider"></div>
 
-      <!-- 4. ESTRUTURA DO ROTEIRO -->
+      <!-- 5. ESTRUTURA DO ROTEIRO -->
       <div class="form-group">
         <label class="form-label">Estrutura do Roteiro</label>
         <div class="hint" style="margin-bottom:10px">Escolha o formato e o modelo do banco que vai estruturar este estoque de conteúdo.</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
           <select class="form-input" id="rod-formato-banco" onchange="carregarModelosBanco()" style="flex:1">
             <option value="">— Selecionar Intenção —</option>
-            <option value="meus-modelos">⭐ Meus Modelos</option>
-            <option value="antes-depois">Antes e Depois</option>
-            <option value="comparacao">Comparação</option>
-            <option value="autoridade">Autoridade</option>
-            <option value="narrativa">Narrativa</option>
-            <option value="analise">Análise</option>
-            <option value="conexao">Conexão</option>
-            <option value="inspiracional">Inspiracional</option>
+            <option value="meus-modelos">⭐ Meus Modelos Editados</option>
+            <option value="antes-depois">Carrossel Antes e Depois</option>
+            <option value="comparacao">Carrossel Comparação</option>
+            <option value="autoridade">Carrossel Autoridade</option>
+            <option value="narrativa">Carrossel Narrativa</option>
+            <option value="analise">Carrossel Análise</option>
+            <option value="conexao">Carrossel Conexão</option>
+            <option value="inspiracional">Carrossel Inspiracional</option>
+            <option value="live">Formato Live</option>
+            <option value="estatico">Formato Estático</option>
+            <option value="reels">Formato Reels</option>
           </select>
           <select class="form-input" id="rod-modelo-banco" style="flex:1">
             <option value="">— Selecione o modelo —</option>
@@ -555,7 +676,7 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
 
       <div class="divider"></div>
 
-      <!-- 5. CTA -->
+      <!-- 6. CTA -->
       <div class="form-group" style="margin-bottom:0">
         <label class="form-label">CTA — Chamada para ação</label>
         <div class="hint" style="margin-bottom:10px">Escolha uma ou escreva a sua. Ela será incluída nos prompts gerados.</div>
@@ -611,11 +732,7 @@ function save(){
 }
 
 document.addEventListener('DOMContentLoaded', function(){
-  if(localStorage.getItem('cubo_entrou')){
-    document.getElementById('splash').style.display='none';
-    document.getElementById('app').style.display='flex';
-    inicializar();
-  }
+  // Logo já está embutida no HTML — nada a fazer aqui
 });
 
 // ══ NAVEGAÇÃO ══
@@ -624,9 +741,32 @@ function goTo(panel, btn){
   document.querySelectorAll('.nav-pill').forEach(b=>b.classList.remove('active'));
   document.getElementById('panel-'+panel).classList.add('active');
   if(btn) btn.classList.add('active');
+  if(panel==='topicos'){
+    renderTopicos();
+    const inp = document.getElementById('top-assunto');
+    if(inp && dados['top-assunto']) { inp.value = dados['top-assunto']; atualizarPromptTopicos(); }
+  }
+  if(panel==='cubo'){
+    renderTopicosMontagem();
+    // Limpar gerador de temas ao entrar na tela
+    const prev = document.getElementById('prompt-temas-preview');
+    const btn = document.getElementById('btn-copiar-temas');
+    if(prev) prev.style.display='none';
+    if(btn) btn.style.display='none';
+    document.querySelectorAll('#obj-temas-btns .btn').forEach(b=>{
+      b.style.fontWeight='400'; b.style.background='transparent';
+    });
+    window._promptTemasAtual = null;
+  }
   if(panel==='modelos') renderBancoModelos();
-  if(panel==='producao') carregarSelectRodadas();
-  if(panel==='distribuir') carregarSelectRodadas();
+  if(panel==='producao'){
+    // Sempre reinicia mostrando os 6 cards
+    document.getElementById('prod-objetivos-grid').style.display='grid';
+    document.getElementById('prod-objetivo-detalhe').style.display='none';
+    document.getElementById('prod-conteudo').innerHTML='';
+    renderProdObjetivos();
+  }
+  if(panel==='distribuir'){ renderCronograma(); renderDistMeses(); }
 }
 
 // ══ NOTIF ══
@@ -637,15 +777,42 @@ function notif(msg){
 }
 
 // ══ MODAL ══
-function openModal(id){document.getElementById(id).classList.add('open')}
+function popularMeses(){
+  const sel = document.getElementById('rod-mes');
+  if(!sel) return;
+  const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const agora = new Date();
+  sel.innerHTML = '<option value="">— Selecione o mês —</option>';
+  for(let i=0; i<4; i++){
+    const d = new Date(agora.getFullYear(), agora.getMonth()+i, 1);
+    const val = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const label = `${meses[d.getMonth()]} ${d.getFullYear()}`;
+    sel.innerHTML += `<option value="${val}">${label}</option>`;
+  }
+}
+
+function openModal(id){
+  document.getElementById(id).classList.add('open');
+  if(id==='modal-nova-rodada'){
+    popularMeses();
+    // Pré-selecionar objetivo se vier do gerador de temas
+    if(window._objetivoTemaSelecionado){
+      setTimeout(()=>{
+        const card = document.querySelector(`#rod-objetivos .objetivo-card.${window._objetivoTemaSelecionado}`);
+        if(card) selecionarObjetivo(window._objetivoTemaSelecionado, card);
+      }, 100);
+    }
+  }
+}
 function closeModal(id){document.getElementById(id).classList.remove('open')}
 
 // ══ INICIALIZAR ══
 function inicializar(){
-  renderTopicos();
-  carregarDados();
-  carregarRodadasLista();
-  carregarSelectRodadas();
+  try { renderTopicos(); } catch(e){ console.error('renderTopicos:', e); }
+  try { renderTopicosMontagem(); } catch(e){ console.error('renderTopicosMontagem:', e); }
+  try { carregarDados(); } catch(e){ console.error('carregarDados:', e); }
+  try { carregarRodadasLista(); } catch(e){ console.error('carregarRodadasLista:', e); }
+  try { carregarSelectRodadas(); } catch(e){ console.error('carregarSelectRodadas:', e); }
 }
 
 // ══ CARREGAR DADOS SALVOS ══
@@ -677,8 +844,66 @@ function salvarAudiencia(){
 }
 
 // ══ TÓPICOS ══
+function atualizarPromptTopicos(){
+  const assunto = document.getElementById('top-assunto')?.value.trim();
+  const preview = document.getElementById('prompt-topicos-preview');
+  if(!preview) return;
+  if(!assunto){
+    preview.innerHTML = '<em style="color:var(--cinza)">Digite seu assunto principal acima para gerar o prompt...</em>';
+    return;
+  }
+  preview.innerHTML = `De acordo com meu assunto principal que é <strong>${assunto}</strong>, me entregue 12 tópicos que serão a estrutura da minha comunicação no digital. Cada tópico deve ter no máximo 2 palavras — são tópicos estruturais, não temas.`;
+  // Salvar assunto principal junto com dados
+  if(!dados.topicos) dados.topicos = Array(12).fill('');
+  dados['top-assunto'] = assunto;
+  save();
+}
+
+function copiarPromptTopicos(){
+  const assunto = document.getElementById('top-assunto')?.value.trim();
+  if(!assunto){ notif('Digite seu assunto principal primeiro'); return; }
+  const prompt = `De acordo com meu assunto principal que é ${assunto}, me entregue 12 tópicos que serão a estrutura da minha comunicação no digital. Cada tópico deve ter no máximo 2 palavras — são tópicos estruturais, não temas.`;
+  copiarTexto(prompt);
+}
+
+function copiarTexto(texto){
+  // Tenta clipboard moderno primeiro
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(texto)
+      .then(()=>notif('Copiado! Cole na sua IA favorita 🚀'))
+      .catch(()=>copiarFallback(texto));
+  } else {
+    copiarFallback(texto);
+  }
+}
+
+function copiarFallback(texto){
+  const el = document.createElement('textarea');
+  el.value = texto;
+  el.setAttribute('readonly','');
+  el.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+  document.body.appendChild(el);
+  el.focus();
+  el.select();
+  el.setSelectionRange(0, texto.length);
+  try {
+    document.execCommand('copy');
+    notif('Copiado! Cole na sua IA favorita 🚀');
+  } catch(e){
+    notif('Erro ao copiar — selecione e copie manualmente');
+  }
+  document.body.removeChild(el);
+}
+
+
+function salvarTopicosAssunto(){
+  save();
+  notif('Tópicos salvos! ✓');
+}
+
 function renderTopicos(){
   const lista = document.getElementById('topicos-lista');
+  if(!lista) return;
   if(!dados.topicos) dados.topicos = Array(12).fill('');
   lista.innerHTML = dados.topicos.map((t,i)=>`
     <div class="topico-item">
@@ -688,8 +913,143 @@ function renderTopicos(){
   `).join('');
 }
 
+// ══ GERADOR DE TEMAS POR OBJETIVO ══
+const REGRAS_OBJETIVO = {
+  atrair:`OBJETIVO: ATRAIR — Topo de funil
+Esses temas são para conteúdos que param o scroll, espelham a realidade da audiência e geram identificação imediata. A pessoa lê e pensa "isso é exatamente o que eu estou vivendo". Não ensinam, não vendem — apenas conectam e despertam curiosidade.
+
+REGRA DE DISTRIBUIÇÃO — divida os 12 temas em 2 grupos:
+• Temas 1 a 6 (DOR): Para cada tópico, sugira 1 tema que nomeie uma dor, um medo, uma frustração, um bloqueio ou uma situação difícil que a audiência reconhece na própria vida.
+• Temas 7 a 12 (DESEJO): Para cada tópico, sugira 1 tema que nomeie um sonho, uma aspiração, um desejo profundo ou um cenário ideal que a audiência quer alcançar.`,
+
+  envolver:`OBJETIVO: ENVOLVER — Meio de funil
+Esses temas são para conteúdos que educam, mostram autoridade e despertam o interesse em aprender algo. A pessoa lê e pensa "quero saber mais sobre isso". São temas que ensinam, revelam um conceito, mostram como fazer ou explicam o porquê de algo importante.
+
+REGRA: Para cada um dos 12 tópicos, sugira 1 tema que ensine algo relevante, revele uma informação valiosa, explique um conceito importante ou mostre um caminho prático relacionado ao tópico. O tema deve despertar curiosidade e vontade de aprender.`,
+
+  relacionar:`OBJETIVO: RELACIONAR — Meio de funil
+Esses temas são para conteúdos que posicionam, dão opinião e geram conexão genuína. A pessoa lê e pensa "ela pensa como eu" ou "nunca tinha pensado assim". São temas de ponto de vista, posicionamento pessoal e reflexão.
+
+REGRA: Para cada um dos 12 tópicos, sugira 1 tema que expresse uma opinião clara, questione uma crença comum do mercado, traga um ponto de vista diferenciado ou provoque uma reflexão que a audiência ainda não teve sobre aquele tópico.`,
+
+  ofertar:`OBJETIVO: OFERTAR — Fundo de funil
+Esses temas são para conteúdos que quebram objeções, mostram resultados e preparam a decisão. A pessoa lê e pensa "isso resolve o meu problema" ou "quero esse resultado". São temas que evidenciam transformação e aproximam a audiência da ação.
+
+REGRA: Para cada um dos 12 tópicos, sugira 1 tema que quebre uma objeção comum relacionada ao tópico, mostre uma transformação real possível, evidencie o resultado de quem já aplicou ou demonstre a diferença entre quem age e quem não age.`,
+
+  fidelizar:`OBJETIVO: FIDELIZAR — Fundo de funil
+Esses temas são para conteúdos que aprofundam a relação com quem já conhece a criadora, retêm a audiência e mostram a transformação ao longo do tempo. A pessoa lê e pensa "ela entende minha jornada" ou "estou no lugar certo".
+
+REGRA: Para cada um dos 12 tópicos, sugira 1 tema que celebre uma conquista da audiência, mostre evolução e progresso, aprofunde um conceito já apresentado, reforce o senso de comunidade ou reconheça quem está na jornada há mais tempo.`,
+
+  humanizar:`OBJETIVO: HUMANIZAR — Livre
+Esses temas mostram quem a criadora é por trás do conteúdo, trazem leveza à linha editorial e criam conexão humana genuína. São espontâneos, pessoais e conectados com o que está acontecendo no mundo.
+
+REGRA DE DISTRIBUIÇÃO — divida os 12 temas em 3 grupos de 4:
+• Temas 1 a 4 (MOMENTO PESSOAL): Para cada tópico, sugira 1 tema baseado em uma história pessoal, bastidor, aprendizado vivido ou momento real da criadora relacionado ao tópico.
+• Temas 5 a 8 (TENDÊNCIA/MERCADO): Para cada tópico, sugira 1 tema conectado a uma tendência atual, notícia recente, movimento cultural ou comportamento do mercado — visto pelo ângulo e opinião da criadora.
+• Temas 9 a 12 (REFLEXÃO DO MOMENTO): Para cada tópico, sugira 1 tema de reflexão atual — algo que a criadora está pensando, questionando ou descobrindo neste momento da sua jornada, conectado ao tópico.`
+};
+
+function selecionarObjetivoTema(objetivo, el){
+  document.querySelectorAll('#obj-temas-btns .btn').forEach(b=>{
+    b.style.fontWeight='400'; b.style.background='transparent';
+  });
+  el.style.fontWeight='700';
+
+  // Pré-selecionar objetivo no modal de gerar estoque
+  window._objetivoTemaSelecionado = objetivo;
+
+  const assunto = dados['top-assunto']||dados['id-assunto']||'[preencha seu assunto principal na aba Tópicos]';
+  const topicos = dados.topicos||Array(12).fill('');
+  const listaTopicos = topicos.map((t,i)=>`${i+1}. ${t||'Tópico '+(i+1)}`).join('\n');
+  const regra = REGRAS_OBJETIVO[objetivo];
+
+  const prompt = `Meu assunto principal é: ${assunto}
+
+Meus 12 tópicos são:
+${listaTopicos}
+
+${regra}
+
+Me entregue exatamente 12 temas, numerados de 1 a 12, um por linha, no formato:
+1. [tema]
+2. [tema]
+...`;
+
+  const preview = document.getElementById('prompt-temas-preview');
+  preview.style.display='block';
+  preview.textContent = prompt;
+  document.getElementById('btn-copiar-temas').style.display='inline-flex';
+  window._promptTemasAtual = prompt;
+}
+
+function copiarPromptTemas(){
+  if(window._promptTemasAtual){
+    copiarTexto(window._promptTemasAtual);
+    // Esconder após copiar
+    setTimeout(()=>{
+      document.getElementById('prompt-temas-preview').style.display='none';
+      document.getElementById('btn-copiar-temas').style.display='none';
+      document.querySelectorAll('#obj-temas-btns .btn').forEach(b=>{
+        b.style.fontWeight='400'; b.style.background='transparent';
+      });
+      window._promptTemasAtual = null;
+    }, 800);
+  } else {
+    notif('Selecione um objetivo primeiro');
+  }
+}
+
+function renderTopicosMontagem(){
+  const lista = document.getElementById('topicos-montagem');
+  if(!lista) return;
+  if(!dados.topicos) dados.topicos = Array(12).fill('');
+  if(!dados.temas) dados.temas = Array(12).fill('');
+  lista.innerHTML = dados.topicos.map((t,i)=>`
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:8px;align-items:center">
+      <input
+        class="form-input"
+        placeholder="Digite o tema deste conteúdo..."
+        value="${(dados.temas[i]||'').replace(/"/g,'&quot;')}"
+        oninput="salvarTema(${i},this.value)"
+        style="font-size:13px"
+      >
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--cinza-light);border-radius:var(--r-md)">
+        <div class="topico-num" style="flex-shrink:0">${i+1}</div>
+        <span style="font-size:13px;color:var(--texto);font-weight:${t?'500':'400'}">${t||'<em style="color:var(--cinza);font-weight:400">Tópico não definido</em>'}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function distribuirTemas(){
+  const texto = document.getElementById('colar-temas-input').value.trim();
+  if(!texto){ notif('Cole os temas primeiro!'); return; }
+  const linhas = texto.split('\n')
+    .map(l=>l.replace(/^\d+[\.\)\-\s]+/,'').trim())
+    .filter(l=>l.length>0);
+  if(!dados.temas) dados.temas = Array(12).fill('');
+  linhas.slice(0,12).forEach((tema,i)=>{ dados.temas[i] = tema; });
+  save();
+  renderTopicosMontagem();
+  document.getElementById('colar-temas-input').value='';
+  notif(`${Math.min(linhas.length,12)} temas distribuídos! ✓`);
+}
+
+function salvarTema(idx, val){
+  dados.temas[idx] = val;
+  save();
+}
+
+function limparTemas(){
+  dados.temas = Array(12).fill('');
+  save();
+  renderTopicosMontagem();
+  notif('Temas limpos! Prontos para novos temas ✓');
+}
+
 function salvarTopico(idx, val){
-  if(!dados.topicos) dados.topicos=Array(12).fill('');
   dados.topicos[idx]=val;
   save();
 }
@@ -808,10 +1168,11 @@ function criarRodada(){
   }
   const nome = document.getElementById('rod-nome').value ||
     `${NOMES_OBJETIVO[objetivoSelecionado]} — ${formatoSelecionado}`;
+  const mes = document.getElementById('rod-mes').value || '';
   const rodada = {
     id: Date.now(),
     nome, objetivo: objetivoSelecionado, formato: formatoSelecionado,
-    formatoBanco: formatoBancoId, modeloBancoId, modeloNome, modeloPrompt, cta,
+    formatoBanco: formatoBancoId, modeloBancoId, modeloNome, modeloPrompt, cta, mes,
     criada: new Date().toISOString(),
   };
   rodadas.push(rodada);
@@ -819,6 +1180,7 @@ function criarRodada(){
   closeModal('modal-nova-rodada');
   // Reset
   document.getElementById('rod-nome').value='';
+  document.getElementById('rod-mes').value='';
   document.getElementById('rod-cta').value='';
   document.getElementById('rod-formato-banco').value='';
   document.getElementById('rod-modelo-banco').innerHTML='<option value="">— Selecione o modelo —</option>';
@@ -861,14 +1223,7 @@ function excluirRodada(id){
 }
 
 function irParaProducao(id){
-  goTo('producao', document.querySelector('[onclick*="producao"]'));
-  document.querySelector('.nav-pill[onclick*="producao"]').classList.add('active');
-  document.querySelectorAll('.nav-pill').forEach(b=>{if(!b.onclick?.toString().includes('producao'))b.classList.remove('active')});
-  setTimeout(()=>{
-    const sel = document.getElementById('prod-rodada');
-    sel.value = id;
-    carregarRodadaProducao();
-  }, 100);
+  irParaConteudo(id, -1);
 }
 
 function carregarSelectRodadas(){
@@ -883,52 +1238,175 @@ function carregarSelectRodadas(){
   });
 }
 
-// ══ PRODUÇÃO ══
-function carregarRodadaProducao(){
-  const id = parseInt(document.getElementById('prod-rodada').value);
-  const rodada = rodadas.find(r=>r.id===id);
-  const cont = document.getElementById('prod-conteudo');
-  if(!rodada){
-    cont.innerHTML='<div class="empty"><div class="empty-icon">⚡</div><div class="empty-text">Selecione um estoque para começar a produzir.</div></div>';
+// ══ PRODUÇÃO POR OBJETIVO ══
+const OBJ_CONFIG = {
+  atrair:  {nome:'Atrair',  emoji:'🟠', cor:'var(--atrair)',  bg:'var(--atrair-light)',  borda:'#FDDBB8'},
+  envolver:{nome:'Envolver',emoji:'🟡', cor:'#B8860B',        bg:'var(--envolver-light)',borda:'#FCF0A0'},
+  relacionar:{nome:'Relacionar',emoji:'🟢',cor:'var(--relacionar)',bg:'var(--relacionar-light)',borda:'#A9ECC6'},
+  ofertar: {nome:'Ofertar', emoji:'🔴', cor:'var(--ofertar)',  bg:'var(--ofertar-light)', borda:'#FFBDB9'},
+  fidelizar:{nome:'Fidelizar',emoji:'🟣',cor:'var(--fidelizar)',bg:'var(--fidelizar-light)',borda:'#D9B8F8'},
+  humanizar:{nome:'Humanizar',emoji:'🔵',cor:'var(--humanizar)',bg:'var(--humanizar-light)',borda:'#BDE0F8'},
+};
+
+function calcularProgressoObjetivo(objetivo){
+  const estoques = rodadas.filter(r=>r.objetivo===objetivo);
+  if(!estoques.length) return {total:0, prontos:0, pct:0};
+  let total = 0, prontos = 0;
+  estoques.forEach(r=>{
+    for(let i=0;i<12;i++){
+      total++;
+      if(r.status?.[i]==='pronto') prontos++;
+    }
+  });
+  return {total, prontos, pct: total>0 ? Math.round((prontos/total)*100) : 0};
+}
+
+function renderProdObjetivos(){
+  const grid = document.getElementById('prod-objetivos-grid');
+  if(!grid) return;
+  grid.innerHTML = Object.entries(OBJ_CONFIG).map(([key,cfg])=>{
+    const {total, prontos, pct} = calcularProgressoObjetivo(key);
+    const estoques = rodadas.filter(r=>r.objetivo===key);
+    const corBarra = CORES_OBJETIVO[key] || 'var(--azul)';
+    return `
+      <div onclick="abrirObjetivo('${key}')" style="background:var(--branco);border:2px solid ${cfg.borderColor||"var(--cinza-borda)"};border-radius:var(--r-lg);padding:24px;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)" 
+        onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.12)'"
+        onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='var(--shadow)'">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+          <span style="font-size:28px">${cfg.emoji}</span>
+          <div>
+            <div style="font-size:16px;font-weight:700;color:${cfg.cor}">${cfg.nome}</div>
+            <div style="font-size:11px;color:var(--cinza)">${estoques.length} estoque${estoques.length!==1?'s':''}</div>
+          </div>
+        </div>
+        <div style="margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-size:11px;color:var(--cinza)">Progresso de produção</span>
+            <span style="font-size:13px;font-weight:700;color:${cfg.cor}">${prontos}/${total}</span>
+          </div>
+          <div style="height:8px;background:var(--cinza-light);border-radius:4px;overflow:hidden">
+            <div style="height:100%;width:${pct}%;background:${corBarra};border-radius:4px;transition:width .5s"></div>
+          </div>
+          <div style="text-align:right;font-size:11px;color:var(--cinza);margin-top:4px">${pct}% prontos</div>
+        </div>
+        ${estoques.length===0?`<div style="font-size:11px;color:var(--cinza);font-style:italic;text-align:center;margin-top:8px">Nenhum estoque criado</div>`:''}
+      </div>
+    `;
+  }).join('');
+}
+
+function abrirObjetivo(objetivo){
+  const cfg = OBJ_CONFIG[objetivo];
+  const estoques = rodadas.filter(r=>r.objetivo===objetivo);
+  document.getElementById('prod-objetivos-grid').style.display='none';
+  document.getElementById('prod-objetivo-detalhe').style.display='block';
+  document.getElementById('prod-conteudo').innerHTML='';
+  document.getElementById('prod-objetivo-titulo').innerHTML = `${cfg.emoji} ${cfg.nome}`;
+
+  const lista = document.getElementById('prod-estoques-lista');
+  if(!estoques.length){
+    lista.innerHTML = `<div class="empty"><div class="empty-icon">${cfg.emoji}</div><div class="empty-text">Nenhum estoque de ${cfg.nome} criado ainda.</div></div>
+      <div style="display:flex;justify-content:center;margin-top:16px">
+        <button class="btn btn-primary" onclick="irParaGerarEstoque('${objetivo}')">⚡ Gerar estoque para ${cfg.nome}</button>
+      </div>`;
     return;
   }
+  lista.innerHTML = estoques.map(r=>{
+    const {prontos, total, pct} = calcularProgressoObjetivo(r.objetivo);
+    // calcular por estoque
+    let ep=0; for(let i=0;i<12;i++) if(r.status?.[i]==='pronto') ep++;
+    const epct = Math.round((ep/12)*100);
+    const corBarra = CORES_OBJETIVO[r.objetivo] || 'var(--azul)';
+    return `
+      <div style="background:var(--branco);border:1px solid var(--cinza-borda);border-radius:var(--r-lg);padding:16px;margin-bottom:10px;cursor:pointer"
+        onclick="carregarEstoqueProducao(${r.id})"
+        onmouseover="this.style.borderColor='${cfg.borderColor||cfg.cor}'"
+        onmouseout="this.style.borderColor='var(--cinza-borda)'">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+          <div style="flex:1">
+            <div style="font-size:14px;font-weight:600;color:var(--azul-dark)">${r.nome}</div>
+            <div style="font-size:11px;color:var(--cinza);margin-top:2px">${r.formato}${r.modeloNome?' · '+r.modeloNome:''}</div>
+          </div>
+          <span style="font-size:13px;font-weight:700;color:${cfg.cor}">${ep}/12</span>
+        </div>
+        <div style="height:6px;background:var(--cinza-light);border-radius:3px;overflow:hidden">
+          <div style="height:100%;width:${epct}%;background:${corBarra};border-radius:3px;transition:width .5s"></div>
+        </div>
+        <div style="text-align:right;font-size:10px;color:var(--cinza);margin-top:3px">${epct}% prontos</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function irParaGerarEstoque(objetivo){
+  // Ir para aba Montar Cubo
+  const btn = document.querySelector('.nav-pill[onclick*="cubo"]');
+  goTo('cubo', btn);
+  // Abrir modal e pré-selecionar objetivo
+  setTimeout(()=>{
+    openModal('modal-nova-rodada');
+    setTimeout(()=>{
+      const card = document.querySelector(`#rod-objetivos .objetivo-card.${objetivo}`);
+      if(card) selecionarObjetivo(objetivo, card);
+    }, 100);
+  }, 200);
+}
+
+
+function voltarObjetivos(){
+  document.getElementById('prod-objetivos-grid').style.display='grid';
+  document.getElementById('prod-objetivo-detalhe').style.display='none';
+  document.getElementById('prod-conteudo').innerHTML='';
+  renderProdObjetivos();
+}
+
+function carregarEstoqueProducao(id){
+  // Usar a função existente mas adaptada
+  const rodada = rodadas.find(r=>r.id===id);
+  if(!rodada) return;
+  const temas = dados.temas || Array(12).fill('');
   const topicos = dados.topicos || Array(12).fill('');
   const cor = CORES_OBJETIVO[rodada.objetivo];
+  const cfg = OBJ_CONFIG[rodada.objetivo];
+  const cont = document.getElementById('prod-conteudo');
+
+  // Esconder lista de estoques
+  document.getElementById('prod-estoques-lista').style.display='none';
+
   cont.innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+      <button class="btn btn-ghost btn-sm" onclick="voltarEstoques('${rodada.objetivo}')">← Voltar</button>
+      <div style="font-size:14px;font-weight:600;color:var(--azul-dark)">${rodada.nome}</div>
+    </div>
     <div class="card" style="margin-bottom:16px">
       <div class="card-body" style="display:flex;align-items:center;gap:12px">
         <div style="width:12px;height:12px;border-radius:50%;background:${cor}"></div>
         <div style="flex:1">
           <div style="font-size:15px;font-weight:700;color:var(--azul-dark)">${rodada.nome}</div>
-          <div style="font-size:12px;color:var(--cinza)">${NOMES_OBJETIVO[rodada.objetivo]} · ${rodada.formato} · 12 conteúdos</div>
+          <div style="font-size:12px;color:var(--cinza)">${NOMES_OBJETIVO[rodada.objetivo]} · ${rodada.formato} · 12 temas</div>
         </div>
       </div>
     </div>
     <div>
-      ${topicos.map((t,i)=>{
+      ${temas.map((tema,i)=>{
         const status = rodada.status?.[i]||'pendente';
         const statusConfig = {
-          pendente:{label:'Pendente',bg:'var(--cinza-light)',cor:'var(--cinza)'},
-          producao:{label:'🎬 Em produção',bg:'#FEF9E7',cor:'#B8860B'},
-          pronto:{label:'✅ Pronto para postar',bg:'#E8F8EF',cor:'var(--relacionar)'},
+          pendente:  {label:'Pendente',    bg:'var(--cinza-light)', cor:'var(--cinza)',      emoji:'⏳'},
+          producao:  {label:'Em produção', bg:'#FEF9E7',            cor:'#B8860B',           emoji:'🎬'},
+          pronto:    {label:'Pronto',      bg:'#E8F8EF',            cor:'var(--relacionar)', emoji:'✅'},
+          noar:      {label:'No Ar',       bg:'#EDE9FE',            cor:'var(--fidelizar)',  emoji:'📡'},
         };
-        const sc = statusConfig[status];
+        const sc = statusConfig[status]||statusConfig.pendente;
         return `
-        <div class="prod-item" id="prod-item-${i}" style="border-left:3px solid ${status==='pronto'?'var(--relacionar)':status==='producao'?'var(--envolver)':'var(--cinza-borda)'}">
+        <div class="prod-item" id="prod-item-${i}" style="border-left:3px solid ${status==='noar'?'var(--fidelizar)':status==='pronto'?'var(--relacionar)':status==='producao'?'#F5C400':'var(--cinza-borda)'}">
           <div class="prod-num" style="background:${cor}">${i+1}</div>
           <div class="prod-info" style="flex:1;min-width:0">
-            <div class="prod-topico" style="font-size:13px">${t||'Tópico '+(i+1)+' (não definido)'}</div>
-            <div class="prod-meta">${NOMES_OBJETIVO[rodada.objetivo]} · ${rodada.formato}${rodada.modeloNome?' · '+rodada.modeloNome:''}</div>
+            <div class="prod-topico" style="font-size:13px">${tema||'<em style="color:var(--cinza);font-weight:400">Tema '+(i+1)+' não definido</em>'}</div>
+            <div class="prod-meta">${NOMES_OBJETIVO[rodada.objetivo]} · ${rodada.formato}${rodada.modeloNome?' · '+rodada.modeloNome:''}${topicos[i]?' · <span style="color:var(--azul)">T'+(i+1)+': '+topicos[i]+'</span>':''}</div>
           </div>
-          <div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
-            <button class="btn btn-primary btn-sm" onclick="gerarPromptProducao(${i},'${rodada.id}')" style="white-space:nowrap">📋 Gerar prompt</button>
-            <button class="btn btn-sm" onclick="setStatus(${i},'${rodada.id}','producao')" 
-              style="background:${status==='producao'?'#F5C400':'var(--branco)'};color:${status==='producao'?'var(--branco)':'var(--cinza)'};border:1px solid ${status==='producao'?'var(--envolver)':'var(--cinza-borda)'}" 
-              title="Em produção">🎬</button>
-            <button class="btn btn-sm" onclick="setStatus(${i},'${rodada.id}','pronto')"
-              style="background:${status==='pronto'?'var(--relacionar)':'var(--branco)'};color:${status==='pronto'?'var(--branco)':'var(--cinza)'};border:1px solid ${status==='pronto'?'var(--relacionar)':'var(--cinza-borda)'}"
-              title="Pronto para postar">✅</button>
-            <span style="font-size:10px;padding:3px 8px;border-radius:10px;background:${sc.bg};color:${sc.cor};white-space:nowrap;font-weight:500">${sc.label}</span>
+          <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+            <span style="font-size:11px;padding:4px 10px;border-radius:20px;background:${sc.bg};color:${sc.cor};font-weight:600;white-space:nowrap">${sc.emoji} ${sc.label}</span>
+            <button class="btn btn-primary btn-sm" onclick="abrirFichaTecnica(${i},${rodada.id})" style="white-space:nowrap">📋 Ficha Técnica</button>
           </div>
         </div>`;
       }).join('')}
@@ -936,10 +1414,18 @@ function carregarRodadaProducao(){
   `;
 }
 
+function voltarEstoques(objetivo){
+  document.getElementById('prod-estoques-lista').style.display='block';
+  document.getElementById('prod-conteudo').innerHTML='';
+}
+
 function gerarPromptProducao(idx, rodadaId){
   const rodada = rodadas.find(r=>r.id==rodadaId);
+  const temas = dados.temas || Array(12).fill('');
   const topicos = dados.topicos || Array(12).fill('');
-  const topico = topicos[idx] || `Tópico ${idx+1}`;
+  const tema = temas[idx] || '';
+  const topico = topicos[idx] || '';
+  const conteudo = tema || topico || `Tema ${idx+1}`;
   const b = {
     nome: dados['id-nome']||'',
     assunto: dados['id-assunto']||'',
@@ -971,7 +1457,8 @@ O que ela deseja: ${b.deseja}
 O que a trava: ${b.trava}
 
 CONTEÚDO A CRIAR:
-Tópico: ${topico}
+Tópico de referência: ${idx+1}${topico?' — '+topico:''}
+Tema do conteúdo: ${tema||'[não definido — volte à tela Montar Cubo e defina o tema]'}
 Objetivo: ${NOMES_OBJETIVO[rodada.objetivo]}
 Formato: ${rodada.formato}
 ${rodada.cta?'CTA definida: '+rodada.cta:''}
@@ -983,7 +1470,7 @@ IMPORTANTE: Adapte todos os campos entre [COLCHETES] para o tópico acima. Use s
 ${rodada.cta?`\nFinalize com a CTA: "${rodada.cta}"`:''}`;
 
 
-  document.getElementById('modal-prompt-titulo').textContent = `Prompt — Tópico ${idx+1}: ${topico}`;
+  document.getElementById('modal-prompt-titulo').textContent = `Prompt — Tema ${idx+1}${conteudo?': '+conteudo:''}`;
   document.getElementById('prompt-box').textContent = promptAtual;
   openModal('modal-prompt');
 }
@@ -992,17 +1479,324 @@ function setStatus(idx, rodadaId, novoStatus){
   const rodada = rodadas.find(r=>r.id==rodadaId);
   if(!rodada) return;
   if(!rodada.status) rodada.status = {};
-  // Toggle — se já está nesse status, volta para pendente
   rodada.status[idx] = rodada.status[idx]===novoStatus ? 'pendente' : novoStatus;
   save();
-  carregarRodadaProducao();
+  carregarEstoqueProducao(rodadaId);
 }
 
 function copiarPromptAtual(){
-  navigator.clipboard.writeText(promptAtual).then(()=>notif('Prompt copiado! Cole na sua IA favorita 🚀'));
+  copiarTexto(promptAtual);
 }
 
-// ══ DISTRIBUIÇÃO ══
+// ══ DISTRIBUIÇÃO POR MESES ══
+const MESES_NOMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+const MATRIZ_EMBARALHAMENTO = [
+  [1,2,4,3,5,6,8,7,9,10,12,11],
+  [5,6,8,7,9,10,12,11,1,2,4,3],
+  [9,10,12,11,1,2,4,3,5,6,8,7],
+  [4,3,1,2,8,7,5,6,12,11,9,10],
+  [8,7,5,6,12,11,9,10,4,3,1,2],
+  [12,11,9,10,4,3,1,2,8,7,5,6],
+];
+
+function getMeses(){
+  const agora = new Date();
+  const meses = [];
+  for(let i=0;i<4;i++){
+    const d = new Date(agora.getFullYear(), agora.getMonth()+i, 1);
+    const val = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const label = `${MESES_NOMES[d.getMonth()]} ${d.getFullYear()}`;
+    meses.push({val, label, atual: i===0});
+  }
+  return meses;
+}
+
+function renderCronograma(){
+  const grid = document.getElementById('cronograma-grid');
+  if(!grid) return;
+
+  const OBJS = ['atrair','envolver','relacionar','ofertar','fidelizar','humanizar'];
+  const CORES = {
+    atrair:'#F4831F', envolver:'#F5C400', relacionar:'#27AE60',
+    ofertar:'#FF3B30', fidelizar:'#8E44AD', humanizar:'#1B7FD4'
+  };
+
+  // Pegar o primeiro estoque ativo de cada objetivo
+  const estoqueAtivo = {};
+  OBJS.forEach(obj=>{
+    const ests = rodadas.filter(r=>r.objetivo===obj);
+    // Pegar o primeiro que não está 100% completo
+    const ativo = ests.find(r=>{
+      let postados=0;
+      for(let i=0;i<12;i++) if(r.distStatus?.[i]==='postado') postados++;
+      return postados < 12;
+    }) || ests[0];
+    if(ativo) estoqueAtivo[obj] = ativo;
+  });
+
+  const temAlgum = Object.keys(estoqueAtivo).length > 0;
+
+  if(!temAlgum){
+    grid.innerHTML = `<div class="empty"><div class="empty-icon">📊</div><div class="empty-text">Crie estoques para cada objetivo para visualizar o cronograma.</div></div>`;
+    return;
+  }
+
+  // Montar a matriz embaralhada — 12 blocos
+  const temas = dados.temas || Array(12).fill('');
+  const SEQ = MATRIZ_EMBARALHAMENTO;
+
+  // Header dos blocos
+  let html = `<div style="overflow-x:auto;padding-bottom:8px">
+  <table style="border-collapse:collapse;width:100%;min-width:700px">
+    <thead>
+      <tr>
+        <td style="width:80px;padding:6px 8px;font-size:10px;font-weight:700;color:var(--cinza);text-transform:uppercase"></td>
+        ${Array.from({length:12},(_,i)=>`
+          <td style="text-align:center;padding:6px 4px;font-size:10px;font-weight:700;color:var(--cinza);text-transform:uppercase;white-space:nowrap">
+            B${i+1}
+          </td>
+        `).join('')}
+      </tr>
+    </thead>
+    <tbody>`;
+
+  OBJS.forEach((obj,objIdx)=>{
+    const cfg = OBJ_CONFIG[obj];
+    const rodada = estoqueAtivo[obj];
+    const cor = CORES[obj];
+    const seq = SEQ[objIdx % 6];
+
+    html += `<tr>
+      <td style="padding:4px 8px;white-space:nowrap">
+        <span style="font-size:11px;font-weight:600;color:${cor}">${cfg?.emoji} ${cfg?.nome}</span>
+      </td>`;
+
+    if(!rodada){
+      // Sem estoque — células vazias
+      for(let i=0;i<12;i++){
+        html += `<td style="padding:3px"><div style="width:100%;min-width:44px;height:44px;border-radius:6px;background:var(--cinza-light);border:1px dashed var(--cinza-borda);display:flex;align-items:center;justify-content:center"><span style="font-size:9px;color:var(--cinza)">—</span></div></td>`;
+      }
+    } else {
+      seq.forEach((pos,blocoIdx)=>{
+        const temaIdx = pos-1;
+        const tema = temas[temaIdx] || '';
+        const status = rodada.status?.[temaIdx]||'pendente';
+        const noar = status==='noar';
+        const pronto = status==='pronto';
+        const emProducao = status==='producao';
+
+        let bg, border, textColor, icone;
+        if(noar){
+          bg=cor; border=cor; textColor='#fff'; icone='✓';
+        } else if(pronto){
+          bg=cor+'CC'; border=cor; textColor='#fff'; icone='●';
+        } else if(emProducao){
+          bg=cor+'44'; border=cor+'88'; textColor=cor; icone='▶';
+        } else {
+          bg=cor+'18'; border=cor+'33'; textColor=cor; icone='';
+        }
+
+        html += `
+          <td style="padding:3px">
+            <div 
+              onclick="irParaConteudo(${rodada.id},${temaIdx})"
+              title="${tema||'Tema '+pos}"
+              style="width:100%;min-width:44px;height:44px;border-radius:6px;background:${bg};border:1px solid ${border};display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .15s"
+              onmouseover="this.style.transform='scale(1.1)';this.style.zIndex='10';this.style.position='relative'"
+              onmouseout="this.style.transform='scale(1)';this.style.zIndex='1'"
+            >
+              <span style="font-size:9px;font-weight:700;color:${textColor}">T${pos}</span>
+              ${icone?`<span style="font-size:9px;font-weight:700;color:${textColor}">${icone}</span>`:''}
+            </div>
+          </td>`;
+      });
+    }
+    html += `</tr>`;
+  });
+
+  html += `</tbody></table></div>
+
+  <!-- LEGENDA -->
+  <div style="display:flex;gap:16px;margin-top:12px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:6px"><div style="width:14px;height:14px;border-radius:3px;background:#1B7FD418;border:1px solid #1B7FD455"></div><span style="font-size:11px;color:var(--cinza)">Pendente</span></div>
+    <div style="display:flex;align-items:center;gap:6px"><div style="width:14px;height:14px;border-radius:3px;background:#1B7FD433;border:1px solid #1B7FD455;display:flex;align-items:center;justify-content:center;font-size:8px;color:#1B7FD4;font-weight:700">▶</div><span style="font-size:11px;color:var(--cinza)">Em produção</span></div>
+    <div style="display:flex;align-items:center;gap:6px"><div style="width:14px;height:14px;border-radius:3px;background:#1B7FD455;border:1px solid #1B7FD488;display:flex;align-items:center;justify-content:center;font-size:8px;color:#1B7FD4;font-weight:700">●</div><span style="font-size:11px;color:var(--cinza)">Pronto</span></div>
+    <div style="display:flex;align-items:center;gap:6px"><div style="width:14px;height:14px;border-radius:3px;background:#1B7FD4;border:1px solid #1B7FD4;display:flex;align-items:center;justify-content:center;font-size:8px;color:white;font-weight:700">✓</div><span style="font-size:11px;color:var(--cinza)">No Ar</span></div>
+    <div style="display:flex;align-items:center;gap:6px"><div style="width:14px;height:14px;border-radius:3px;background:var(--cinza-light);border:1px dashed var(--cinza-borda)"></div><span style="font-size:11px;color:var(--cinza)">Sem estoque</span></div>
+  </div>`;
+
+  grid.innerHTML = html;
+}
+
+function irParaConteudo(rodadaId, temaIdx){
+  const rodada = rodadas.find(r=>r.id==rodadaId);
+  if(!rodada) return;
+
+  if(temaIdx >= 0){
+    // Abrir direto na Ficha Técnica
+    abrirFichaTecnica(temaIdx, rodadaId);
+  } else {
+    // Ir para o estoque no Produzir
+    const btnProd = document.querySelector('.nav-pill[onclick*="producao"]');
+    goTo('producao', btnProd);
+    setTimeout(()=>{
+      document.getElementById('prod-objetivos-grid').style.display='none';
+      document.getElementById('prod-objetivo-detalhe').style.display='block';
+      const cfg = OBJ_CONFIG[rodada.objetivo];
+      document.getElementById('prod-objetivo-titulo').innerHTML = cfg.emoji+' '+cfg.nome;
+      carregarEstoqueProducao(rodadaId);
+    }, 200);
+  }
+}
+
+function renderDistMeses(){
+  const grid = document.getElementById('dist-meses-grid');
+  const detalhe = document.getElementById('dist-mes-detalhe');
+  if(!grid) return;
+  detalhe.style.display='none';
+  detalhe.innerHTML='';
+  const meses = getMeses();
+
+  grid.style.display='block';
+  grid.innerHTML = meses.map((m,idx)=>{
+    const estoques = rodadas.filter(r=>r.mes===m.val);
+    const temEstoque = estoques.length > 0;
+    const totalTemas = estoques.length * 12;
+    const totalPostados = estoques.reduce((acc,r)=>{
+      for(let i=0;i<12;i++) if(r.distStatus?.[i]==='postado') acc++;
+      return acc;
+    }, 0);
+    const pct = totalTemas > 0 ? Math.round((totalPostados/totalTemas)*100) : 0;
+
+    const bgAtual = m.atual ? 'background:linear-gradient(135deg,#0A1628,#1B7FD4)' : 'background:var(--branco)';
+    const corTitulo = m.atual ? 'color:var(--branco)' : 'color:var(--azul-dark)';
+    const corSub = m.atual ? 'color:rgba(255,255,255,.7)' : 'color:var(--cinza)';
+    const corBorda = m.atual ? 'border:2px solid var(--azul)' : temEstoque ? 'border:2px solid #6EE7B7' : 'border:2px solid var(--cinza-borda)';
+    const barraHTML = temEstoque ? [
+      '<div style="height:6px;background:'+(m.atual?'rgba(255,255,255,.2)':'var(--cinza-light)')+';border-radius:3px;overflow:hidden">',
+      '<div style="height:100%;width:'+pct+'%;background:'+(m.atual?'var(--branco)':'var(--relacionar)')+';border-radius:3px;transition:width .5s"></div></div>',
+      '<div style="display:flex;justify-content:space-between;margin-top:6px">',
+      '<span style="font-size:11px;'+corSub+'">'+totalPostados+'/'+totalTemas+' postados</span>',
+      '<span style="font-size:11px;'+corSub+'">'+estoques.map(r=>(OBJ_CONFIG[r.objetivo]?.emoji||'')+' '+r.formato).join(' · ')+'</span>',
+      '</div>'
+    ].join('') : '';
+
+    const clickAttr = temEstoque ? ('onclick="abrirMes(\'' + m.val + '\',\'' + m.label + '\')"') : '';
+    const hoverAttr = temEstoque ? 'onmouseover="this.style.paddingLeft=\'28px\'" onmouseout="this.style.paddingLeft=\'24px\'"' : '';
+    const estoqueInfo = temEstoque ? estoques.length+' estoque'+(estoques.length>1?'s':'')+' planejado'+(estoques.length>1?'s':'') : '⚠️ Nenhum estoque planejado para este mês';
+    const pctSpan = temEstoque ? '<span style="font-size:20px;font-weight:700;'+(m.atual?'color:rgba(255,255,255,.9)':'color:var(--azul)')+'">'+pct+'%</span>' : '';
+    const atualPin = m.atual ? '📍 ' : '';
+    const atualSpan = m.atual ? '<span style="font-size:11px;font-weight:400;margin-left:8px;opacity:.8">mês atual</span>' : '';
+
+    return '<div '+clickAttr+' style="'+bgAtual+';'+corBorda+';border-radius:var(--r-lg);padding:20px 24px;margin-bottom:12px;cursor:'+(temEstoque?'pointer':'default')+';transition:all .15s" '+hoverAttr+'>'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:'+(temEstoque?'14px':'0')+'">'
+      + '<div>'
+      + '<div style="font-size:16px;font-weight:700;'+corTitulo+'">'+atualPin+m.label+atualSpan+'</div>'
+      + '<div style="font-size:12px;margin-top:3px;'+corSub+'">'+estoqueInfo+'</div>'
+      + '</div>'
+      + pctSpan
+      + '</div>'
+      + barraHTML
+      + '</div>';
+  }).join('');
+}
+
+function abrirMes(mesVal, mesLabel){
+  const grid = document.getElementById('dist-meses-grid');
+  const detalhe = document.getElementById('dist-mes-detalhe');
+  const estoques = rodadas.filter(r=>r.mes===mesVal);
+  grid.style.display='none';
+
+  const temas = dados.temas || Array(12).fill('');
+  const OBJS = OBJ_CONFIG;
+
+  detalhe.style.display='block';
+  detalhe.innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+      <button class="btn btn-ghost btn-sm" onclick="renderDistMeses()">← Voltar</button>
+      <div style="height:1px;flex:1;background:var(--cinza-borda)"></div>
+      <span style="font-size:14px;font-weight:700;color:var(--azul-dark)">📅 ${mesLabel}</span>
+      <div style="height:1px;flex:1;background:var(--cinza-borda)"></div>
+    </div>
+    ${estoques.map(r=>{
+      const cfg = OBJS[r.objetivo];
+      const seq = MATRIZ_EMBARALHAMENTO[rodadas.indexOf(r) % 6];
+      return `
+      <div style="border:2px solid ${cfg?.borderColor||'var(--cinza-borda)'};border-radius:var(--r-lg);margin-bottom:20px;overflow:hidden">
+        <div style="background:${cfg?.bg||'var(--cinza-light)'};padding:14px 20px;display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-size:15px;font-weight:700;color:${cfg?.cor||'var(--azul-dark)'}">${cfg?.emoji||''} ${NOMES_OBJETIVO[r.objetivo]}</div>
+            <div style="font-size:12px;color:var(--cinza);margin-top:2px">${r.nome} · ${r.formato}${r.modeloNome?' · '+r.modeloNome:''}</div>
+          </div>
+          <div style="text-align:right">
+            ${(()=>{let p=0;for(let i=0;i<12;i++)if(r.distStatus?.[i]==='postado')p++;return `<span style="font-size:18px;font-weight:700;color:${cfg?.cor}">${p}/12</span><div style="font-size:10px;color:var(--cinza)">postados</div>`;})()}
+          </div>
+        </div>
+        <div style="padding:12px 16px">
+          ${seq.map((pos,i)=>{
+            const temaIdx = pos-1;
+            const tema = temas[temaIdx] || `Tema ${pos}`;
+            const postado = r.distStatus?.[temaIdx]==='postado';
+            const dataPostagem = r.datasPostagem?.[temaIdx]||'';
+            return `
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:6px;border-radius:var(--r-md);background:${postado?'#E8F8EF':'var(--cinza-light)'};border:1px solid ${postado?'#6EE7B7':'var(--cinza-borda)'}">
+              <div style="width:24px;height:24px;border-radius:50%;border:2px solid ${postado?'var(--relacionar)':'var(--cinza-borda)'};background:${postado?'var(--relacionar)':'transparent'};flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:white;font-weight:700">
+                ${postado?'✓':''}
+              </div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13px;font-weight:${postado?'400':'500'};color:${postado?'var(--cinza)':'var(--texto)'};text-decoration:${postado?'line-through':'none'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tema}</div>
+                <div style="font-size:10px;color:var(--cinza);margin-top:1px">Tópico ${pos}</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+                <span style="font-size:11px;color:var(--cinza)">📅</span>
+                <input 
+                  type="date" 
+                  value="${dataPostagem}"
+                  onchange="salvarDataPostagem(${r.id},${temaIdx},this.value)"
+                  style="font-size:11px;padding:4px 8px;border:1px solid var(--cinza-borda);border-radius:var(--r-sm);background:var(--branco);color:var(--texto);cursor:pointer"
+                >
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+    }).join('')}
+  `;
+}
+
+function salvarDataPostagem(rodadaId, temaIdx, data){
+  const rodada = rodadas.find(r=>r.id==rodadaId);
+  if(!rodada) return;
+  if(!rodada.datasPostagem) rodada.datasPostagem={};
+  if(!rodada.distStatus) rodada.distStatus={};
+  if(!rodada.status) rodada.status={};
+  rodada.datasPostagem[temaIdx] = data;
+  // Se preencheu data → marca como postado e No Ar automaticamente
+  if(data){
+    rodada.distStatus[temaIdx] = 'postado';
+    rodada.status[temaIdx] = 'noar';
+  } else {
+    rodada.distStatus[temaIdx] = '';
+    if(rodada.status[temaIdx]==='noar') rodada.status[temaIdx] = 'pronto';
+  }
+  save();
+  const mesLabel = document.querySelector('#dist-mes-detalhe span[style*="azul-dark"]')?.textContent?.replace('📅 ','').trim()||'';
+  abrirMes(rodada.mes, mesLabel);
+}
+
+function togglePostado(rodadaId, temaIdx){
+  const rodada = rodadas.find(r=>r.id==rodadaId);
+  if(!rodada) return;
+  if(!rodada.distStatus) rodada.distStatus={};
+  rodada.distStatus[temaIdx] = rodada.distStatus[temaIdx]==='postado' ? '' : 'postado';
+  save();
+  const mesAtual = rodada.mes;
+  const mesLabel = document.querySelector('#dist-mes-detalhe span[style*="azul-dark"]')?.textContent?.replace('📅 ','').trim()||'';
+  abrirMes(mesAtual, mesLabel);
+}
+
+
 // Matriz de embaralhamento fixa (6 sequências × 12 posições)
 const MATRIZ = [
   [1,2,4,3,5,6,8,7,9,10,12,11],
@@ -1076,7 +1870,7 @@ function copiarDistribuicao(){
     const tIdx = sequencia[i]-1;
     txt += `Bloco ${i+1}: ${topicos[tIdx]||'Tópico '+sequencia[i]} (${NOMES_OBJETIVO[rodada.objetivo].replace(/[^\w\s]/gi,'')} · ${rodada.formato})\n`;
   }
-  navigator.clipboard.writeText(txt).then(()=>notif('Plano copiado! ✓'));
+  copiarTexto(txt);
 }
 
 // ══ BANCO DE MODELOS ══
@@ -1939,6 +2733,237 @@ CARD 8 — SOLUÇÃO + CTA: "E isso se resolve com [SEU MÉTODO / PRODUTO / SOLU
 Tom: empático, preciso, sem drama. A força desse modelo está em nomear o que a pessoa não consegue nomear sozinha — isso gera alívio, não culpa. A solução no final soa como consequência natural, não como venda forçada.`},
     ]
   },
+  {
+    id:'live',
+    nome:'Formato Live',
+    cor:'blue',
+    bgColor:'#E8F4FD',
+    borderColor:'#BDE0F8',
+    labelColor:'#1B7FD4',
+    descricao:'Roteiros para lives — estrutura narrativa completa pronta para transmissão ao vivo',
+    funis:['meio','fundo'],
+    modelos:[
+      {
+        funil:['meio','fundo'], id:'live1', nome:'Live Colab',
+        quandoUsar:'Use quando quiser fazer uma live com convidado ou parceiro. Gera autoridade por associação e aquece a audiência para uma oferta sutil no encerramento.',
+        prompt:`Você vai gerar um roteiro completo de Live Colab de aproximadamente 30 minutos sobre o tema indicado.
+
+IDENTIDADE DA MARCA E AUDIÊNCIA:
+Use as informações do briefing da criadora e do perfil da audiência para personalizar toda a linguagem, exemplos e abordagem.
+
+ESTRUTURA OBRIGATÓRIA:
+
+ABERTURA (0–3 min)
+Boas-vindas calorosas à audiência. Apresente o tema da live em 1 frase de impacto. Crie expectativa sobre o que será revelado. Apresente o convidado — quem é, o que faz, por que está aqui hoje.
+
+AQUECIMENTO (3–8 min)
+Pergunta de conexão para a audiência (responde nos comentários). Convidado compartilha brevemente sua trajetória e relação com o tema. Criadora compartilha o ponto em comum entre elas.
+
+DESENVOLVIMENTO — CONVERSA PRINCIPAL (8–22 min)
+Bloco 1 — O problema: Qual é o maior desafio que a audiência enfrenta no tema? Convidado traz sua visão e experiência.
+Bloco 2 — A virada: O que muda quando a pessoa resolve esse problema? Cases reais ou exemplos práticos.
+Bloco 3 — O método: Qual o primeiro passo concreto que a audiência pode dar hoje?
+Durante toda a conversa: incentive comentários, leia perguntas da audiência, mantenha o ritmo leve e humano.
+
+ENCERRAMENTO (22–28 min)
+Resumo dos 3 principais aprendizados da conversa. Convidado deixa uma mensagem final para a audiência. Criadora reforça o tema com sua visão pessoal.
+
+CTA FINAL (28–30 min)
+Insira aqui a CTA definida no estoque de produção. Agradeça a presença de todos e do convidado. Convite para próxima live ou conteúdo.
+
+Tom: conversa real entre duas pessoas que se respeitam. Leve, humano, sem roteiro engessado. A audiência deve sentir que está numa conversa privilegiada, não numa apresentação formal.`
+      },
+      {
+        funil:['meio','fundo'], id:'live2', nome:'Live Aula',
+        quandoUsar:'Use quando quiser ensinar um tema de forma aprofundada, posicionando-se como referência. Educa a audiência e prepara terreno para oferta no encerramento.',
+        prompt:`Você vai gerar um roteiro completo de Live Aula de aproximadamente 30 minutos sobre o tema indicado.
+
+IDENTIDADE DA MARCA E AUDIÊNCIA:
+Use as informações do briefing da criadora e do perfil da audiência para personalizar toda a linguagem, exemplos e abordagem.
+
+ESTRUTURA OBRIGATÓRIA:
+
+ABERTURA (0–3 min)
+Boas-vindas e apresentação do tema. Frase de impacto que resume o que a audiência vai aprender. Promessa clara: "Ao final dessa live você vai saber [resultado específico]." Pedido de engajamento: "Digita nos comentários de onde você está assistindo."
+
+CONTEXTO E DOR (3–8 min)
+Por que esse tema é importante agora? Qual o erro mais comum que a audiência comete nesse tema? Valide a dor com empatia — mostre que você entende o que ela vive.
+
+DESENVOLVIMENTO — O CONTEÚDO (8–22 min)
+Divida o ensinamento em 3 pilares ou etapas claras:
+Pilar 1 — [conceito/fundação]: explique, dê exemplo real, conecte com a realidade da audiência.
+Pilar 2 — [aplicação/método]: como colocar em prática, passo a passo simplificado.
+Pilar 3 — [resultado/transformação]: o que muda quando ela aplica, casos reais ou resultados esperados.
+A cada pilar: pause para ler comentários e responder dúvidas relevantes.
+
+SÍNTESE (22–27 min)
+Recapitule os 3 pilares em frases curtas e memoráveis. "Se você for sair dessa live com uma coisa, que seja esta:" — entregue a frase de ouro do tema.
+
+CTA FINAL (27–30 min)
+Insira aqui a CTA definida no estoque de produção. Agradeça a presença. Convite para próximo conteúdo ou live.
+
+Tom: professora que domina o assunto mas fala com simplicidade. Sem jargão técnico, sem didatismo excessivo. A audiência deve sair sentindo que aprendeu algo que pode usar hoje.`
+      },
+      {
+        funil:['topo','meio','fundo'], id:'live3', nome:'Live Posicionamento',
+        quandoUsar:'Use quando quiser compartilhar seu ponto de vista sobre um tema relevante para a audiência — pode ser um tópico da linha editorial ou um assunto do momento. Fortalece identidade, gera conexão e diferencia a criadora no mercado.',
+        prompt:`Você vai gerar um roteiro completo de Live Posicionamento de aproximadamente 30 minutos sobre o tema indicado.
+
+IDENTIDADE DA MARCA E AUDIÊNCIA:
+Use as informações do briefing da criadora e do perfil da audiência para personalizar toda a linguagem, tom e posicionamento.
+
+ESTRUTURA OBRIGATÓRIA:
+
+ABERTURA (0–3 min)
+Boas-vindas diretas. Apresente o tema com uma afirmação forte ou provocadora — algo que faça a audiência querer ouvir o que vem a seguir. Ex: "Hoje eu vou falar algo que muita gente no mercado não vai concordar..."
+
+CONTEXTO — POR QUE FALAR NISSO AGORA (3–7 min)
+O que está acontecendo no mercado, na vida da audiência ou na sua própria trajetória que torna esse tema urgente. Mostre que você tem uma visão própria — não está repetindo o que todo mundo diz.
+
+POSICIONAMENTO PRINCIPAL (7–20 min)
+Ponto de vista 1 — [sua opinião/crença sobre o tema]: explique o porquê com argumentos reais.
+Ponto de vista 2 — [o que você discorda ou questiona]: quebre uma crença comum do mercado com respeito e clareza.
+Ponto de vista 3 — [o que você propõe como alternativa]: sua visão de como deveria ser, o que funciona na prática.
+A cada ponto: abra para comentários, leia reações, dialogue com a audiência.
+
+VIRADA PESSOAL (20–25 min)
+Compartilhe um momento da sua trajetória que ilustra esse posicionamento. Mostre vulnerabilidade com propósito — não é drama, é conexão.
+
+CTA FINAL (25–30 min)
+Insira aqui a CTA definida no estoque de produção. Agradeça quem ficou até o final. Convite para próximo conteúdo.
+
+Tom: honesto, firme e acolhedor ao mesmo tempo. Você tem uma opinião e não tem medo de expressá-la — mas sem arrogância. A audiência deve sentir que está ouvindo alguém que realmente acredita no que diz.`
+      },
+    ]
+  },
+  {
+    id:'estatico',
+    nome:'Formato Estático',
+    cor:'green',
+    bgColor:'#D1FAE5',
+    borderColor:'#6EE7B7',
+    labelColor:'#065F46',
+    descricao:'Prompts para posts estáticos — imagem + legenda estratégica que gera reflexão e engajamento',
+    funis:['topo','meio','fundo'],
+    modelos:[
+      {
+        funil:['topo','meio'], id:'est1', nome:'Post Legenda — PAS',
+        quandoUsar:'Use quando quiser um post direto e impactante que espelha a dor, agita o sentimento e entrega uma reflexão transformadora. Ótimo para topo e meio de funil — gera salvamentos e identificação imediata.',
+        prompt:`Você vai gerar um post estático completo (imagem + legenda) no modelo PAS sobre o tema indicado.
+
+IDENTIDADE DA MARCA E AUDIÊNCIA:
+Use as informações do briefing da criadora e do perfil da audiência para personalizar toda a linguagem, exemplos e tom.
+
+ESTRUTURA OBRIGATÓRIA:
+
+TEXTO DA IMAGEM (máximo 15 palavras)
+Uma frase curta, forte e memorável que funciona sozinha — mesmo sem ler a legenda. Pode ser uma afirmação, uma pergunta ou uma verdade que provoca. Deve parar o scroll.
+
+LEGENDA — MODELO PAS:
+
+P — PROBLEMA (2–3 linhas)
+Espelhe a situação ou dor que a audiência vive no tema. Use a linguagem dela — as palavras que ela usaria para descrever o que sente. Não explique, apenas nomeie com precisão.
+
+A — AGITAÇÃO (2–3 linhas)
+Aprofunde o sentimento. Mostre a consequência de continuar nessa situação. Gere identificação emocional — a pessoa deve pensar "é exatamente isso que eu sinto."
+
+S — SOLUÇÃO (2–3 linhas)
+Entregue a reflexão ou transformação. Não precisa ser uma solução técnica — pode ser uma mudança de perspectiva, uma verdade libertadora ou um convite para pensar diferente.
+
+LINHA DE TRANSIÇÃO (1 linha)
+Frase que conecta a legenda com a CTA. Ex: "Se isso fez sentido pra você..." / "Se você se reconheceu aqui..."
+
+CTA
+Insira aqui a CTA definida no estoque de produção.
+
+HASHTAGS
+Sugira 5 hashtags relevantes para o tema e nicho da criadora.
+
+Tom: humano, preciso, sem romantizar nem dramatizar. Cada palavra tem intenção. A legenda deve parecer que foi escrita para uma pessoa específica — não para todo mundo.`
+      },
+      {
+        funil:['topo','meio','fundo'], id:'est2', nome:'Post Legenda — AIDA',
+        quandoUsar:'Use quando quiser uma legenda mais desenvolvida que conduz a audiência por uma jornada emocional completa — da atenção até a ação. Funciona bem em todos os funis dependendo da CTA escolhida.',
+        prompt:`Você vai gerar um post estático completo (imagem + legenda) no modelo AIDA sobre o tema indicado.
+
+IDENTIDADE DA MARCA E AUDIÊNCIA:
+Use as informações do briefing da criadora e do perfil da audiência para personalizar toda a linguagem, exemplos e tom.
+
+ESTRUTURA OBRIGATÓRIA:
+
+TEXTO DA IMAGEM (máximo 15 palavras)
+Uma frase curta, forte e memorável que para o scroll. Pode ser uma afirmação provocadora, uma pergunta ou uma verdade que gera curiosidade imediata.
+
+LEGENDA — MODELO AIDA:
+
+A — ATENÇÃO (1–2 linhas)
+Abertura que prende — uma frase que faz a pessoa parar e querer continuar lendo. Pode ser uma afirmação surpreendente, uma pergunta direta ou uma história em miniatura.
+
+I — INTERESSE (3–4 linhas)
+Desenvolva o tema de forma que gere curiosidade e identificação. Traga um dado, uma observação, uma contradição ou uma situação que a audiência reconhece na própria vida.
+
+D — DESEJO (3–4 linhas)
+Mostre a transformação possível. Como seria diferente se ela encarasse o tema de outro ângulo? Pinte o cenário desejado sem prometer milagres — com realismo e emoção.
+
+A — AÇÃO (1–2 linhas)
+Linha de transição + CTA. Insira aqui a CTA definida no estoque de produção.
+
+HASHTAGS
+Sugira 5 hashtags relevantes para o tema e nicho da criadora.
+
+Tom: envolvente e humano. A legenda deve fluir como uma conversa — não como um texto de marketing. Cada bloco puxa o próximo naturalmente, sem que a pessoa perceba que está sendo conduzida.`
+      },
+    ]
+  },
+  {
+    id:'reels',
+    nome:'Formato Reels',
+    cor:'blue',
+    bgColor:'#EDE9FE',
+    borderColor:'#C4B5FD',
+    labelColor:'#6D28D9',
+    descricao:'Roteiros para Reels — estrutura narrativa curta e impactante para vídeos de feed',
+    funis:['topo','meio','fundo'],
+    modelos:[
+      {
+        funil:['topo','meio','fundo'], id:'reels1', nome:'Reels Narrativo',
+        quandoUsar:'Use para qualquer objetivo e tópico. Estrutura narrativa completa com hook forte, desenvolvimento direto, virada emocional e CTA. Funciona para Reels de 30 a 90 segundos.',
+        prompt:`Você vai gerar um roteiro completo de Reels Narrativo de 30 a 90 segundos sobre o tema indicado.
+
+IDENTIDADE DA MARCA E AUDIÊNCIA:
+Use as informações do briefing da criadora e do perfil da audiência para personalizar toda a linguagem, exemplos e tom.
+
+ESTRUTURA OBRIGATÓRIA:
+
+HOOK — PRIMEIROS 3 SEGUNDOS (1 frase)
+A frase de abertura que para o scroll imediatamente. Deve ser dita olhando direto para a câmera, com intenção. Pode ser:
+- Uma afirmação provocadora: "Você está fazendo [X] do jeito errado."
+- Uma pergunta direta: "Por que você ainda não consegue [resultado]?"
+- Uma verdade incômoda: "Ninguém te contou isso sobre [tema]."
+- Uma promessa específica: "Em 60 segundos você vai entender por que [situação]."
+
+DESENVOLVIMENTO (15–40 segundos)
+Aprofunde o tema em 3 blocos curtos e rítmicos — cada um com 1 ideia central:
+Bloco 1: Contextualize o problema ou situação — o que está acontecendo, o que a audiência vive.
+Bloco 2: Aprofunde — por que isso acontece, qual é a raiz, o que a maioria não percebe.
+Bloco 3: Plante a virada — mostre que existe outro caminho, outra perspectiva, outra possibilidade.
+
+VIRADA — O MOMENTO DE OURO (5–10 segundos)
+A frase que resume tudo — simples, memorável, que a pessoa vai querer salvar ou compartilhar. É o coração do Reels. Deve soar como uma verdade que ela sempre soube mas nunca tinha ouvido assim.
+
+CTA FINAL (3–5 segundos)
+Insira aqui a CTA definida no estoque de produção. Deve ser dito com naturalidade — não como anúncio, mas como conversa.
+
+LEGENDA SUGERIDA
+Escreva uma legenda curta (3–5 linhas) que complemente o vídeo sem repetir o roteiro. Pode ser uma reflexão adicional, uma pergunta para os comentários ou uma continuação do raciocínio.
+
+HASHTAGS
+Sugira 5 hashtags relevantes para o tema e nicho da criadora.
+
+Tom: conversa real, ritmo natural, sem roteiro engessado. A criadora deve parecer que está falando espontaneamente — mesmo que esteja seguindo uma estrutura. Direto, humano e com intenção em cada palavra.`
+      },
+    ]
+  },
 ];
 
 // ══ MEUS MODELOS ══
@@ -2028,7 +3053,7 @@ function excluirMeuModelo(id){
 
 function copiarMeuModelo(id){
   const m = meusModelos.find(m=>m.id===id);
-  if(m) navigator.clipboard.writeText(m.prompt).then(()=>notif('Prompt copiado! Cole na sua IA favorita 🚀'));
+  if(m) copiarTexto(m.prompt);
 }
 
 function renderMeusModelos(){
@@ -2112,7 +3137,7 @@ function renderBancoModelos(){
           ${temConteudo?`
           <div id="modelo-body-${m.id}" style="display:none">
             <div class="modelo-prompt">
-              <pre>${conteudo.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</pre>
+              <pre>${conteudo.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/`/g,'&#96;').replace(/\${/g,'&#36;{')}</pre>
             </div>
             <div style="padding:10px 20px;border-top:1px solid var(--cinza-borda);display:flex;justify-content:flex-end">
               <button onclick="copiarModelo('${m.id}')" class="btn btn-secondary btn-sm" style="color:${f.labelColor};border-color:${f.borderColor}">📋 Copiar prompt</button>
@@ -2137,10 +3162,178 @@ function copiarModelo(modeloId){
     const m=f.modelos.find(m=>m.id===modeloId);
     if(m){conteudo=m.prompt||m.estrutura||'';break;}
   }
-  if(conteudo) navigator.clipboard.writeText(conteudo).then(()=>notif('Prompt copiado! Cole na sua IA favorita 🚀'));
+  if(conteudo) copiarTexto(conteudo);
 }
 
-// ══ INIT ══
+// ══ FICHA TÉCNICA ══
+let fichaAtual = {rodadaId: null, idx: null};
+
+function abrirFichaTecnica(idx, rodadaId){
+  const rodada = rodadas.find(r=>r.id==rodadaId);
+  if(!rodada) return;
+  fichaAtual = {rodadaId, idx};
+
+  const temas = dados.temas || Array(12).fill('');
+  const topicos = dados.topicos || Array(12).fill('');
+  const tema = temas[idx] || 'Tema '+(idx+1);
+  const topico = topicos[idx] || '';
+  const ficha = rodada.fichas?.[idx] || {};
+
+  // Cabeçalho
+  document.getElementById('ficha-titulo').textContent = tema;
+  document.getElementById('ficha-meta').textContent =
+    NOMES_OBJETIVO[rodada.objetivo]+' · '+rodada.formato+(rodada.modeloNome?' · '+rodada.modeloNome:'')+(topico?' · T'+(idx+1)+': '+topico:'');
+
+  // Status com cores
+  const status = rodada.status?.[idx]||'pendente';
+  const dataPostagem = rodada.datasPostagem?.[idx]||'';
+  const cores = {
+    pendente: {bg:'var(--cinza-light)', cor:'var(--cinza)',      border:'var(--cinza-borda)'},
+    producao: {bg:'#FEF9E7',            cor:'#B8860B',           border:'#F5C400'},
+    pronto:   {bg:'#E8F8EF',            cor:'var(--relacionar)', border:'var(--relacionar)'},
+    noar:     {bg:'#EDE9FE',            cor:'var(--fidelizar)',  border:'var(--fidelizar)'},
+  };
+  const statusMap = {pendente:0, producao:1, pronto:2};
+  const btns = document.querySelectorAll('#ficha-status-btns .btn');
+  btns.forEach(b=>{
+    b.style.background='transparent';
+    b.style.color='var(--cinza)';
+    b.style.border='1px solid var(--cinza-borda)';
+    b.style.fontWeight='400';
+  });
+  // Se No Ar — mostrar data, esconder botões de status
+  const fichaDataEl = document.getElementById('ficha-data-postagem');
+  if(status==='noar' && dataPostagem){
+    fichaDataEl.style.display='block';
+    const d = new Date(dataPostagem+'T12:00:00');
+    document.getElementById('ficha-data-postagem-valor').textContent = d.toLocaleDateString('pt-BR');
+    document.querySelectorAll('#ficha-status-btns .btn').forEach(b=>b.style.opacity='0.4');
+  } else {
+    fichaDataEl.style.display='none';
+    document.querySelectorAll('#ficha-status-btns .btn').forEach(b=>b.style.opacity='1');
+    aplicarEstiloStatus(status);
+  }
+
+  // Gerar prompt
+  const promptTexto = gerarPromptTexto(idx, rodada);
+  document.getElementById('ficha-prompt-preview').textContent = promptTexto;
+  window._fichaPrompt = promptTexto;
+
+  // Links
+  document.getElementById('ficha-link-design').value = ficha.linkDesign||'';
+  document.getElementById('ficha-link-post').value = ficha.linkPost||'';
+
+  // Métricas
+  document.getElementById('ficha-alcance').value = ficha.alcance||'';
+  document.getElementById('ficha-impressoes').value = ficha.impressoes||'';
+  document.getElementById('ficha-seguidores').value = ficha.seguidores||'';
+  document.getElementById('ficha-curtidas').value = ficha.curtidas||'';
+  document.getElementById('ficha-comentarios').value = ficha.comentarios||'';
+  document.getElementById('ficha-salvamentos').value = ficha.salvamentos||'';
+  document.getElementById('ficha-compartilhamentos').value = ficha.compartilhamentos||'';
+  document.getElementById('ficha-visitas').value = ficha.visitas||'';
+
+  openModal('modal-ficha');
+}
+
+function aplicarEstiloStatus(status){
+  const cores = {
+    pendente: {bg:'#F0F0F0', cor:'#666666', border:'#CCCCCC'},
+    producao: {bg:'#FEF9E7', cor:'#B8860B', border:'#F5C400'},
+    pronto:   {bg:'#E8F8EF', cor:'#27AE60', border:'#27AE60'},
+  };
+  document.querySelectorAll('#ficha-status-btns .btn').forEach(b=>{
+    const s = b.getAttribute('data-status');
+    const c = s === status ? (cores[status]||cores.pendente) : null;
+    b.style.background = c ? c.bg : 'transparent';
+    b.style.color = c ? c.cor : 'var(--cinza)';
+    b.style.border = c ? '2px solid '+c.border : '1px solid var(--cinza-borda)';
+    b.style.fontWeight = c ? '700' : '400';
+    b.style.opacity = '1';
+  });
+}
+
+function setFichaStatus(novoStatus, el){
+  const rodada = rodadas.find(r=>r.id==fichaAtual.rodadaId);
+  if(!rodada) return;
+  if(!rodada.status) rodada.status={};
+  if(!rodada.distStatus) rodada.distStatus={};
+  // Toggle — se já está nesse status volta para pendente
+  const statusAtual = rodada.status[fichaAtual.idx]||'pendente';
+  const definitivo = statusAtual===novoStatus ? 'pendente' : novoStatus;
+  rodada.status[fichaAtual.idx] = definitivo;
+  // Sincronizar distStatus
+  if(definitivo==='noar') rodada.distStatus[fichaAtual.idx]='postado';
+  else if(definitivo==='pronto') rodada.distStatus[fichaAtual.idx]='pronto';
+  else if(definitivo==='producao') rodada.distStatus[fichaAtual.idx]='producao';
+  else rodada.distStatus[fichaAtual.idx]='';
+  save();
+  aplicarEstiloStatus(definitivo);
+  carregarEstoqueProducao(fichaAtual.rodadaId);
+}
+
+function copiarFichaPrompt(){
+  if(window._fichaPrompt) copiarTexto(window._fichaPrompt);
+}
+
+function salvarFicha(){
+  const rodada = rodadas.find(r=>r.id==fichaAtual.rodadaId);
+  if(!rodada) return;
+  if(!rodada.fichas) rodada.fichas={};
+  rodada.fichas[fichaAtual.idx] = {
+    linkDesign: document.getElementById('ficha-link-design').value,
+    linkPost: document.getElementById('ficha-link-post').value,
+    alcance: document.getElementById('ficha-alcance').value,
+    impressoes: document.getElementById('ficha-impressoes').value,
+    seguidores: document.getElementById('ficha-seguidores').value,
+    curtidas: document.getElementById('ficha-curtidas').value,
+    comentarios: document.getElementById('ficha-comentarios').value,
+    salvamentos: document.getElementById('ficha-salvamentos').value,
+    compartilhamentos: document.getElementById('ficha-compartilhamentos').value,
+    visitas: document.getElementById('ficha-visitas').value,
+  };
+  save();
+  closeModal('modal-ficha');
+  notif('Ficha salva! ✓');
+  carregarEstoqueProducao(fichaAtual.rodadaId);
+}
+
+function gerarPromptTexto(idx, rodada){
+  const temas = dados.temas || Array(12).fill('');
+  const topicos = dados.topicos || Array(12).fill('');
+  const tema = temas[idx] || '';
+  const topico = topicos[idx] || '';
+  const conteudo = tema || topico || 'Tema '+(idx+1);
+  const id = dados['id-nome']||'[sua marca]';
+  const assunto = dados['id-assunto']||'[seu assunto principal]';
+  const posicionamento = dados['id-posicionamento']||'';
+  const tom = dados['id-tom']||'';
+  const historia = dados['id-historia']||'';
+  const audQuem = dados['aud-quem']||'';
+  const audSente = dados['aud-sente']||'';
+  const audDeseja = dados['aud-deseja']||'';
+  const audTrava = dados['aud-trava']||'';
+
+  let prompt = `BRIEFING DA CRIADORA:\nNome/Marca: ${id}\nAssunto principal: ${assunto}`;
+  if(posicionamento) prompt += `\nPositionamento: ${posicionamento}`;
+  if(tom) prompt += `\nTom de voz: ${tom}`;
+  if(historia) prompt += `\nHistória: ${historia}`;
+  if(audQuem||audSente||audDeseja||audTrava){
+    prompt += `\n\nPERFIL DA AUDIÊNCIA:`;
+    if(audQuem) prompt += `\nQuem ela é: ${audQuem}`;
+    if(audSente) prompt += `\nO que ela sente: ${audSente}`;
+    if(audDeseja) prompt += `\nO que ela deseja: ${audDeseja}`;
+    if(audTrava) prompt += `\nO que a trava: ${audTrava}`;
+  }
+  prompt += `\n\nCONTEÚDO A CRIAR:\nTópico de referência: ${idx+1}${topico?' — '+topico:''}`;
+  prompt += `\nTema do conteúdo: ${conteudo}`;
+  prompt += `\nObjetivo: ${NOMES_OBJETIVO[rodada.objetivo]}`;
+  prompt += `\nFormato: ${rodada.formato}`;
+  if(rodada.cta) prompt += `\nCTA definida: ${rodada.cta}`;
+  if(rodada.modeloPrompt) prompt += `\n\nESTRUTURA DO ROTEIRO:\n${rodada.modeloPrompt}`;
+  return prompt;
+}
+
 function entrar(){
   localStorage.setItem('cubo_entrou','1');
   document.getElementById('splash').style.display='none';
@@ -2182,6 +3375,109 @@ function entrar(){
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="fecharCriarModelo()">Cancelar</button>
       <button class="btn btn-primary" onclick="salvarMeuModelo()">💾 Salvar modelo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL FICHA TÉCNICA ══ -->
+<div class="modal-overlay" id="modal-ficha">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-header">
+      <div>
+        <span class="modal-title" id="ficha-titulo">Ficha Técnica</span>
+        <div id="ficha-meta" style="font-size:11px;color:var(--cinza);margin-top:2px"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-ficha')">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- STATUS -->
+      <div class="form-group">
+        <label class="form-label">Status do conteúdo</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap" id="ficha-status-btns">
+          <button onclick="setFichaStatus('pendente',this)" data-status="pendente" class="btn btn-ghost btn-sm">● Pendente</button>
+          <button onclick="setFichaStatus('producao',this)" data-status="producao" class="btn btn-ghost btn-sm">▶ Em produção</button>
+          <button onclick="setFichaStatus('pronto',this)" data-status="pronto" class="btn btn-ghost btn-sm">✓ Pronto</button>
+        </div>
+        <div id="ficha-data-postagem" style="display:none;margin-top:12px;padding:10px 14px;background:#EDE9FE;border-radius:var(--r-md);font-size:13px;color:var(--fidelizar);font-weight:600">
+          📡 No Ar — postado em <span id="ficha-data-postagem-valor"></span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- PROMPT -->
+      <div class="form-group">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <label class="form-label" style="margin:0">Prompt gerado</label>
+          <button class="btn btn-secondary btn-sm" onclick="copiarFichaPrompt()">📋 Copiar prompt</button>
+        </div>
+        <div id="ficha-prompt-preview" style="background:var(--cinza-light);border:1px solid var(--cinza-borda);border-radius:var(--r-md);padding:14px;font-size:12px;color:var(--texto);line-height:1.7;max-height:200px;overflow-y:auto;white-space:pre-wrap"></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- LINKS -->
+      <div class="form-group">
+        <label class="form-label">Links</label>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">🎨</span>
+            <input class="form-input" id="ficha-link-design" placeholder="Link do designer (Canva, Drive...)" style="font-size:12px">
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">📱</span>
+            <input class="form-input" id="ficha-link-post" placeholder="Link do post no perfil" style="font-size:12px">
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- MÉTRICAS -->
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Métricas</label>
+        <div class="hint-azul" style="margin-bottom:12px">💡 Preencha após o conteúdo ir ao ar. Copie os dados do Instagram.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div>
+            <label style="font-size:11px;color:var(--cinza);font-weight:600;display:block;margin-bottom:4px">👁️ Alcance</label>
+            <input class="form-input" id="ficha-alcance" type="number" placeholder="0" style="font-size:13px">
+          </div>
+          <div>
+            <label style="font-size:11px;color:var(--cinza);font-weight:600;display:block;margin-bottom:4px">📊 Impressões</label>
+            <input class="form-input" id="ficha-impressoes" type="number" placeholder="0" style="font-size:13px">
+          </div>
+          <div>
+            <label style="font-size:11px;color:var(--cinza);font-weight:600;display:block;margin-bottom:4px">👥 Seguidores ganhos</label>
+            <input class="form-input" id="ficha-seguidores" type="number" placeholder="0" style="font-size:13px">
+          </div>
+          <div>
+            <label style="font-size:11px;color:var(--cinza);font-weight:600;display:block;margin-bottom:4px">❤️ Curtidas</label>
+            <input class="form-input" id="ficha-curtidas" type="number" placeholder="0" style="font-size:13px">
+          </div>
+          <div>
+            <label style="font-size:11px;color:var(--cinza);font-weight:600;display:block;margin-bottom:4px">💬 Comentários</label>
+            <input class="form-input" id="ficha-comentarios" type="number" placeholder="0" style="font-size:13px">
+          </div>
+          <div>
+            <label style="font-size:11px;color:var(--cinza);font-weight:600;display:block;margin-bottom:4px">🔖 Salvamentos</label>
+            <input class="form-input" id="ficha-salvamentos" type="number" placeholder="0" style="font-size:13px">
+          </div>
+          <div>
+            <label style="font-size:11px;color:var(--cinza);font-weight:600;display:block;margin-bottom:4px">📤 Compartilhamentos</label>
+            <input class="form-input" id="ficha-compartilhamentos" type="number" placeholder="0" style="font-size:13px">
+          </div>
+          <div>
+            <label style="font-size:11px;color:var(--cinza);font-weight:600;display:block;margin-bottom:4px">🎯 Visitas ao perfil</label>
+            <input class="form-input" id="ficha-visitas" type="number" placeholder="0" style="font-size:13px">
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-ficha')">Fechar</button>
+      <button class="btn btn-primary" onclick="salvarFicha()">💾 Salvar ficha</button>
     </div>
   </div>
 </div>
