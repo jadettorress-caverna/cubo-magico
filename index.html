@@ -241,6 +241,26 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
 
       <div class="hint-azul" style="margin-bottom:20px">💡 Responda com frases curtas e diretas — este é seu cadastro editorial. Essas informações alimentam todos os prompts gerados pelo sistema.</div>
 
+      <!-- PROMPT GERADOR DO CANVAS -->
+      <div class="card" style="margin-bottom:20px;border:2px solid var(--azul-light)">
+        <div class="card-header" style="background:var(--azul-light)">
+          <span class="card-title" style="color:var(--azul-dark)">🤖 Preencher meu Canvas de Manifesto</span>
+          <button class="btn btn-primary btn-sm" onclick="copiarPromptCanvas()">Copiar prompt</button>
+        </div>
+        <div class="card-body">
+          <div class="hint-azul" style="margin-bottom:12px">💡 Copie o prompt, cole na sua IA favorita, responda as perguntas e cole a resposta aqui — os campos serão preenchidos automaticamente!</div>
+          <div id="canvas-prompt-preview" style="display:none;background:var(--cinza-light);border:1px solid var(--cinza-borda);border-radius:var(--r-md);padding:14px;font-size:12px;color:var(--texto);line-height:1.6;max-height:150px;overflow-y:auto;margin-bottom:12px;white-space:pre-wrap"></div>
+          <div id="canvas-colar-section" style="display:none">
+            <div class="hint-dourado" style="margin-bottom:12px">✨ Ótimo! Agora cole aqui a resposta completa da IA:</div>
+            <textarea id="canvas-colar-input" class="form-input" style="min-height:150px;font-size:12px" placeholder="Cole aqui a resposta completa da IA..."></textarea>
+            <div style="display:flex;justify-content:flex-end;margin-top:10px;gap:8px">
+              <button class="btn btn-ghost btn-sm" onclick="document.getElementById('canvas-colar-section').style.display='none'">Cancelar</button>
+              <button class="btn btn-primary" onclick="distribuirRespostaCanvas()">✨ Distribuir nos campos</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="grid-2" style="margin-bottom:24px">
         <div class="card">
           <div class="card-header"><span class="card-title">Quem sou eu</span><span style="font-size:10px;color:var(--cinza)">Identidade pessoal</span></div>
@@ -354,7 +374,7 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
         </div>
         <div class="card-body">
           <div class="hint-azul" style="margin-bottom:12px">💡 Preencha o Canvas acima, copie o prompt, cole na sua IA favorita e depois cole a resposta aqui — os campos serão preenchidos automaticamente!</div>
-          <div id="prompt-audiencia-preview" style="background:var(--cinza-light);border:1px solid var(--cinza-borda);border-radius:var(--r-md);padding:14px;font-size:12px;color:var(--cinza);line-height:1.6;font-style:italic">
+          <div id="prompt-audiencia-preview" style="display:none;background:var(--cinza-light);border:1px solid var(--cinza-borda);border-radius:var(--r-md);padding:14px;font-size:12px;color:var(--cinza);line-height:1.6;font-style:italic">
             Preencha o Canvas de Manifesto acima para gerar o prompt...
           </div>
           <!-- CAMPO DE COLAR RESPOSTA -->
@@ -362,7 +382,7 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
             <div class="hint-dourado" style="margin-bottom:12px">✨ Ótimo! Agora cole aqui a resposta completa da IA:</div>
             <textarea id="audiencia-colar-input" class="form-input" style="min-height:200px;font-size:12px" placeholder="Cole aqui a resposta completa da IA..."></textarea>
             <div style="display:flex;justify-content:flex-end;margin-top:10px;gap:8px">
-              <button class="btn btn-ghost btn-sm" onclick="document.getElementById('audiencia-colar-section').style.display='none';document.getElementById('prompt-audiencia-preview').style.display='block'">Cancelar</button>
+              <button class="btn btn-ghost btn-sm" onclick="const _acs2=document.getElementById('audiencia-colar-section'); if(_acs2) _acs2.style.display='none';document.getElementById('prompt-audiencia-preview').style.display='block'">Cancelar</button>
               <button class="btn btn-primary" onclick="distribuirRespostaAudiencia()">✨ Distribuir nos campos</button>
             </div>
           </div>
@@ -450,99 +470,111 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
         <div class="page-sub">3 conjuntos de tópicos — cada um com sua lógica e prompt gerador</div>
       </div>
 
-      <!-- ABAS -->
-      <div style="display:flex;gap:4px;margin-bottom:24px;border-bottom:2px solid var(--cinza-borda);padding-bottom:0">
-        <button id="aba-metodo" onclick="trocarAbaTopicos('metodo')" style="padding:10px 20px;border:none;border-radius:8px 8px 0 0;font-size:13px;font-weight:600;cursor:pointer;background:var(--azul);color:#fff;margin-bottom:-2px;border-bottom:2px solid var(--azul)">🎯 Método</button>
-        <button id="aba-audiencia-top" onclick="trocarAbaTopicos('audiencia-top')" style="padding:10px 20px;border:none;border-radius:8px 8px 0 0;font-size:13px;font-weight:600;cursor:pointer;background:var(--cinza-light);color:var(--cinza);margin-bottom:-2px">🧠 Audiência</button>
-        <button id="aba-territorios" onclick="trocarAbaTopicos('territorios')" style="padding:10px 20px;border:none;border-radius:8px 8px 0 0;font-size:13px;font-weight:600;cursor:pointer;background:var(--cinza-light);color:var(--cinza);margin-bottom:-2px">🗺️ Territórios</button>
-      </div>
-
-      <!-- ABA MÉTODO -->
-      <div id="conteudo-aba-metodo">
-        <div class="card" style="margin-bottom:20px">
-          <div class="card-header"><span class="card-title">Assunto Principal</span></div>
-          <div class="card-body">
-            <div class="form-group" style="margin-bottom:0">
-              <textarea class="form-input" id="top-assunto" placeholder="Ex: Empreendedorismo digital para mulheres 35+" oninput="atualizarPromptTopicos()" style="min-height:60px"></textarea>
-              <div class="hint-azul" style="margin-top:8px">💡 Se você ainda não tem clareza sobre seu assunto principal, o programa <strong>12 Semanas no AR</strong> pode te ajudar. Fale com o suporte.</div>
-            </div>
-          </div>
+      <!-- ASSUNTO PRINCIPAL -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-header">
+          <span class="card-title">🎯 Assunto Principal</span>
         </div>
-        <div class="card" style="margin-bottom:20px">
-          <div class="card-header">
-            <span class="card-title">📋 Prompt para extrair tópicos do Método</span>
-            <button class="btn btn-primary btn-sm" onclick="copiarPromptTopicos()">Copiar prompt</button>
-          </div>
-          <div class="card-body">
-            <div class="hint-azul" style="margin-bottom:12px">💡 Cole os 12 tópicos estruturais do seu método — máximo 2 palavras cada.</div>
-            <div id="prompt-topicos-preview" style="background:var(--cinza-light);border:1px solid var(--cinza-borda);border-radius:var(--r-md);padding:14px;font-size:13px;color:var(--texto);line-height:1.8">
-              <em style="color:var(--cinza)">Digite seu assunto principal acima para gerar o prompt...</em>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">Seus 12 Tópicos do Método</span>
-            <button class="btn btn-primary btn-sm" onclick="salvarTopicosAssunto()">💾 Salvar</button>
-          </div>
-          <div class="card-body">
-            <div id="topicos-lista"></div>
-          </div>
+        <div class="card-body">
+          <textarea class="form-input" id="top-assunto" placeholder="Ex: Empreendedorismo digital para mulheres 35+" oninput="atualizarPromptTopicos()" style="min-height:50px"></textarea>
+          <div class="hint-azul" style="margin-top:8px">💡 Este é o tema central da sua comunicação — ele alimenta os prompts dos 3 conjuntos de tópicos abaixo.</div>
         </div>
       </div>
 
-      <!-- ABA AUDIÊNCIA -->
-      <div id="conteudo-aba-audiencia-top" style="display:none">
-        <div class="card" style="margin-bottom:20px;border:2px solid #8E44AD22">
-          <div class="card-header" style="background:#F5EEFF">
-            <span class="card-title" style="color:#8E44AD">📋 Prompt para extrair tópicos da Audiência</span>
-            <button class="btn btn-sm" style="background:#8E44AD;color:#fff" onclick="copiarPromptTopicosAudiencia()">Copiar prompt</button>
-          </div>
-          <div class="card-body">
-            <div class="hint-azul" style="margin-bottom:12px">💡 Esses tópicos são baseados no Mapa Psicoemocional da sua persona — sonhos, medos, culpas, suspeitas e inimigos. Máximo 2 palavras cada.</div>
-            <div id="prompt-topicos-audiencia-preview" style="background:var(--cinza-light);border:1px solid var(--cinza-borda);border-radius:var(--r-md);padding:14px;font-size:13px;color:var(--cinza);line-height:1.8;font-style:italic">
-              Preencha sua Identidade para gerar o prompt...
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header" style="background:#F5EEFF">
-            <span class="card-title" style="color:#8E44AD">Seus 12 Tópicos da Audiência</span>
-            <button class="btn btn-sm" style="background:#8E44AD;color:#fff" onclick="salvarTopicosAudiencia()">💾 Salvar</button>
-          </div>
-          <div class="card-body">
-            <div id="topicos-audiencia-lista"></div>
-          </div>
-        </div>
-      </div>
+      <!-- 3 COLUNAS DE TÓPICOS -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
 
-      <!-- ABA TERRITÓRIOS -->
-      <div id="conteudo-aba-territorios" style="display:none">
-        <div class="card" style="margin-bottom:20px;border:2px solid #27AE6022">
-          <div class="card-header" style="background:#F0FFF4">
-            <span class="card-title" style="color:#27AE60">📋 Prompt para extrair Territórios Temáticos</span>
-            <button class="btn btn-sm" style="background:#27AE60;color:#fff" onclick="copiarPromptTopicosTerritorios()">Copiar prompt</button>
+        <!-- COLUNA 1 — ASSUNTO PRINCIPAL -->
+        <div>
+          <div class="card" style="margin-bottom:12px">
+            <div class="card-header">
+              <span class="card-title" style="font-size:12px">📋 Prompt</span>
+              <button class="btn btn-primary btn-sm" style="font-size:11px" onclick="copiarPromptTopicos()">Copiar</button>
+            </div>
+            <div class="card-body" style="padding:10px">
+              <div id="prompt-topicos-preview" style="display:none;background:var(--cinza-light);border:1px solid var(--cinza-borda);border-radius:var(--r-md);padding:10px;font-size:11px;color:var(--texto);line-height:1.7;margin-bottom:8px;white-space:pre-wrap;max-height:120px;overflow-y:auto"></div>
+              <div id="topicos-metodo-colar-section" style="display:none">
+                <textarea id="topicos-metodo-colar-input" class="form-input" style="min-height:80px;font-size:11px" placeholder="Cole os 12 tópicos numerados..."></textarea>
+                <div style="display:flex;justify-content:flex-end;margin-top:6px;gap:6px">
+                  <button class="btn btn-ghost btn-sm" style="font-size:11px" onclick="fecharColarTopicosMetodo()">Cancelar</button>
+                  <button class="btn btn-primary btn-sm" style="font-size:11px" onclick="distribuirTopicosMetodo()">✨ Distribuir</button>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="card-body">
-            <div class="hint-azul" style="margin-bottom:12px">💡 Os territórios temáticos são os espaços que seu conteúdo deve ocupar — baseados nos 5 pilares de conexão emocional de Blair Warren. Máximo 2 palavras cada.</div>
-            <div id="prompt-topicos-territorios-preview" style="background:var(--cinza-light);border:1px solid var(--cinza-borda);border-radius:var(--r-md);padding:14px;font-size:13px;color:var(--cinza);line-height:1.8;font-style:italic">
-              Preencha sua Identidade para gerar o prompt...
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title" style="font-size:12px">Seus 12 Tópicos</span>
+              <button class="btn btn-primary btn-sm" style="font-size:11px" onclick="salvarTopicosAssunto()">💾</button>
+            </div>
+            <div class="card-body" style="padding:10px">
+              <div id="topicos-lista"></div>
             </div>
           </div>
         </div>
-        <div class="card">
-          <div class="card-header" style="background:#F0FFF4">
-            <span class="card-title" style="color:#27AE60">Seus 12 Territórios Temáticos</span>
-            <button class="btn btn-sm" style="background:#27AE60;color:#fff" onclick="salvarTopicosTerritorios()">💾 Salvar</button>
+
+        <!-- COLUNA 2 — PERSONA -->
+        <div>
+          <div class="card" style="margin-bottom:12px;border:2px solid #8E44AD22">
+            <div class="card-header" style="background:#F5EEFF">
+              <span class="card-title" style="color:#8E44AD;font-size:12px">📋 Prompt da Persona</span>
+              <button class="btn btn-sm" style="background:#8E44AD;color:#fff;font-size:11px" onclick="copiarPromptTopicosAudiencia()">Copiar</button>
+            </div>
+            <div class="card-body" style="padding:10px">
+              <div id="prompt-topicos-audiencia-preview" style="display:none;background:var(--cinza-light);border:1px solid var(--cinza-borda);border-radius:var(--r-md);padding:10px;font-size:11px;color:var(--texto);line-height:1.7;margin-bottom:8px;white-space:pre-wrap;max-height:120px;overflow-y:auto"></div>
+              <div id="topicos-audiencia-colar-section" style="display:none">
+                <textarea id="topicos-audiencia-colar-input" class="form-input" style="min-height:80px;font-size:11px" placeholder="Cole os 12 tópicos numerados..."></textarea>
+                <div style="display:flex;justify-content:flex-end;margin-top:6px;gap:6px">
+                  <button class="btn btn-ghost btn-sm" style="font-size:11px" onclick="fecharColarTopicosAudiencia()">Cancelar</button>
+                  <button class="btn btn-sm" style="background:#8E44AD;color:#fff;font-size:11px" onclick="distribuirTopicosAudiencia()">✨ Distribuir</button>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="card-body">
-            <div id="topicos-territorios-lista"></div>
+          <div class="card">
+            <div class="card-header" style="background:#F5EEFF">
+              <span class="card-title" style="color:#8E44AD;font-size:12px">🧠 Tópicos da Persona</span>
+              <button class="btn btn-sm" style="background:#8E44AD;color:#fff;font-size:11px" onclick="salvarTopicosAudiencia()">💾</button>
+            </div>
+            <div class="card-body" style="padding:10px">
+              <div id="topicos-audiencia-lista"></div>
+            </div>
           </div>
         </div>
+
+        <!-- COLUNA 3 — CONEXÃO EMOCIONAL -->
+        <div>
+          <div class="card" style="margin-bottom:12px;border:2px solid #27AE6022">
+            <div class="card-header" style="background:#F0FFF4">
+              <span class="card-title" style="color:#27AE60;font-size:12px">📋 Prompt de Conexão</span>
+              <button class="btn btn-sm" style="background:#27AE60;color:#fff;font-size:11px" onclick="copiarPromptTopicosTerritorios()">Copiar</button>
+            </div>
+            <div class="card-body" style="padding:10px">
+              <div id="prompt-topicos-territorios-preview" style="display:none;background:var(--cinza-light);border:1px solid var(--cinza-borda);border-radius:var(--r-md);padding:10px;font-size:11px;color:var(--texto);line-height:1.7;margin-bottom:8px;white-space:pre-wrap;max-height:120px;overflow-y:auto"></div>
+              <div id="topicos-territorios-colar-section" style="display:none">
+                <textarea id="topicos-territorios-colar-input" class="form-input" style="min-height:80px;font-size:11px" placeholder="Cole os 12 tópicos numerados..."></textarea>
+                <div style="display:flex;justify-content:flex-end;margin-top:6px;gap:6px">
+                  <button class="btn btn-ghost btn-sm" style="font-size:11px" onclick="fecharColarTopicosTerritorios()">Cancelar</button>
+                  <button class="btn btn-sm" style="background:#27AE60;color:#fff;font-size:11px" onclick="distribuirTopicosTerritorios()">✨ Distribuir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" style="background:#F0FFF4">
+              <span class="card-title" style="color:#27AE60;font-size:12px">🗺️ Tópicos de Conexão</span>
+              <button class="btn btn-sm" style="background:#27AE60;color:#fff;font-size:11px" onclick="salvarTopicosTerritorios()">💾</button>
+            </div>
+            <div class="card-body" style="padding:10px">
+              <div id="topicos-territorios-lista"></div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <!-- ══ MONTAR CUBO ══ -->
+        <!-- ══ MONTAR CUBO ══ -->
     <div id="panel-cubo" class="panel">
       <div class="page-header">
         <div class="page-title">Montar o Cubo</div>
@@ -561,21 +593,22 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
           <div style="margin-bottom:16px">
             <div style="font-size:11px;font-weight:700;color:var(--cinza);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Escolha o conjunto de tópicos:</div>
             <div style="display:flex;gap:8px">
-              <button id="conj-metodo" onclick="selecionarConjuntoTopicos('metodo',this)" class="btn btn-sm" style="background:var(--azul);color:#fff;font-size:12px">🎯 Método</button>
-              <button id="conj-audiencia" onclick="selecionarConjuntoTopicos('audiencia',this)" class="btn btn-sm" style="background:var(--cinza-light);color:var(--cinza);font-size:12px">🧠 Audiência</button>
-              <button id="conj-territorios" onclick="selecionarConjuntoTopicos('territorios',this)" class="btn btn-sm" style="background:var(--cinza-light);color:var(--cinza);font-size:12px">🗺️ Territórios</button>
+              <button id="conj-metodo" onclick="selecionarConjuntoTopicos('metodo',this)" class="btn btn-sm" style="background:var(--azul);color:#fff;font-size:12px">🎯 Tópicos do Assunto Principal</button>
+              <button id="conj-audiencia" onclick="selecionarConjuntoTopicos('audiencia',this)" class="btn btn-sm" style="background:var(--cinza-light);color:var(--cinza);font-size:12px">🧠 Tópicos da Persona</button>
+              <button id="conj-territorios" onclick="selecionarConjuntoTopicos('territorios',this)" class="btn btn-sm" style="background:var(--cinza-light);color:var(--cinza);font-size:12px">🗺️ Tópicos de Conexão Emocional</button>
             </div>
           </div>
           <!-- OBJETIVOS -->
           <div style="margin-bottom:14px">
             <div style="font-size:11px;font-weight:700;color:var(--cinza);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Escolha o objetivo do estoque de conteúdo:</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap" id="obj-temas-btns">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap" id="obj-temas-btns">
               <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('atrair',this)" style="border-color:var(--atrair);color:var(--atrair)">🟠 Atrair</button>
               <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('envolver',this)" style="border-color:#B8860B;color:#B8860B">🟡 Envolver</button>
               <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('relacionar',this)" style="border-color:var(--relacionar);color:var(--relacionar)">🟢 Relacionar</button>
               <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('ofertar',this)" style="border-color:var(--ofertar);color:var(--ofertar)">🔴 Ofertar</button>
               <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('fidelizar',this)" style="border-color:var(--fidelizar);color:var(--fidelizar)">🟣 Fidelizar</button>
               <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('humanizar',this)" style="border-color:var(--humanizar);color:var(--humanizar)">🔵 Humanizar</button>
+              <button class="btn btn-primary btn-sm" id="btn-copiar-temas" onclick="copiarPromptTemas()" style="display:none;margin-left:auto">📋 Copiar prompt</button>
             </div>
           </div>
           <div id="prompt-temas-preview" style="display:none;background:var(--cinza-light);border:1px solid var(--cinza-borda);border-radius:var(--r-md);padding:14px;font-size:13px;color:var(--texto);line-height:1.8"></div>
@@ -863,6 +896,7 @@ function goTo(panel, btn){
     if(inp && dados['top-assunto']) { inp.value = dados['top-assunto']; atualizarPromptTopicos(); }
   }
   if(panel==='cubo'){
+    dados = JSON.parse(localStorage.getItem('cubo_dados')||'{}');
     renderTopicosMontagem();
     // Limpar gerador de temas ao entrar na tela
     const prev = document.getElementById('prompt-temas-preview');
@@ -877,8 +911,8 @@ function goTo(panel, btn){
   if(panel==='modelos') renderBancoModelos();
   if(panel==='producao'){
     // Sempre reinicia mostrando os 6 cards
-    document.getElementById('prod-objetivos-grid').style.display='grid';
-    document.getElementById('prod-objetivo-detalhe').style.display='none';
+    const _pog=document.getElementById('prod-objetivos-grid'); if(_pog) _pog.style.display='grid';
+    const _pod=document.getElementById('prod-objetivo-detalhe'); if(_pod) _pod.style.display='none';
     document.getElementById('prod-conteudo').innerHTML='';
     renderProdObjetivos();
   }
@@ -911,12 +945,18 @@ function openModal(id){
   document.getElementById(id).classList.add('open');
   if(id==='modal-nova-rodada'){
     popularMeses();
+    // Reset estado
+    objetivoSelecionado = '';
+    formatoSelecionado = '';
+    document.querySelectorAll('#rod-objetivos .objetivo-card').forEach(c=>c.style.outline='none');
+    document.querySelectorAll('#rod-formatos .btn').forEach(b=>{b.style.background='transparent';b.style.fontWeight='400';});
+    document.getElementById('rod-nome').value='';
     // Pré-selecionar objetivo se vier do gerador de temas
     if(window._objetivoTemaSelecionado){
       setTimeout(()=>{
         const card = document.querySelector(`#rod-objetivos .objetivo-card.${window._objetivoTemaSelecionado}`);
         if(card) selecionarObjetivo(window._objetivoTemaSelecionado, card);
-      }, 100);
+      }, 200);
     }
   }
 }
@@ -972,6 +1012,102 @@ function salvarAudiencia(){
 }
 
 // ══ TÓPICOS ══
+function copiarPromptCanvas(){
+  const prompt = `Vou te fazer algumas perguntas para preencher meu Canvas de Manifesto Editorial. Responda de forma curta e direta — exceto a trajetória que pode ser um pouco mais elaborada.
+
+Responda EXATAMENTE neste formato, usando os marcadores abaixo:
+
+QUEM SOU EU:
+[Seu nome completo e como você se define profissionalmente — ex: Jade Torres, mentora de projetos digitais]
+
+O QUE EU FAÇO:
+[O que você ensina, transforma ou entrega — ex: Ensino mulheres a viver do digital através do seu conhecimento]
+
+PARA QUEM EU FAÇO:
+[Seu público principal em poucas palavras — ex: Mulheres 35+ que querem transição de carreira para o digital]
+
+COMO EU FAÇO:
+[Seu método, produtos ou formato de trabalho — ex: Mentorias, cursos e comunidade online]
+
+QUAL MINHA CAUSA:
+[Sua bandeira, o que você defende — ex: Toda mulher pode viver do que sabe]
+
+POR QUE EU FAÇO:
+[Seu propósito e legado — ex: Para provar que experiência e conhecimento têm valor no digital]
+
+MINHA HISTÓRIA:
+[Resumo da sua trajetória — de onde você veio, o que viveu, como chegou até aqui. Pode ser um pouco mais longo que os outros campos.]
+
+TOM DE VOZ:
+[Como você fala — ex: Acolhedora, direta e provocativa]
+
+FRASE DE POSICIONAMENTO:
+[Quem você ajuda, com o quê e qual transformação entrega — em 1 frase]
+
+NUNCA FALAR OU FAZER:
+[O que está fora do seu posicionamento]
+
+SEMPRE PRIORIZAR:
+[O que define sua comunicação]`;
+
+  copiarTexto(prompt);
+  document.getElementById('canvas-prompt-preview').textContent = prompt;
+  const _cpp=document.getElementById('canvas-prompt-preview'); if(_cpp) _cpp.style.display='block';
+  const _ccs=document.getElementById('canvas-colar-section'); if(_ccs) _ccs.style.display='block';
+  notif('Prompt copiado! Cole na sua IA favorita 🚀');
+}
+
+function distribuirRespostaCanvas(){
+  const texto = document.getElementById('canvas-colar-input').value.trim();
+  if(!texto){ notif('Cole a resposta da IA primeiro'); return; }
+
+  const campos = {
+    'QUEM SOU EU:':           'id-nome',
+    'O QUE EU FAÇO:':         'id-assunto',
+    'PARA QUEM EU FAÇO:':     'id-paraquem',
+    'COMO EU FAÇO:':          'id-como',
+    'QUAL MINHA CAUSA:':      'id-causa',
+    'POR QUE EU FAÇO:':       'id-porque',
+    'MINHA HISTÓRIA:':        'id-historia',
+    'TOM DE VOZ:':            'id-tom',
+    'FRASE DE POSICIONAMENTO:':'id-posicionamento',
+    'NUNCA FALAR OU FAZER:':  'id-nunca',
+    'SEMPRE PRIORIZAR:':      'id-sempre',
+  };
+
+  const marcadores = Object.keys(campos);
+  let preenchidos = 0;
+
+  marcadores.forEach((marcador, idx)=>{
+    const inicio = texto.indexOf(marcador);
+    if(inicio === -1) return;
+    const fimMarcador = inicio + marcador.length;
+    const proximoMarcador = marcadores.slice(idx+1).reduce((min, m)=>{
+      const pos = texto.indexOf(m, fimMarcador);
+      return pos > -1 && pos < min ? pos : min;
+    }, texto.length);
+    const valor = texto.slice(fimMarcador, proximoMarcador).trim();
+    const el = document.getElementById(campos[marcador]);
+    if(el && valor){
+      el.value = valor;
+      dados[campos[marcador]] = valor;
+      preenchidos++;
+    }
+  });
+
+  save();
+  atualizarPromptAudiencia();
+
+  if(preenchidos > 0){
+    notif(`${preenchidos} campos preenchidos automaticamente! ✓`);
+    const _ccs2=document.getElementById('canvas-colar-section'); if(_ccs2) _ccs2.style.display='none';
+    document.getElementById('canvas-colar-input').value='';
+    const _cpp2=document.getElementById('canvas-prompt-preview'); if(_cpp2) _cpp2.style.display='none';
+  } else {
+    notif('Não consegui identificar os campos — verifique se a IA seguiu o formato solicitado');
+  }
+}
+
 function atualizarPromptAudiencia(){
   const nome = document.getElementById('id-nome')?.value.trim()||'[sua marca]';
   const assunto = document.getElementById('id-assunto')?.value.trim()||'';
@@ -1030,13 +1166,9 @@ function copiarPromptAudiencia(){
   atualizarPromptAudiencia();
   if(!window._promptAudienciaAtual) return;
   copiarTexto(window._promptAudienciaAtual);
-  // Esconder preview e mostrar campo de colar resposta
-  setTimeout(()=>{
-    document.getElementById('prompt-audiencia-preview').style.display='none';
-    document.querySelector('[onclick="copiarPromptAudiencia()"]').style.display='none';
-    document.getElementById('audiencia-colar-section').style.display='block';
-    notif('Prompt copiado! Cole na sua IA favorita 🚀');
-  }, 800);
+  const _pap=document.getElementById('prompt-audiencia-preview'); if(_pap) _pap.style.display='block';
+  const _acs=document.getElementById('audiencia-colar-section'); if(_acs) _acs.style.display='block';
+  notif('Prompt copiado! Cole na sua IA favorita 🚀');
 }
 
 function distribuirRespostaAudiencia(){
@@ -1079,11 +1211,10 @@ function distribuirRespostaAudiencia(){
   // Feedback
   if(preenchidos > 0){
     notif(`${preenchidos} campos preenchidos automaticamente! ✓`);
-    document.getElementById('audiencia-colar-section').style.display='none';
+    const _acs2=document.getElementById('audiencia-colar-section'); if(_acs2) _acs2.style.display='none';
     document.getElementById('audiencia-colar-input').value='';
-    // Mostrar botão de copiar novamente
+    const _pap2=document.getElementById('prompt-audiencia-preview'); if(_pap2) _pap2.style.display='none';
     document.querySelector('[onclick="copiarPromptAudiencia()"]').style.display='inline-flex';
-    document.getElementById('prompt-audiencia-preview').style.display='block';
   } else {
     notif('Não consegui identificar os campos — verifique se a IA seguiu o formato solicitado');
   }
@@ -1336,6 +1467,30 @@ function copiarPromptTopicos(){
   if(!assunto){ notif('Digite seu assunto principal primeiro'); return; }
   const prompt = `De acordo com meu assunto principal que é ${assunto}, me entregue 12 tópicos que serão a estrutura da minha comunicação no digital. Cada tópico deve ter no máximo 2 palavras — são tópicos estruturais, não temas.`;
   copiarTexto(prompt);
+  document.getElementById('prompt-topicos-preview').textContent = prompt;
+  const _ptp2=document.getElementById('prompt-topicos-preview'); if(_ptp2) _ptp2.style.display='block';
+  const _tmcs=document.getElementById('topicos-metodo-colar-section'); if(_tmcs) _tmcs.style.display='block';
+  notif('Prompt copiado! Cole na sua IA favorita 🚀');
+}
+
+function fecharColarTopicosMetodo(){
+  const _tmcs2=document.getElementById('topicos-metodo-colar-section'); if(_tmcs2) _tmcs2.style.display='none';
+  const _ptp3=document.getElementById('prompt-topicos-preview'); if(_ptp3) _ptp3.style.display='none';
+  document.getElementById('topicos-metodo-colar-input').value='';
+}
+
+function distribuirTopicosMetodo(){
+  const texto = document.getElementById('topicos-metodo-colar-input').value.trim();
+  if(!texto){ notif('Cole os tópicos primeiro'); return; }
+  const linhas = texto.split('\n')
+    .map(l=>l.replace(/^\d+[\.\)\-\s]+/,'').trim())
+    .filter(l=>l.length>0);
+  if(!dados.topicos) dados.topicos = Array(12).fill('');
+  linhas.slice(0,12).forEach((t,i)=>{ dados.topicos[i]=t; });
+  save();
+  renderTopicos();
+  fecharColarTopicosMetodo();
+  notif(`${Math.min(linhas.length,12)} tópicos distribuídos! ✓`);
 }
 
 function copiarTexto(texto){
@@ -1428,6 +1583,7 @@ let conjuntoTopicosSelecionado = 'metodo';
 
 function selecionarConjuntoTopicos(conjunto, el){
   conjuntoTopicosSelecionado = conjunto;
+  dados = JSON.parse(localStorage.getItem('cubo_dados')||'{}');
   const cores = {
     metodo:      {bg:'var(--azul)', cor:'#fff'},
     audiencia:   {bg:'#8E44AD',     cor:'#fff'},
@@ -1441,10 +1597,11 @@ function selecionarConjuntoTopicos(conjunto, el){
   });
   // Resetar prompt
   window._promptTemasAtual = null;
-  document.getElementById('prompt-temas-preview').style.display='none';
-  document.getElementById('btn-copiar-temas').style.display='none';
+  const _ptp=document.getElementById('prompt-temas-preview'); if(_ptp) _ptp.style.display='none';
+  const _bct=document.getElementById('btn-copiar-temas'); if(_bct) _bct.style.display='none';
   document.querySelectorAll('#obj-temas-btns .btn').forEach(b=>b.style.fontWeight='400');
   window._objetivoTemaSelecionado = null;
+  renderTopicosMontagem();
 }
 
 function getTopicosConjunto(){
@@ -1460,13 +1617,26 @@ function getNomeConjunto(){
 }
 
 function selecionarObjetivoTema(objetivo, el){
-  document.querySelectorAll('#obj-temas-btns .btn').forEach(b=>{
-    b.style.fontWeight='400'; b.style.background='transparent';
+  const CORES = {
+    atrair:'var(--atrair)', envolver:'#B8860B', relacionar:'var(--relacionar)',
+    ofertar:'var(--ofertar)', fidelizar:'var(--fidelizar)', humanizar:'var(--humanizar)'
+  };
+  const BGS = {
+    atrair:'#FFF4EC', envolver:'#FFFBEA', relacionar:'#EDFBF3',
+    ofertar:'#FFECEB', fidelizar:'#F5EEFF', humanizar:'#E8F4FD'
+  };
+  document.querySelectorAll('#obj-temas-btns .btn-ghost').forEach(b=>{
+    b.style.background='transparent';
+    b.style.fontWeight='400';
+    b.style.transform='scale(1)';
   });
-  el.style.fontWeight='700';
+  el.style.background = BGS[objetivo];
+  el.style.fontWeight = '700';
+  el.style.transform = 'scale(1.05)';
 
   // Pré-selecionar objetivo no modal de gerar estoque
   window._objetivoTemaSelecionado = objetivo;
+  renderTopicosMontagem();
 
   const assunto = dados['top-assunto']||dados['id-assunto']||'[preencha seu assunto principal na aba Tópicos]';
   const topicos = getTopicosConjunto();
@@ -1489,21 +1659,17 @@ Me entregue exatamente 12 temas, numerados de 1 a 12, um por linha, no formato:
   const preview = document.getElementById('prompt-temas-preview');
   preview.style.display='block';
   preview.textContent = prompt;
-  document.getElementById('btn-copiar-temas').style.display='inline-flex';
+  const _bct2=document.getElementById('btn-copiar-temas'); if(_bct2) _bct2.style.display='inline-flex';
   window._promptTemasAtual = prompt;
 }
 
 function copiarPromptTemas(){
   if(window._promptTemasAtual){
     copiarTexto(window._promptTemasAtual);
-    // Esconder após copiar
+    // Esconder preview mas manter objetivo destacado
     setTimeout(()=>{
-      document.getElementById('prompt-temas-preview').style.display='none';
-      document.getElementById('btn-copiar-temas').style.display='none';
-      document.querySelectorAll('#obj-temas-btns .btn').forEach(b=>{
-        b.style.fontWeight='400'; b.style.background='transparent';
-      });
-      window._promptTemasAtual = null;
+      const _ptp=document.getElementById('prompt-temas-preview'); if(_ptp) _ptp.style.display='none';
+      notif('Prompt copiado! Cole na sua IA 🚀');
     }, 800);
   } else {
     notif('Selecione um objetivo primeiro');
@@ -1513,14 +1679,26 @@ function copiarPromptTemas(){
 function renderTopicosMontagem(){
   const lista = document.getElementById('topicos-montagem');
   if(!lista) return;
-  if(!dados.topicos) dados.topicos = Array(12).fill('');
-  if(!dados.temas) dados.temas = Array(12).fill('');
-  lista.innerHTML = dados.topicos.map((t,i)=>`
+
+
+
+  // Pegar tópicos do conjunto selecionado
+  let topicos;
+  if(conjuntoTopicosSelecionado==='audiencia'){
+    topicos = dados.topicosAudiencia||Array(12).fill('');
+  } else if(conjuntoTopicosSelecionado==='territorios'){
+    topicos = dados.topicosTerritorios||Array(12).fill('');
+  } else {
+    topicos = dados.topicos||Array(12).fill('');
+  }
+
+  const temasAtual = getTemasAtual();
+  lista.innerHTML = topicos.map((t,i)=>`
     <div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:8px;align-items:center">
       <input
         class="form-input"
         placeholder="Digite o tema deste conteúdo..."
-        value="${(dados.temas[i]||'').replace(/"/g,'&quot;')}"
+        value="${(temasAtual[i]||'').replace(/"/g,'&quot;')}"
         oninput="salvarTema(${i},this.value)"
         style="font-size:13px"
       >
@@ -1538,21 +1716,38 @@ function distribuirTemas(){
   const linhas = texto.split('\n')
     .map(l=>l.replace(/^\d+[\.\)\-\s]+/,'').trim())
     .filter(l=>l.length>0);
-  if(!dados.temas) dados.temas = Array(12).fill('');
-  linhas.slice(0,12).forEach((tema,i)=>{ dados.temas[i] = tema; });
+  const chave = getChaveTemas();
+  if(!dados[chave]) dados[chave] = Array(12).fill('');
+  linhas.slice(0,12).forEach((tema,i)=>{ dados[chave][i] = tema; });
   save();
   renderTopicosMontagem();
   document.getElementById('colar-temas-input').value='';
   notif(`${Math.min(linhas.length,12)} temas distribuídos! ✓`);
 }
 
+
+function getChaveTemas(){
+  const obj = window._objetivoTemaSelecionado;
+  if(!obj || obj === 'geral') return 'temas';
+  return 'temas_' + obj;
+}
+
+function getTemasAtual(){
+  const chave = getChaveTemas();
+  if(!dados[chave]) dados[chave] = Array(12).fill('');
+  return dados[chave];
+}
+
 function salvarTema(idx, val){
-  dados.temas[idx] = val;
+  const chave = getChaveTemas();
+  if(!dados[chave]) dados[chave] = Array(12).fill('');
+  dados[chave][idx] = val;
   save();
 }
 
 function limparTemas(){
-  dados.temas = Array(12).fill('');
+  const chave = getChaveTemas();
+  dados[chave] = Array(12).fill('');
   save();
   renderTopicosMontagem();
   notif('Temas limpos! Prontos para novos temas ✓');
@@ -1655,7 +1850,60 @@ IMPORTANTE: Cada tópico deve ter no máximo 2 palavras — são tópicos estrut
 
 function copiarPromptTopicosAudiencia(){
   atualizarPromptTopicosAudiencia();
-  if(window._promptTopAudienciaAtual) copiarTexto(window._promptTopAudienciaAtual);
+  if(!window._promptTopAudienciaAtual) return;
+  copiarTexto(window._promptTopAudienciaAtual);
+  document.getElementById('prompt-topicos-audiencia-preview').style.display='block';
+  document.getElementById('topicos-audiencia-colar-section').style.display='block';
+  notif('Prompt copiado! Cole na sua IA favorita 🚀');
+}
+
+function fecharColarTopicosAudiencia(){
+  document.getElementById('topicos-audiencia-colar-section').style.display='none';
+  document.getElementById('prompt-topicos-audiencia-preview').style.display='none';
+  document.getElementById('topicos-audiencia-colar-input').value='';
+}
+
+function distribuirTopicosAudiencia(){
+  const texto = document.getElementById('topicos-audiencia-colar-input').value.trim();
+  if(!texto){ notif('Cole os tópicos primeiro'); return; }
+  const linhas = texto.split('\n')
+    .map(l=>l.replace(/^\d+[\.\)\-\s]+/,'').trim())
+    .filter(l=>l.length>0);
+  if(!dados.topicosAudiencia) dados.topicosAudiencia = Array(12).fill('');
+  linhas.slice(0,12).forEach((t,i)=>{ dados.topicosAudiencia[i]=t; });
+  save();
+  renderTopicosAudiencia();
+  fecharColarTopicosAudiencia();
+  notif(`${Math.min(linhas.length,12)} tópicos distribuídos! ✓`);
+}
+
+function copiarPromptTopicosTerritorios(){
+  atualizarPromptTopicosTerritorios();
+  if(!window._promptTopTerritoriosAtual) return;
+  copiarTexto(window._promptTopTerritoriosAtual);
+  document.getElementById('prompt-topicos-territorios-preview').style.display='block';
+  document.getElementById('topicos-territorios-colar-section').style.display='block';
+  notif('Prompt copiado! Cole na sua IA favorita 🚀');
+}
+
+function fecharColarTopicosTerritorios(){
+  document.getElementById('topicos-territorios-colar-section').style.display='none';
+  document.getElementById('prompt-topicos-territorios-preview').style.display='none';
+  document.getElementById('topicos-territorios-colar-input').value='';
+}
+
+function distribuirTopicosTerritorios(){
+  const texto = document.getElementById('topicos-territorios-colar-input').value.trim();
+  if(!texto){ notif('Cole os territórios primeiro'); return; }
+  const linhas = texto.split('\n')
+    .map(l=>l.replace(/^\d+[\.\)\-\s]+/,'').trim())
+    .filter(l=>l.length>0);
+  if(!dados.topicosTerritorios) dados.topicosTerritorios = Array(12).fill('');
+  linhas.slice(0,12).forEach((t,i)=>{ dados.topicosTerritorios[i]=t; });
+  save();
+  renderTopicosTerritorios();
+  fecharColarTopicosTerritorios();
+  notif(`${Math.min(linhas.length,12)} territórios distribuídos! ✓`);
 }
 
 function atualizarPromptTopicosTerritorios(){
@@ -1677,12 +1925,6 @@ IMPORTANTE: Cada território deve ter no máximo 2 palavras — são território
   window._promptTopTerritoriosAtual = prompt;
 }
 
-function copiarPromptTopicosTerritorios(){
-  atualizarPromptTopicosTerritorios();
-  if(window._promptTopTerritoriosAtual) copiarTexto(window._promptTopTerritoriosAtual);
-}
-
-
 let objetivoSelecionado = '';
 let formatoSelecionado = '';
 let ctaSelecionada = '';
@@ -1695,8 +1937,8 @@ function selecionarCTA(cta, el){
 }
 
 function carregarModelosBanco(){
-  const formatoId = document.getElementById('rod-formato-banco').value;
-  const sel = document.getElementById('rod-modelo-banco');
+  const formatoId = '';
+  const sel = null; if(!sel) return;
   const preview = document.getElementById('rod-modelo-preview');
   sel.innerHTML = '<option value="">— Selecione o modelo —</option>';
   preview.style.display='none';
@@ -1772,9 +2014,9 @@ function selecionarFormato(fmt, el){
 function criarRodada(){
   if(!objetivoSelecionado){notif('Selecione um objetivo');return;}
   if(!formatoSelecionado){notif('Selecione um formato');return;}
-  const cta = document.getElementById('rod-cta').value || ctaSelecionada || '';
-  const formatoBancoId = document.getElementById('rod-formato-banco').value;
-  const modeloBancoId = document.getElementById('rod-modelo-banco').value;
+  const cta = '';
+  const formatoBancoId = '';
+  const modeloBancoId = '';
   let modeloNome = ''; let modeloPrompt = '';
   if(formatoBancoId && modeloBancoId){
     if(formatoBancoId === 'meus-modelos'){
@@ -1802,9 +2044,9 @@ function criarRodada(){
   // Reset
   document.getElementById('rod-nome').value='';
   document.getElementById('rod-mes').value='';
-  document.getElementById('rod-cta').value='';
-  document.getElementById('rod-formato-banco').value='';
-  document.getElementById('rod-modelo-banco').innerHTML='<option value="">— Selecione o modelo —</option>';
+  
+  
+  const rmb = document.getElementById('rod-modelo-banco'); if(rmb) rmb.innerHTML='<option value="">— Selecione o modelo —</option>';
   document.getElementById('rod-modelo-preview').style.display='none';
   objetivoSelecionado=''; formatoSelecionado=''; ctaSelecionada='';
   document.querySelectorAll('#rod-objetivos .objetivo-card').forEach(c=>c.style.outline='none');
@@ -1918,6 +2160,7 @@ function renderProdObjetivos(){
 
 function abrirObjetivo(objetivo){
   const cfg = OBJ_CONFIG[objetivo];
+  if(!cfg){ notif('Objetivo não encontrado: '+objetivo); return; }
   const estoques = rodadas.filter(r=>r.objetivo===objetivo);
   document.getElementById('prod-objetivos-grid').style.display='none';
   document.getElementById('prod-objetivo-detalhe').style.display='block';
@@ -1975,17 +2218,20 @@ function irParaGerarEstoque(objetivo){
 
 
 function voltarObjetivos(){
-  document.getElementById('prod-objetivos-grid').style.display='grid';
-  document.getElementById('prod-objetivo-detalhe').style.display='none';
+  const _pog=document.getElementById('prod-objetivos-grid'); if(_pog) _pog.style.display='grid';
+  const _pod=document.getElementById('prod-objetivo-detalhe'); if(_pod) _pod.style.display='none';
   document.getElementById('prod-conteudo').innerHTML='';
   renderProdObjetivos();
 }
 
 function carregarEstoqueProducao(id){
-  // Usar a função existente mas adaptada
-  const rodada = rodadas.find(r=>r.id===id);
+  const rodada = rodadas.find(r=>r.id==id);
   if(!rodada) return;
-  const temas = dados.temas || Array(12).fill('');
+  // Garantir que a tela de produção está visível
+  document.getElementById('prod-objetivos-grid').style.display='none';
+  document.getElementById('prod-objetivo-detalhe').style.display='block';
+  document.getElementById('prod-estoques-lista').style.display='none';
+  const temas = (typeof rodada !== 'undefined' && rodada && dados['temas_'+rodada.objetivo]) || dados.temas || Array(12).fill('');
   const topicos = dados.topicos || Array(12).fill('');
   const cor = CORES_OBJETIVO[rodada.objetivo];
   const cfg = OBJ_CONFIG[rodada.objetivo];
@@ -2042,7 +2288,7 @@ function voltarEstoques(objetivo){
 
 function gerarPromptProducao(idx, rodadaId){
   const rodada = rodadas.find(r=>r.id==rodadaId);
-  const temas = dados.temas || Array(12).fill('');
+  const temas = (typeof rodada !== 'undefined' && rodada && dados['temas_'+rodada.objetivo]) || dados.temas || Array(12).fill('');
   const topicos = dados.topicos || Array(12).fill('');
   const tema = temas[idx] || '';
   const topico = topicos[idx] || '';
@@ -2248,7 +2494,7 @@ function renderCronograma(){
   }
 
   // Montar a matriz embaralhada — 12 blocos
-  const temas = dados.temas || Array(12).fill('');
+  const temas = (typeof rodada !== 'undefined' && rodada && dados['temas_'+rodada.objetivo]) || dados.temas || Array(12).fill('');
   const SEQ = MATRIZ_EMBARALHAMENTO;
 
   // Header dos blocos
@@ -2357,117 +2603,80 @@ function irParaConteudo(rodadaId, temaIdx){
 
 function renderDistMeses(){
   const grid = document.getElementById('dist-meses-grid');
-  const detalhe = document.getElementById('dist-mes-detalhe');
   if(!grid) return;
-  detalhe.style.display='none';
-  detalhe.innerHTML='';
-  const meses = getMeses();
 
-  grid.style.display='block';
-  grid.innerHTML = meses.map((m,idx)=>{
-    const estoques = rodadas.filter(r=>r.mes===m.val);
-    const temEstoque = estoques.length > 0;
-    const totalTemas = estoques.length * 12;
-    const totalPostados = estoques.reduce((acc,r)=>{
-      for(let i=0;i<12;i++) if(r.distStatus?.[i]==='postado') acc++;
-      return acc;
-    }, 0);
-    const pct = totalTemas > 0 ? Math.round((totalPostados/totalTemas)*100) : 0;
+  if(!rodadas.length){
+    grid.innerHTML = '<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Crie estoques para visualizar o calendário trimestral.</div></div>';
+    return;
+  }
 
-    const bgAtual = 'background:var(--branco)';
-    const corTitulo = 'color:var(--azul-dark)';
-    const corSub = m.atual ? 'color:var(--cinza)' : 'color:var(--cinza)';
-    const corBorda = m.atual ? 'border:2px solid var(--cinza-borda)' : temEstoque ? 'border:2px solid #6EE7B7' : 'border:2px solid var(--cinza-borda)';
-    const barraHTML = temEstoque ? [
-      '<div style="height:6px;background:'+(m.atual?'rgba(255,255,255,.2)':'var(--cinza-light)')+';border-radius:3px;overflow:hidden">',
-      '<div style="height:100%;width:'+pct+'%;background:'+(m.atual?'var(--branco)':'var(--relacionar)')+';border-radius:3px;transition:width .5s"></div></div>',
-      '<div style="display:flex;justify-content:space-between;margin-top:6px">',
-      '<span style="font-size:11px;'+corSub+'">'+totalPostados+'/'+totalTemas+' postados</span>',
-      '<span style="font-size:11px;'+corSub+'">'+estoques.map(r=>(OBJ_CONFIG[r.objetivo]?.emoji||'')+' '+r.formato).join(' · ')+'</span>',
-      '</div>'
-    ].join('') : '';
+  // Agrupar estoques por objetivo
+  const ORDEM_OBJS = ['atrair','envolver','relacionar','ofertar','fidelizar','humanizar'];
+  const estoquesPorObj = {};
+  ORDEM_OBJS.forEach(obj=>{
+    estoquesPorObj[obj] = rodadas.filter(r=>r.objetivo===obj);
+  });
 
-    const clickAttr = temEstoque ? ('onclick="abrirMes(\'' + m.val + '\',\'' + m.label + '\')"') : '';
-    const hoverAttr = temEstoque ? 'onmouseover="this.style.paddingLeft=\'28px\'" onmouseout="this.style.paddingLeft=\'24px\'"' : '';
-    const estoqueInfo = temEstoque ? estoques.length+' estoque'+(estoques.length>1?'s':'')+' planejado'+(estoques.length>1?'s':'') : '⚠️ Nenhum estoque planejado para este mês';
-    const pctSpan = temEstoque ? '<span style="font-size:20px;font-weight:700;'+(m.atual?'color:rgba(255,255,255,.9)':'color:var(--azul)')+'">'+pct+'%</span>' : '';
-    const atualPin = m.atual ? '📍 ' : '';
-    const atualSpan = m.atual ? '<span style="font-size:11px;font-weight:400;margin-left:8px;opacity:.8">mês atual</span>' : '';
+  // Montar linhas — 12 blocos
+  let linhas = [];
+  for(let bloco=0; bloco<12; bloco++){
+    ORDEM_OBJS.forEach(obj=>{
+      const estoques = estoquesPorObj[obj];
+      if(!estoques.length) return;
+      estoques.forEach((r, estoqueIdx)=>{
+        const seq = estoqueIdx % 2 === 0
+          ? MATRIZ_EMBARALHAMENTO[ORDEM_OBJS.indexOf(obj) % 6]
+          : [...MATRIZ_EMBARALHAMENTO[ORDEM_OBJS.indexOf(obj) % 6]].reverse();
+        const pos = seq[bloco];
+        const temaIdx = pos - 1;
+        const temas = dados['temas_'+obj] || dados.temas || Array(12).fill('');
+        const tema = temas[temaIdx] || `Tema ${pos}`;
+        const dataPostagem = r.datasPostagem?.[temaIdx]||'';
+        const postado = r.distStatus?.[temaIdx]==='postado';
+        const cfg = OBJ_CONFIG[obj];
+        const cor = CORES_OBJETIVO[obj];
+        linhas.push({bloco, obj, estoqueIdx, r, pos, temaIdx, tema, dataPostagem, postado, cfg, cor});
+      });
+    });
+  }
 
-    return '<div '+clickAttr+' style="'+bgAtual+';'+corBorda+';border-radius:var(--r-lg);padding:20px 24px;margin-bottom:12px;cursor:'+(temEstoque?'pointer':'default')+';transition:all .15s" '+hoverAttr+'>'
-      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:'+(temEstoque?'14px':'0')+'">'
-      + '<div>'
-      + '<div style="font-size:16px;font-weight:700;'+corTitulo+'">'+atualPin+m.label+atualSpan+'</div>'
-      + '<div style="font-size:12px;margin-top:3px;'+corSub+'">'+estoqueInfo+'</div>'
-      + '</div>'
-      + pctSpan
-      + '</div>'
-      + barraHTML
-      + '</div>';
-  }).join('');
-}
+  // Renderizar
+  let html = '';
+  let blocoAtual = -1;
 
-function abrirMes(mesVal, mesLabel){
-  const grid = document.getElementById('dist-meses-grid');
-  const detalhe = document.getElementById('dist-mes-detalhe');
-  const estoques = rodadas.filter(r=>r.mes===mesVal);
-  grid.style.display='none';
-
-  const temas = dados.temas || Array(12).fill('');
-  const OBJS = OBJ_CONFIG;
-
-  detalhe.style.display='block';
-  detalhe.innerHTML = `
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
-      <button class="btn btn-ghost btn-sm" onclick="renderDistMeses()">← Voltar</button>
-      <div style="height:1px;flex:1;background:var(--cinza-borda)"></div>
-      <span style="font-size:14px;font-weight:700;color:var(--azul-dark)">📅 ${mesLabel}</span>
-      <div style="height:1px;flex:1;background:var(--cinza-borda)"></div>
-    </div>
-    ${estoques.map(r=>{
-      const cfg = OBJS[r.objetivo];
-      const seq = MATRIZ_EMBARALHAMENTO[rodadas.indexOf(r) % 6];
-      return `
-      <div style="border:2px solid ${cfg?.borderColor||'var(--cinza-borda)'};border-radius:var(--r-lg);margin-bottom:20px;overflow:hidden">
-        <div style="background:${cfg?.bg||'var(--cinza-light)'};padding:14px 20px;display:flex;align-items:center;justify-content:space-between">
-          <div>
-            <div style="font-size:15px;font-weight:700;color:${cfg?.cor||'var(--azul-dark)'}">${cfg?.emoji||''} ${NOMES_OBJETIVO[r.objetivo]}</div>
-            <div style="font-size:12px;color:var(--cinza);margin-top:2px">${r.nome} · ${r.formato}${r.modeloNome?' · '+r.modeloNome:''}</div>
+  linhas.forEach(l=>{
+    if(l.bloco !== blocoAtual){
+      if(blocoAtual >= 0) html += `</div>`;
+      html += `
+        <div style="margin-bottom:20px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="height:1px;flex:1;background:var(--cinza-borda)"></div>
+            <span style="font-size:11px;font-weight:700;color:var(--cinza);text-transform:uppercase;letter-spacing:1px">Bloco ${l.bloco+1}</span>
+            <div style="height:1px;flex:1;background:var(--cinza-borda)"></div>
           </div>
-          <div style="text-align:right">
-            ${(()=>{let p=0;for(let i=0;i<12;i++)if(r.distStatus?.[i]==='postado')p++;return `<span style="font-size:18px;font-weight:700;color:${cfg?.cor}">${p}/12</span><div style="font-size:10px;color:var(--cinza)">postados</div>`;})()}
-          </div>
-        </div>
-        <div style="padding:12px 16px">
-          ${seq.map((pos,i)=>{
-            const temaIdx = pos-1;
-            const tema = temas[temaIdx] || `Tema ${pos}`;
-            const postado = r.distStatus?.[temaIdx]==='postado';
-            const dataPostagem = r.datasPostagem?.[temaIdx]||'';
-            return `
-            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:6px;border-radius:var(--r-md);background:${postado?'#E8F8EF':'var(--cinza-light)'};border:1px solid ${postado?'#6EE7B7':'var(--cinza-borda)'}">
-              <div style="width:24px;height:24px;border-radius:50%;border:2px solid ${postado?'var(--relacionar)':'var(--cinza-borda)'};background:${postado?'var(--relacionar)':'transparent'};flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:white;font-weight:700">
-                ${postado?'✓':''}
-              </div>
-              <div style="flex:1;min-width:0">
-                <div style="font-size:13px;font-weight:${postado?'400':'500'};color:${postado?'var(--cinza)':'var(--texto)'};text-decoration:${postado?'line-through':'none'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tema}</div>
-                <div style="font-size:10px;color:var(--cinza);margin-top:1px">Tópico ${pos}</div>
-              </div>
-              <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-                <span style="font-size:11px;color:var(--cinza)">📅</span>
-                <input 
-                  type="date" 
-                  value="${dataPostagem}"
-                  onchange="salvarDataPostagem(${r.id},${temaIdx},this.value)"
-                  style="font-size:11px;padding:4px 8px;border:1px solid var(--cinza-borda);border-radius:var(--r-sm);background:var(--branco);color:var(--texto);cursor:pointer"
-                >
-              </div>
-            </div>`;
-          }).join('')}
-        </div>
+        <div>`;
+      blocoAtual = l.bloco;
+    }
+
+    const nomeEstoque = l.estoquesPorObj > 1 ? ` (est. ${l.estoqueIdx+1})` : '';
+    html += `
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;margin-bottom:4px;border-radius:var(--r-md);background:${l.postado?l.cor+'18':'var(--cinza-light)'};border:1px solid ${l.postado?l.cor+'44':'var(--cinza-borda)'}">
+        <div style="width:10px;height:10px;border-radius:50%;background:${l.cor};flex-shrink:0"></div>
+        <span style="font-size:11px;font-weight:700;color:${l.cor};min-width:90px;white-space:nowrap">${l.cfg?.nome||l.obj}${estoquesPorObj[l.obj].length>1?' ('+(l.estoqueIdx+1)+'º)':''}</span>
+        <span style="font-size:12px;color:${l.postado?'var(--cinza)':'var(--texto)'};text-decoration:${l.postado?'line-through':'none'};flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${l.tema}</span>
+        <span style="font-size:10px;color:var(--cinza);flex-shrink:0">T${l.pos}</span>
+        <input
+          type="date"
+          value="${l.dataPostagem}"
+          onchange="salvarDataPostagem(${l.r.id},${l.temaIdx},this.value)"
+          style="font-size:11px;padding:4px 8px;border:1px solid var(--cinza-borda);border-radius:var(--r-sm);background:var(--branco);color:var(--texto);cursor:pointer;flex-shrink:0"
+        >
+        ${l.postado?`<span style="font-size:14px">🚀</span>`:''}
       </div>`;
-    }).join('')}
-  `;
+  });
+
+  if(blocoAtual >= 0) html += `</div></div>`;
+  grid.innerHTML = html;
 }
 
 function salvarDataPostagem(rodadaId, temaIdx, data){
@@ -2486,8 +2695,9 @@ function salvarDataPostagem(rodadaId, temaIdx, data){
     if(rodada.status[temaIdx]==='noar') rodada.status[temaIdx] = 'pronto';
   }
   save();
-  const mesLabel = document.querySelector('#dist-mes-detalhe span[style*="azul-dark"]')?.textContent?.replace('📅 ','').trim()||'';
-  abrirMes(rodada.mes, mesLabel);
+  renderDistMeses();
+  if(document.getElementById('cronograma-grid')) renderCronograma();
+  renderEquilibrio();
 }
 
 function togglePostado(rodadaId, temaIdx){
@@ -4116,7 +4326,7 @@ function abrirFichaTecnica(idx, rodadaId){
   if(!rodada) return;
   fichaAtual = {rodadaId, idx};
 
-  const temas = dados.temas || Array(12).fill('');
+  const temas = (typeof rodada !== 'undefined' && rodada && dados['temas_'+rodada.objetivo]) || dados.temas || Array(12).fill('');
   const topicos = dados.topicos || Array(12).fill('');
   const tema = temas[idx] || 'Tema '+(idx+1);
   const topico = topicos[idx] || '';
@@ -4258,7 +4468,7 @@ function salvarFicha(){
 }
 
 function gerarPromptTexto(idx, rodada){
-  const temas = dados.temas || Array(12).fill('');
+  const temas = (typeof rodada !== 'undefined' && rodada && dados['temas_'+rodada.objetivo]) || dados.temas || Array(12).fill('');
   const topicos = dados.topicos || Array(12).fill('');
   const tema = temas[idx] || '';
   const topico = topicos[idx] || '';
@@ -4291,6 +4501,20 @@ function gerarPromptTexto(idx, rodada){
   if(rodada.cta) prompt += `\nCTA definida: ${rodada.cta}`;
   if(rodada.modeloPrompt) prompt += `\n\nESTRUTURA DO ROTEIRO:\n${rodada.modeloPrompt}`;
   return prompt;
+}
+
+function abrirAula(){
+  const modal = document.getElementById('modal-aula');
+  const iframe = document.getElementById('aula-iframe');
+  iframe.src = 'https://www.youtube.com/embed/7L4hsxpv1Rc?autoplay=1';
+  modal.style.display='flex';
+}
+
+function fecharAula(){
+  const modal = document.getElementById('modal-aula');
+  const iframe = document.getElementById('aula-iframe');
+  iframe.src = '';
+  modal.style.display='none';
 }
 
 function entrar(){
@@ -4499,6 +4723,29 @@ function entrar(){
       <button class="btn btn-primary" onclick="salvarFicha()">💾 Salvar ficha</button>
     </div>
   </div>
+</div>
+
+<!-- BOTÃO FLUTUANTE DE AULA -->
+<div id="btn-aula-flutuante" onclick="abrirAula()" style="position:fixed;bottom:24px;right:24px;z-index:999;background:linear-gradient(135deg,#0A1628,#1B7FD4);color:#fff;border-radius:50px;padding:12px 20px;display:flex;align-items:center;gap:10px;cursor:pointer;box-shadow:0 4px 20px rgba(27,127,212,.4);transition:all .2s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+  <span style="font-size:18px">▶</span>
+  <div>
+    <div style="font-size:12px;font-weight:700;letter-spacing:.5px">AULA DE APRESENTAÇÃO</div>
+    <div style="font-size:10px;opacity:.8">Cubo Mágico de Conteúdo</div>
+  </div>
+</div>
+
+<!-- MODAL DA AULA -->
+<div id="modal-aula" style="display:none;position:fixed;bottom:80px;right:24px;z-index:9998;width:520px;border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.5)">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#0A1628">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:14px">🎲</span>
+        <span style="font-size:12px;font-weight:700;color:#fff">Aula de Apresentação</span>
+      </div>
+      <button onclick="fecharAula()" style="background:rgba(255,255,255,.1);border:none;color:#fff;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:11px;font-weight:600">✕ Fechar</button>
+    </div>
+    <div style="position:relative;padding-bottom:56.25%;height:0;background:#000">
+      <iframe id="aula-iframe" width="100%" height="100%" style="position:absolute;top:0;left:0;width:100%;height:100%" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
 </div>
 
 </body>
