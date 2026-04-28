@@ -78,8 +78,8 @@ main{flex:1;padding:28px 24px;max-width:1100px;width:100%;margin:0 auto}
 
 /* ══ CARDS ══ */
 .card{background:var(--branco);border:1px solid var(--cinza-borda);border-radius:var(--r-lg);box-shadow:var(--shadow)}
-.card-header{padding:16px 20px;border-bottom:1px solid var(--cinza-borda);display:flex;align-items:center;justify-content:space-between}
-.card-title{font-size:14px;font-weight:600;color:var(--azul-dark)}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--cinza-borda);display:flex;align-items:center;justify-content:space-between;overflow:hidden}
+.card-title{font-size:14px;font-weight:600;color:var(--azul-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card-body{padding:20px}
 
 /* ══ FORMS ══ */
@@ -488,7 +488,7 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
         <div>
           <div class="card" style="margin-bottom:12px">
             <div class="card-header">
-              <span class="card-title" style="font-size:12px">📋 Prompt</span>
+              <span class="card-title" style="font-size:11px">📋 Prompt do Assunto Principal</span>
               <button class="btn btn-primary btn-sm" style="font-size:11px" onclick="copiarPromptTopicos()">Copiar</button>
             </div>
             <div class="card-body" style="padding:10px">
@@ -504,7 +504,7 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
           </div>
           <div class="card">
             <div class="card-header">
-              <span class="card-title" style="font-size:12px">Seus 12 Tópicos</span>
+              <span class="card-title" style="font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Tópicos do Assunto Principal</span>
               <button class="btn btn-primary btn-sm" style="font-size:11px" onclick="salvarTopicosAssunto()">💾</button>
             </div>
             <div class="card-body" style="padding:10px">
@@ -720,7 +720,7 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
       </div>
 
       <div class="hint-azul" style="margin-bottom:24px">
-        💡 O mês atual é o seu ponto de partida. Os meses seguintes são suas janelas de planejamento — cada estoque que você criar já vai para o mês que você escolheu.
+        💡 Aqui você visualiza todos os seus estoques organizados em blocos, na sequência do embaralhamento. Preencha as datas e acompanhe o que foi ao ar.
       </div>
 
       <div id="dist-meses-grid"></div>
@@ -737,28 +737,18 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
         <button class="btn btn-primary" onclick="openModal('modal-criar-modelo')">+ Criar modelo</button>
       </div>
 
-      <!-- GUIA -->
-      <div class="card" style="margin-bottom:20px">
-        <div class="card-body" style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
-          <div style="font-size:12px;font-weight:600;color:var(--azul-dark)">💡 Perfil narrativo:</div>
-          <div style="display:flex;gap:12px;flex-wrap:wrap">
-            <span><span class="badge-funil badge-topo">Topo</span> <span style="font-size:11px;color:var(--cinza)">Atrai e gera identificação</span></span>
-            <span><span class="badge-funil badge-meio">Meio</span> <span style="font-size:11px;color:var(--cinza)">Educa e aprofunda vínculo</span></span>
-            <span><span class="badge-funil badge-fundo">Fundo</span> <span style="font-size:11px;color:var(--cinza)">Quebra objeção e converte</span></span>
-          </div>
-          <div style="font-size:11px;color:var(--cinza);border-left:2px solid var(--cinza-borda);padding-left:12px;flex:1;min-width:200px">A CTA escolhida por você na hora de gerar o prompt é que define o objetivo final do conteúdo.</div>
-          <div>
-            <select class="form-input" style="width:auto;font-size:12px;padding:7px 12px" id="filtro-formato" onchange="renderBancoModelos()">
-              <option value="">Todos os objetivos</option>
-              <option value="atrair-obj">🟠 Atrair</option>
-              <option value="envolver-obj">🟡 Envolver</option>
-              <option value="relacionar-obj">🟢 Relacionar</option>
-              <option value="ofertar-obj">🔴 Ofertar</option>
-              <option value="fidelizar-obj">🟣 Fidelizar</option>
-              <option value="humanizar-obj">🔵 Humanizar</option>
-            </select>
-          </div>
-        </div>
+      <!-- FILTRO -->
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+        <span style="font-size:12px;color:var(--cinza)">Filtre os modelos por objetivo para ver apenas os que combinam com o conteúdo que você está produzindo:</span>
+        <select class="form-input" style="width:auto;font-size:12px;padding:7px 12px;flex-shrink:0" id="filtro-formato" onchange="renderBancoModelos()">
+          <option value="">Todos os objetivos</option>
+          <option value="atrair-obj">🟠 Atrair</option>
+          <option value="envolver-obj">🟡 Envolver</option>
+          <option value="relacionar-obj">🟢 Relacionar</option>
+          <option value="ofertar-obj">🔴 Ofertar</option>
+          <option value="fidelizar-obj">🟣 Fidelizar</option>
+          <option value="humanizar-obj">🔵 Humanizar</option>
+        </select>
       </div>
 
       <div id="banco-grid"></div>
@@ -2473,97 +2463,80 @@ function renderCronograma(){
     ofertar:'#FF3B30', fidelizar:'#8E44AD', humanizar:'#1B7FD4'
   };
 
-  // Pegar o primeiro estoque ativo de cada objetivo
-  const estoqueAtivo = {};
-  OBJS.forEach(obj=>{
-    const ests = rodadas.filter(r=>r.objetivo===obj);
-    // Pegar o primeiro que não está 100% completo
-    const ativo = ests.find(r=>{
-      let postados=0;
-      for(let i=0;i<12;i++) if(r.distStatus?.[i]==='postado') postados++;
-      return postados < 12;
-    }) || ests[0];
-    if(ativo) estoqueAtivo[obj] = ativo;
-  });
-
-  const temAlgum = Object.keys(estoqueAtivo).length > 0;
-
-  if(!temAlgum){
+  if(!rodadas.length){
     grid.innerHTML = `<div class="empty"><div class="empty-icon">📊</div><div class="empty-text">Crie estoques para cada objetivo para visualizar o cronograma.</div></div>`;
     return;
   }
 
-  // Montar a matriz embaralhada — 12 blocos
-  const temas = (typeof rodada !== 'undefined' && rodada && dados['temas_'+rodada.objetivo]) || dados.temas || Array(12).fill('');
   const SEQ = MATRIZ_EMBARALHAMENTO;
 
-  // Header dos blocos
   let html = `<div style="overflow-x:auto;padding-bottom:8px">
   <table style="border-collapse:collapse;width:100%;min-width:700px">
     <thead>
       <tr>
-        <td style="width:80px;padding:6px 8px;font-size:10px;font-weight:700;color:var(--cinza);text-transform:uppercase"></td>
+        <td style="width:120px;padding:6px 8px;font-size:10px;font-weight:700;color:var(--cinza);text-transform:uppercase"></td>
         ${Array.from({length:12},(_,i)=>`
-          <td style="text-align:center;padding:6px 4px;font-size:10px;font-weight:700;color:var(--cinza);text-transform:uppercase;white-space:nowrap">
-            B${i+1}
-          </td>
+          <td style="text-align:center;padding:6px 4px;font-size:10px;font-weight:700;color:var(--cinza);text-transform:uppercase;white-space:nowrap">B${i+1}</td>
         `).join('')}
       </tr>
     </thead>
     <tbody>`;
 
-  OBJS.forEach((obj,objIdx)=>{
+  OBJS.forEach((obj, objIdx)=>{
     const cfg = OBJ_CONFIG[obj];
-    const rodada = estoqueAtivo[obj];
     const cor = CORES[obj];
-    const seq = SEQ[objIdx % 6];
+    const estoques = rodadas.filter(r=>r.objetivo===obj);
 
-    html += `<tr>
-      <td style="padding:4px 8px;white-space:nowrap">
-        <span style="font-size:11px;font-weight:600;color:${cor}">${cfg?.emoji} ${cfg?.nome}</span>
-      </td>`;
+    if(!estoques.length){
+      // Linha vazia
+      html += `<tr>
+        <td style="padding:6px 8px;font-size:12px;font-weight:600;color:${cor};white-space:nowrap">
+          ${cfg?.emoji||''} ${cfg?.nome||obj}
+        </td>
+        ${Array.from({length:12},()=>`
+          <td style="text-align:center;padding:3px">
+            <div style="width:36px;height:36px;border-radius:6px;background:var(--cinza-light);border:1px dashed var(--cinza-borda);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--cinza)">➖</div>
+          </td>
+        `).join('')}
+      </tr>`;
+      return;
+    }
 
-    if(!rodada){
-      // Sem estoque — células vazias
-      for(let i=0;i<12;i++){
-        html += `<td style="padding:3px"><div style="width:100%;min-width:44px;height:44px;border-radius:6px;background:var(--cinza-light);border:1px dashed var(--cinza-borda);display:flex;align-items:center;justify-content:center"><span style="font-size:9px;color:var(--cinza)">—</span></div></td>`;
-      }
-    } else {
-      seq.forEach((pos,blocoIdx)=>{
-        const temaIdx = pos-1;
-        const tema = temas[temaIdx] || '';
-        const status = rodada.status?.[temaIdx]||'pendente';
-        const noar = status==='noar';
-        const pronto = status==='pronto';
-        const emProducao = status==='producao';
+    estoques.forEach((rodada, estoqueIdx)=>{
+      // Estoque par → sequência normal, ímpar → invertida
+      const seqBase = SEQ[objIdx % 6];
+      const seq = estoqueIdx % 2 === 0 ? seqBase : [...seqBase].reverse();
+      const temas = dados['temas_'+obj] || dados.temas || Array(12).fill('');
+      const label = estoques.length > 1 ? ` (${estoqueIdx+1}º)` : '';
 
-        let bg, border, textColor, icone;
-        if(noar){
-          bg=cor; border=cor; textColor='#fff'; icone='🚀';
-        } else if(pronto){
-          bg=cor+'CC'; border=cor; textColor='#fff'; icone='✅';
-        } else if(emProducao){
-          bg=cor+'44'; border=cor+'88'; textColor=cor; icone='🎬';
-        } else {
-          bg=cor+'18'; border=cor+'33'; textColor=cor; icone='';
-        }
+      html += `<tr>
+        <td style="padding:6px 8px;font-size:11px;font-weight:600;color:${cor};white-space:nowrap">
+          ${cfg?.emoji||''} ${cfg?.nome||obj}${label}
+        </td>
+        ${seq.map((pos, blocoIdx)=>{
+          const temaIdx = pos - 1;
+          const status = rodada.status?.[temaIdx]||'pendente';
+          const noar = status==='noar';
+          const pronto = status==='pronto';
+          const emProducao = status==='producao';
+          const icone = noar ? '🚀' : pronto ? '✅' : emProducao ? '🎬' : '';
+          const bg = noar ? cor : pronto ? cor+'CC' : emProducao ? cor+'44' : cor+'18';
+          const textColor = (noar||pronto) ? '#fff' : cor;
 
-        html += `
-          <td style="padding:3px">
-            <div 
+          return `<td style="text-align:center;padding:3px">
+            <div
               onclick="irParaConteudo(${rodada.id},${temaIdx})"
-              title="${tema||'Tema '+pos}"
-              style="width:100%;min-width:44px;height:44px;border-radius:6px;background:${bg};border:1px solid ${border};display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .15s"
+              style="width:36px;height:36px;border-radius:6px;background:${bg};border:1px solid ${cor}44;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .15s"
               onmouseover="this.style.transform='scale(1.1)';this.style.zIndex='10';this.style.position='relative'"
               onmouseout="this.style.transform='scale(1)';this.style.zIndex='1'"
             >
               <span style="font-size:9px;font-weight:700;color:${textColor}">T${pos}</span>
-              ${icone?`<span style="font-size:9px;font-weight:700;color:${textColor}">${icone}</span>`:''}
+              ${icone?`<span style="font-size:9px">${icone}</span>`:''}
             </div>
           </td>`;
-      });
-    }
-    html += `</tr>`;
+        }).join('')}
+      </tr>`;
+    });
   });
 
   html += `</tbody></table></div>
@@ -2696,7 +2669,7 @@ function salvarDataPostagem(rodadaId, temaIdx, data){
   }
   save();
   renderDistMeses();
-  if(document.getElementById('cronograma-grid')) renderCronograma();
+  renderCronograma();
   renderEquilibrio();
 }
 
@@ -4726,7 +4699,7 @@ function entrar(){
 </div>
 
 <!-- BOTÃO FLUTUANTE DE AULA -->
-<div id="btn-aula-flutuante" onclick="abrirAula()" style="position:fixed;bottom:24px;right:24px;z-index:999;background:linear-gradient(135deg,#0A1628,#1B7FD4);color:#fff;border-radius:50px;padding:12px 20px;display:flex;align-items:center;gap:10px;cursor:pointer;box-shadow:0 4px 20px rgba(27,127,212,.4);transition:all .2s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+<div id="btn-aula-flutuante" onclick="abrirAula()" style="position:fixed;bottom:24px;left:24px;z-index:999;background:linear-gradient(135deg,#0A1628,#1B7FD4);color:#fff;border-radius:50px;padding:12px 20px;display:flex;align-items:center;gap:10px;cursor:pointer;box-shadow:0 4px 20px rgba(27,127,212,.4);transition:all .2s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
   <span style="font-size:18px">▶</span>
   <div>
     <div style="font-size:12px;font-weight:700;letter-spacing:.5px">AULA DE APRESENTAÇÃO</div>
@@ -4735,7 +4708,7 @@ function entrar(){
 </div>
 
 <!-- MODAL DA AULA -->
-<div id="modal-aula" style="display:none;position:fixed;bottom:80px;right:24px;z-index:9998;width:520px;border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.5)">
+<div id="modal-aula" style="display:none;position:fixed;bottom:80px;left:24px;z-index:9998;width:520px;border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.5)">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#0A1628">
       <div style="display:flex;align-items:center;gap:8px">
         <span style="font-size:14px">🎲</span>
