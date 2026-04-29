@@ -477,7 +477,7 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
         </div>
         <div class="card-body">
           <textarea class="form-input" id="top-assunto" placeholder="Ex: Empreendedorismo digital para mulheres 35+" oninput="atualizarPromptTopicos()" style="min-height:50px"></textarea>
-          <div class="hint-azul" style="margin-top:8px">💡 Este é o tema central da sua comunicação — ele alimenta os prompts dos 3 conjuntos de tópicos abaixo.</div>
+          <div class="hint-azul" style="margin-top:8px">💡 Este é o tema central da sua comunicação — ele alimenta os prompts dos 3 conjuntos de tópicos abaixo. Se ainda não tem clareza sobre seu assunto principal, o programa <strong>12 Semanas no AR</strong> pode te ajudar. Entre em contato com o suporte.</div>
         </div>
       </div>
 
@@ -660,8 +660,8 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
       </div>
 
       <!-- TEXTO EXPLICATIVO -->
-      <div class="hint-azul" style="margin-bottom:24px">
-        💡 Selecione um objetivo para ver seus estoques e acompanhar o progresso da produção. Uma linha editorial equilibrada trabalha todos os objetivos juntos — não só vender, não só atrair. É o conjunto que faz o sistema funcionar.
+      <div id="prod-hint" class="hint-azul" style="margin-bottom:24px">
+        💡 Clique em um objetivo para ver seus estoques e acompanhar o progresso da produção. Uma linha editorial equilibrada trabalha todos os objetivos juntos — é o conjunto que faz o sistema funcionar.
       </div>
 
       <!-- CARDS DOS 6 OBJETIVOS -->
@@ -669,11 +669,15 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
 
       <!-- ESTOQUES DO OBJETIVO SELECIONADO -->
       <div id="prod-objetivo-detalhe" style="display:none">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-          <button class="btn btn-ghost btn-sm" onclick="voltarObjetivos()">← Voltar</button>
-          <div style="height:1px;flex:1;background:var(--cinza-borda)"></div>
-          <span id="prod-objetivo-titulo" style="font-size:13px;font-weight:700;color:var(--azul-dark)"></span>
-          <div style="height:1px;flex:1;background:var(--cinza-borda)"></div>
+        <!-- BREADCRUMB -->
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13px">
+          <span onclick="voltarObjetivos()" style="color:var(--azul);cursor:pointer;font-weight:600">Estoques</span>
+          <span style="color:var(--cinza)">›</span>
+          <span id="prod-objetivo-titulo" style="color:var(--azul);cursor:pointer;font-weight:600" onclick="voltarEstoquesAtual()"></span>
+          <span id="prod-breadcrumb-estoque" style="display:none">
+            <span style="color:var(--cinza)">›</span>
+            <span id="prod-estoque-titulo" style="color:var(--cinza-dark);font-weight:600"></span>
+          </span>
         </div>
         <div id="prod-estoques-lista"></div>
       </div>
@@ -817,14 +821,6 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
         <input class="form-input" id="rod-nome" placeholder="Ex: Carrosséis de Atração — Jan 2025">
       </div>
 
-      <!-- 4. MÊS DE DISTRIBUIÇÃO -->
-      <div class="form-group">
-        <label class="form-label">📅 Mês de distribuição</label>
-        <div class="hint" style="margin-bottom:8px">Em qual mês este estoque será distribuído?</div>
-        <select class="form-input" id="rod-mes">
-          <option value="">— Selecione o mês —</option>
-        </select>
-      </div>
 
     </div>
     <div class="modal-footer">
@@ -883,7 +879,11 @@ function goTo(panel, btn){
     renderTopicosAudiencia();
     renderTopicosTerritorios();
     const inp = document.getElementById('top-assunto');
-    if(inp && dados['top-assunto']) { inp.value = dados['top-assunto']; atualizarPromptTopicos(); }
+    if(inp){
+      // Usar top-assunto salvo, ou fallback para id-assunto da Identidade
+      const valor = dados['top-assunto'] || dados['id-assunto'] || '';
+      if(valor){ inp.value = valor; atualizarPromptTopicos(); }
+    }
   }
   if(panel==='cubo'){
     dados = JSON.parse(localStorage.getItem('cubo_dados')||'{}');
@@ -900,6 +900,8 @@ function goTo(panel, btn){
   }
   if(panel==='modelos') renderBancoModelos();
   if(panel==='producao'){
+    // Recarregar dados frescos
+    rodadas = JSON.parse(localStorage.getItem('cubo_rodadas')||'[]');
     // Sempre reinicia mostrando os 6 cards
     const _pog=document.getElementById('prod-objetivos-grid'); if(_pog) _pog.style.display='grid';
     const _pod=document.getElementById('prod-objetivo-detalhe'); if(_pod) _pod.style.display='none';
@@ -1246,7 +1248,11 @@ function gerarDossie(){
   .card.green .card-head{background:#F0FFF4;color:#1A7A42}
   .section-divider{height:1px;background:#E8EDF2;margin:5mm 0}
   .footer{position:absolute;bottom:10mm;left:18mm;right:18mm;display:flex;justify-content:space-between;font-size:9px;color:#95A5A6;border-top:1px solid #E8EDF2;padding-top:3mm}
-  @media print{
+  @media print {
+  body > *:not(#modal-relatorio-roteiros) { display:none !important; }
+  #modal-relatorio-roteiros > div:first-child { display:none !important; }
+  #modal-relatorio-roteiros { position:static !important; padding:0 !important; }
+}
     body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
     .page{page-break-after:always}
   }
@@ -1997,8 +2003,16 @@ function selecionarObjetivo(obj, el){
 
 function selecionarFormato(fmt, el){
   formatoSelecionado = fmt;
-  document.querySelectorAll('#rod-formatos .btn').forEach(b=>{b.className='btn btn-ghost btn-sm'});
-  el.className = 'btn btn-primary btn-sm';
+  document.querySelectorAll('#rod-formatos .btn').forEach(b=>{
+    b.style.background='transparent';
+    b.style.color='var(--azul-dark)';
+    b.style.fontWeight='400';
+    b.style.border='1px solid var(--cinza-borda)';
+  });
+  el.style.background='var(--azul)';
+  el.style.color='#fff';
+  el.style.fontWeight='700';
+  el.style.border='1px solid var(--azul)';
 }
 
 function criarRodada(){
@@ -2044,6 +2058,9 @@ function criarRodada(){
   document.querySelectorAll('#rod-ctas .btn').forEach(b=>b.className='btn btn-ghost btn-sm');
   carregarRodadasLista();
   carregarSelectRodadas();
+  renderProdObjetivos();
+  renderCronograma();
+  renderEquilibrio();
   notif('Estoque criado! ✓');
 }
 
@@ -2071,7 +2088,13 @@ function carregarRodadasLista(){
 function excluirRodada(id){
   if(confirm('Excluir esta rodada?')){
     rodadas = rodadas.filter(r=>r.id!==id);
-    save(); carregarRodadasLista(); carregarSelectRodadas();
+    save();
+    carregarRodadasLista();
+    carregarSelectRodadas();
+    renderProdObjetivos();
+    renderCronograma();
+    renderEquilibrio();
+    renderDistMeses();
   }
 }
 
@@ -2155,6 +2178,8 @@ function abrirObjetivo(objetivo){
   document.getElementById('prod-objetivos-grid').style.display='none';
   document.getElementById('prod-objetivo-detalhe').style.display='block';
   document.getElementById('prod-conteudo').innerHTML='';
+  window._objetivoAtual = objetivo;
+  const _ph=document.getElementById('prod-hint'); if(_ph) _ph.style.display='none';
   document.getElementById('prod-objetivo-titulo').innerHTML = `${cfg.emoji} ${cfg.nome}`;
 
   const lista = document.getElementById('prod-estoques-lista');
@@ -2208,6 +2233,7 @@ function irParaGerarEstoque(objetivo){
 
 
 function voltarObjetivos(){
+  const _ph=document.getElementById('prod-hint'); if(_ph) _ph.style.display='block';
   const _pog=document.getElementById('prod-objetivos-grid'); if(_pog) _pog.style.display='grid';
   const _pod=document.getElementById('prod-objetivo-detalhe'); if(_pod) _pod.style.display='none';
   document.getElementById('prod-conteudo').innerHTML='';
@@ -2230,17 +2256,22 @@ function carregarEstoqueProducao(id){
   // Esconder lista de estoques
   document.getElementById('prod-estoques-lista').style.display='none';
 
+  // Atualizar breadcrumb com nome do estoque
+  const _bce = document.getElementById('prod-breadcrumb-estoque');
+  const _nte = document.getElementById('prod-estoque-titulo');
+  if(_bce) _bce.style.display='inline';
+  if(_nte) _nte.textContent = rodada.nome;
+
   cont.innerHTML = `
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
-      <button class="btn btn-ghost btn-sm" onclick="voltarEstoques('${rodada.objetivo}')">← Voltar</button>
-      <div style="font-size:14px;font-weight:600;color:var(--azul-dark)">${rodada.nome}</div>
-    </div>
-    <div class="card" style="margin-bottom:16px">
-      <div class="card-body" style="display:flex;align-items:center;gap:12px">
-        <div style="width:12px;height:12px;border-radius:50%;background:${cor}"></div>
-        <div style="flex:1">
-          <div style="font-size:15px;font-weight:700;color:var(--azul-dark)">${rodada.nome}</div>
-          <div style="font-size:12px;color:var(--cinza)">${NOMES_OBJETIVO[rodada.objetivo]} · ${rodada.formato} · 12 temas</div>
+    <div style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-body" style="display:flex;align-items:center;gap:12px">
+          <div style="width:12px;height:12px;border-radius:50%;background:${cor}"></div>
+          <div style="flex:1">
+            <div style="font-size:15px;font-weight:700;color:var(--azul-dark)">${rodada.nome}</div>
+            <div style="font-size:12px;color:var(--cinza)">${NOMES_OBJETIVO[rodada.objetivo]} · ${rodada.formato} · 12 temas</div>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="gerarRelatorioRoteiros(${rodada.id})">📄 Relatório de Roteiros</button>
         </div>
       </div>
     </div>
@@ -2271,9 +2302,125 @@ function carregarEstoqueProducao(id){
   `;
 }
 
+function autoSalvarRoteiro(){
+  const rodada = rodadas.find(r=>r.id==fichaAtual.rodadaId);
+  if(!rodada) return;
+  if(!rodada.fichas) rodada.fichas={};
+  if(!rodada.fichas[fichaAtual.idx]) rodada.fichas[fichaAtual.idx]={};
+  rodada.fichas[fichaAtual.idx].roteiro = document.getElementById('ficha-roteiro').value;
+  save();
+}
+
+function gerarRelatorioRoteiros(rodadaId){
+  const rodada = rodadas.find(r=>r.id==rodadaId);
+  if(!rodada) return;
+
+  const temas = dados['temas_'+rodada.objetivo] || dados.temas || Array(12).fill('');
+  const cor = CORES_OBJETIVO[rodada.objetivo]||'#1B7FD4';
+  const cfg = OBJ_CONFIG[rodada.objetivo];
+
+  // Filtrar só temas prontos ou no ar com roteiro
+  const itens = [];
+  for(let i=0;i<12;i++){
+    const status = rodada.status?.[i]||'pendente';
+    const ficha = rodada.fichas?.[i];
+    if(status==='producao'||status==='pronto'||status==='noar'){
+      itens.push({
+        num: i+1,
+        tema: temas[i]||'Tema '+(i+1),
+        status,
+        roteiro: ficha?.roteiro||'',
+        cta: ficha?.cta||'',
+      });
+    }
+  }
+
+  if(!itens.length){
+    notif('Nenhum tema Em Produção, Pronto ou No Ar ainda.');
+    return;
+  }
+
+  const html = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Relatório de Roteiros — ${rodada.nome}</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; color:#1a1a2e; background:#fff; padding:40px; }
+  .header { border-bottom: 3px solid ${cor}; padding-bottom:16px; margin-bottom:32px; }
+  .header h1 { font-size:22px; font-weight:800; color:${cor}; }
+  .header p { font-size:13px; color:#666; margin-top:4px; }
+  .item { margin-bottom:32px; padding:20px; border:1px solid #eee; border-left:4px solid ${cor}; border-radius:8px; page-break-inside:avoid; }
+  .item-header { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+  .num { width:32px; height:32px; border-radius:50%; background:${cor}; color:#fff; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .tema { font-size:15px; font-weight:700; color:#1a1a2e; }
+  .status { font-size:11px; padding:3px 10px; border-radius:20px; background:${cor}22; color:${cor}; font-weight:600; }
+  .roteiro-label { font-size:11px; font-weight:700; color:#888; text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; }
+  .roteiro { font-size:13px; line-height:1.7; color:#333; white-space:pre-wrap; background:#f9f9f9; padding:14px; border-radius:6px; }
+  .sem-roteiro { font-size:12px; color:#aaa; font-style:italic; }
+  .cta { margin-top:10px; font-size:12px; color:${cor}; font-weight:600; }
+  .footer { margin-top:40px; padding-top:16px; border-top:1px solid #eee; font-size:11px; color:#aaa; text-align:center; }
+  @media print { body { padding:20px; } .item { break-inside:avoid; } }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>${cfg?.emoji||''} ${rodada.nome}</h1>
+    <p>${NOMES_OBJETIVO[rodada.objetivo]||rodada.objetivo} · ${rodada.formato} · ${itens.length} roteiro${itens.length>1?'s':''} prontos</p>
+  </div>
+
+  ${itens.map(item=>`
+  <div class="item">
+    <div class="item-header">
+      <div class="num">${item.num}</div>
+      <div class="tema">${item.tema}</div>
+      <div class="status">${item.status==='noar'?'🚀 No Ar':item.status==='pronto'?'✅ Pronto':'🎬 Em Produção'}</div>
+    </div>
+    <div class="roteiro-label">Roteiro</div>
+    ${item.roteiro
+      ? `<div class="roteiro">${item.roteiro.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`
+      : `<div class="sem-roteiro">Nenhum roteiro salvo para este tema.</div>`
+    }
+    ${item.cta?`<div class="cta">CTA: ${item.cta}</div>`:''}
+  </div>`).join('')}
+
+  <div class="footer">Gerado pelo Cubo Mágico de Conteúdo — Caverna das Guerreiras</div>
+</body>
+</html>`;
+
+  // Criar modal de impressão interno
+  const modalId = 'modal-relatorio-roteiros';
+  let modal = document.getElementById(modalId);
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = modalId;
+    modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:#fff;overflow-y:auto;padding:0';
+    document.body.appendChild(modal);
+  }
+  modal.innerHTML = `
+    <div style="position:sticky;top:0;background:#fff;border-bottom:2px solid #eee;padding:12px 24px;display:flex;align-items:center;gap:12px;z-index:1">
+      <button onclick="document.getElementById('${modalId}').style.display='none'" style="padding:8px 16px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer;font-size:13px">✕ Fechar</button>
+      <span style="font-size:14px;font-weight:700;color:#1a1a2e">📄 Relatório de Roteiros — ${rodada.nome}</span>
+      <button onclick="window.print()" style="margin-left:auto;padding:8px 20px;border:none;border-radius:6px;background:#1B7FD4;color:#fff;cursor:pointer;font-size:13px;font-weight:700">🖨️ Imprimir / Salvar PDF</button>
+    </div>
+    <div id="relatorio-conteudo" style="padding:40px;max-width:800px;margin:0 auto">
+      ${html.match(/<body>([\s\S]*)<\/body>/)?.[1]||''}
+    </div>
+  `;
+  modal.style.display = 'block';
+}
+
+function voltarEstoquesAtual(){
+  const obj = window._objetivoAtual||'';
+  voltarEstoques(obj);
+}
+
 function voltarEstoques(objetivo){
   document.getElementById('prod-estoques-lista').style.display='block';
   document.getElementById('prod-conteudo').innerHTML='';
+  const _bce = document.getElementById('prod-breadcrumb-estoque');
+  if(_bce) _bce.style.display='none';
 }
 
 function gerarPromptProducao(idx, rodadaId){
@@ -2373,82 +2520,69 @@ function renderEquilibrio(){
   const el = document.getElementById('painel-equilibrio');
   if(!el) return;
 
-  const FUNIL_OBJ = {
-    atrair:'atrair', envolver:'envolver', relacionar:'relacionar',
-    ofertar:'ofertar', fidelizar:'fidelizar', humanizar:'humanizar'
-  };
+  const STATUS_PESO = {pendente:10, producao:50, pronto:80, noar:100};
 
   const OBJETIVOS = [
-    {key:'atrair',    nome:'Estoque de Atração',       cor:'#F4831F', bg:'#FFF4EC', texto:'#fff'},
-    {key:'envolver',  nome:'Estoque de Envolvimento',  cor:'#F5C400', bg:'#FFFBEA', texto:'#fff'},
-    {key:'relacionar',nome:'Estoque de Relacionamento',cor:'#27AE60', bg:'#EDFBF3', texto:'#fff'},
-    {key:'ofertar',   nome:'Estoque de Oferta/Vendas', cor:'#FF3B30', bg:'#FFECEB', texto:'#fff'},
-    {key:'fidelizar', nome:'Estoque de Pós Venda',     cor:'#8E44AD', bg:'#F5EEFF', texto:'#fff'},
-    {key:'humanizar', nome:'Estoque de Humanização',   cor:'#1B7FD4', bg:'#E8F4FD', texto:'#fff'},
+    {key:'atrair',    nome:'Estoque de Atração',       cor:'#F4831F', bg:'#FFF4EC'},
+    {key:'envolver',  nome:'Estoque de Envolvimento',  cor:'#B8860B', bg:'#FFFBEA'},
+    {key:'relacionar',nome:'Estoque de Relacionamento',cor:'#27AE60', bg:'#EDFBF3'},
+    {key:'ofertar',   nome:'Estoque de Oferta/Vendas', cor:'#FF3B30', bg:'#FFECEB'},
+    {key:'fidelizar', nome:'Estoque de Pós Venda',     cor:'#8E44AD', bg:'#F5EEFF'},
+    {key:'humanizar', nome:'Estoque de Humanização',   cor:'#1B7FD4', bg:'#E8F4FD'},
   ];
 
-  const total = rodadas.length;
-
-  if(total===0){
+  if(!rodadas.length){
     el.innerHTML = '<div class="empty"><div class="empty-icon">⚖️</div><div class="empty-text">Crie estoques para visualizar o equilíbrio do funil.</div></div>';
     return;
   }
 
+  const arrowStyle = `width:0;height:0;border-top:22px solid transparent;border-bottom:22px solid transparent`;
+
   el.innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:8px">
-      <div style="text-align:center;font-size:12px;font-weight:700;color:var(--cinza);text-transform:uppercase;letter-spacing:1px">📋 Planejado</div>
-      <div style="text-align:center;font-size:12px;font-weight:700;color:var(--cinza);text-transform:uppercase;letter-spacing:1px">✅ Executado</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+      <div style="text-align:center;font-size:11px;font-weight:700;color:var(--cinza);text-transform:uppercase;letter-spacing:1px">📋 Planejado</div>
+      <div style="text-align:center;font-size:11px;font-weight:700;color:var(--cinza);text-transform:uppercase;letter-spacing:1px">⚡ Executado</div>
     </div>
     ${OBJETIVOS.map(obj=>{
       const estoques = rodadas.filter(r=>r.objetivo===obj.key);
-      const planejado = estoques.length;
-      const pctPlan = total > 0 ? Math.round((planejado/total)*100) : 0;
-
-      // Executado baseado no progresso dos status dos temas
-      const STATUS_PESO = {pendente:10, producao:50, pronto:80, noar:100};
-      let somaProgressos = 0;
-      let totalTemas = 0;
-      estoques.forEach(r=>{
+      if(!estoques.length) return '';
+      return estoques.map((r, idx)=>{
+        let soma = 0;
         for(let i=0;i<12;i++){
           const s = r.status?.[i]||'pendente';
-          somaProgressos += STATUS_PESO[s]||10;
-          totalTemas++;
+          soma += STATUS_PESO[s]||10;
         }
-      });
-      const pctExec = totalTemas > 0 ? Math.round(somaProgressos/totalTemas) : 0;
-
-      const numStyle = `font-size:28px;font-weight:900;color:${obj.cor};min-width:36px;text-align:center;line-height:1`;
-      const arrowStyle = `width:0;height:0;border-top:22px solid transparent;border-bottom:22px solid transparent`;
-
-      return `
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:5px;align-items:stretch">
-        <!-- PLANEJADO -->
-        <div style="display:flex;align-items:center;gap:0">
-          <div style="display:flex;align-items:center;background:${obj.cor};border-radius:8px 0 0 8px;padding:8px 12px;flex:1;gap:8px">
-            <span style="font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.5px;flex:1">${obj.nome}</span>
-            <div style="background:rgba(255,255,255,.2);border-radius:6px;padding:4px 10px;min-width:52px;text-align:center">
-              <div style="font-size:9px;color:rgba(255,255,255,.7);font-weight:600;text-transform:uppercase">${planejado} est.</div>
-              <div style="font-size:18px;font-weight:900;color:#fff;line-height:1">${pctPlan}%</div>
+        const pctExec = Math.round(soma/12);
+        const label = estoques.length > 1 ? ` (${idx+1})` : '';
+        const nome = (r.nome || obj.nome).toUpperCase();
+        return `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;align-items:stretch">
+          <div style="display:flex;align-items:center">
+            <div style="display:flex;align-items:center;background:${obj.cor};border-radius:8px 0 0 8px;padding:8px 12px;flex:1;gap:8px;overflow:hidden">
+              <span style="font-size:11px;font-weight:700;color:#fff;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nome}${label}</span>
+              <div style="background:rgba(255,255,255,.2);border-radius:6px;padding:3px 8px;flex-shrink:0;text-align:center">
+                <div style="font-size:9px;color:rgba(255,255,255,.7);font-weight:600">EST.</div>
+                <div style="font-size:16px;font-weight:900;color:#fff;line-height:1">100%</div>
+              </div>
+            </div>
+            <div style="${arrowStyle};border-left:14px solid ${obj.cor}"></div>
+          </div>
+          <div style="display:flex;align-items:center">
+            <div style="${arrowStyle};border-left:14px solid ${obj.cor}"></div>
+            <div style="display:flex;align-items:center;background:${obj.bg};border:2px solid ${obj.cor}33;border-left:none;border-radius:0 8px 8px 0;padding:8px 12px;flex:1;gap:8px;overflow:hidden">
+              <span style="font-size:11px;font-weight:700;color:${obj.cor};flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nome}${label}</span>
+              <div style="background:${obj.cor}22;border-radius:6px;padding:3px 8px;flex-shrink:0;text-align:center">
+                <div style="font-size:9px;color:${obj.cor};font-weight:600;opacity:.7">PROG.</div>
+                <div style="font-size:16px;font-weight:900;color:${obj.cor};line-height:1">${pctExec}%</div>
+              </div>
             </div>
           </div>
-          <div style="${arrowStyle};border-left:14px solid ${obj.cor}"></div>
-        </div>
-        <!-- EXECUTADO -->
-        <div style="display:flex;align-items:center;gap:0">
-          <div style="${arrowStyle};border-left:14px solid ${obj.cor};border-top-color:transparent;border-bottom-color:transparent;filter:drop-shadow(1px 0 0 #ddd)"></div>
-          <div style="display:flex;align-items:center;background:${obj.bg};border:2px solid ${obj.cor}33;border-left:none;border-radius:0 8px 8px 0;padding:8px 12px;flex:1;gap:8px">
-            <span style="font-size:12px;font-weight:700;color:${obj.cor};text-transform:uppercase;letter-spacing:.5px;flex:1">${obj.nome}</span>
-            <div style="background:${obj.cor}22;border-radius:6px;padding:4px 10px;min-width:52px;text-align:center">
-              <div style="font-size:9px;color:${obj.cor};font-weight:600;opacity:.7;text-transform:uppercase">progresso</div>
-              <div style="font-size:18px;font-weight:900;color:${obj.cor};line-height:1">${pctExec}%</div>
-            </div>
-          </div>
-        </div>
-      </div>`;
+        </div>`;
+      }).join('');
     }).join('')}
-    <div style="display:flex;justify-content:space-between;margin-top:8px;padding-top:12px;border-top:1px solid var(--cinza-borda)">
-      <span style="font-size:11px;color:var(--cinza)">Total planejado: <strong>${total} estoques</strong></span>
-      <span style="font-size:11px;color:var(--cinza)">Progresso: <strong>Pendente 10% · Em produção 50% · Pronto 80% · No Ar 100%</strong></span>
+    <div style="border-top:1px solid var(--cinza-borda);padding-top:10px;margin-top:4px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <span style="font-size:11px;color:var(--cinza)">Total: <strong>${rodadas.length} estoque${rodadas.length>1?'s':''}</strong></span>
+      <span style="font-size:10px;color:var(--cinza)">⏳ 10% · 🎬 50% · ✅ 80% · 🚀 100%</span>
     </div>
   `;
 }
@@ -2765,7 +2899,7 @@ function copiarDistribuicao(){
 const FORMATOS_MODELOS = [
   {
     id:'antes-depois',
-    nome:'Antes e Depois',
+    nome:'Categoria Antes e Depois',
     cor:'purple',
     bgColor:'#EDE9FE',
     borderColor:'#C4B5FD',
@@ -2774,7 +2908,7 @@ const FORMATOS_MODELOS = [
     funis:['topo','meio'],
     modelos:[
       {
-        funil:['atrair'], intencao:'Antes e Depois', id:'ad1', nome:'Faça isso | Em vez de fazer isso',
+        funil:['atrair'], intencao:'Categoria Antes e Depois', id:'ad1', nome:'Faça isso | Em vez de fazer isso',
         quandoUsar:'Quando quer ensinar o jeito estratégico sem bater de frente. Ideal para orientar comportamento e decisões práticas mostrando caminhos mais eficientes.',
         prompt:`Gere um carrossel de 7 cards no modelo "Faça isso | Em vez de fazer isso" sobre o tema indicado.
 
@@ -2790,7 +2924,7 @@ CARD 7 — CTA: Escolha uma das 3 opções adaptada ao tema: (1) Salva pra revis
 Tom: acolhedor, direto, sem julgamento. Use linguagem da cliente ideal (bagagem, experiência, autêntica).`
       },
       {
-        funil:['atrair'], intencao:'Antes e Depois', id:'ad2', nome:'Jamais fale ou faça / Faça assim',
+        funil:['atrair'], intencao:'Categoria Antes e Depois', id:'ad2', nome:'Jamais fale ou faça / Faça assim',
         quandoUsar:'Quando a audiência está se diminuindo, pedindo validação ou abrindo brecha para objeção. Ideal para falar de linguagem, preço, vendas e posicionamento profissional.',
         prompt:`Gere um carrossel de 7 cards no modelo "Jamais fale ou faça / Faça assim" sobre o tema indicado.
 
@@ -2806,7 +2940,7 @@ CARD 7 — CTA: Adapte ao tema: (1) Salva pra não repetir isso no automático (
 Tom: direto e empoderador. Sem agressividade. Mostre o padrão que você sustenta.`
       },
       {
-        funil:['atrair'], intencao:'Antes e Depois', id:'ad3', nome:'Troque isso / Por isso',
+        funil:['atrair'], intencao:'Categoria Antes e Depois', id:'ad3', nome:'Troque isso / Por isso',
         quandoUsar:'Quando quer elevar a comunicação da audiência com mudanças pequenas que geram grande salto de percepção. Alto potencial de compartilhamento.',
         prompt:`Gere um carrossel de 7 cards no modelo "Troque isso / Por isso" sobre o tema indicado.
 
@@ -2822,7 +2956,7 @@ CARD 7 — CTA: (1) Salve esse post pra revisar antes de [ação] (2) Compartilh
 Tom: refinado e revelador. Pequenas mudanças, grande impacto.`
       },
       {
-        id:'ad4', funil:['humanizar'], intencao:'Antes e Depois',
+        id:'ad4', funil:['humanizar'], intencao:'Categoria Antes e Depois',
         nome:'Eu era a pessoa que... / Pra hoje ser...',
         quandoUsar:'Quando quer posicionar sem parecer chata ou repetitiva, mostrando evolução de critério e maturidade. Funciona bem em topo e meio de funil.',
         prompt:`Gere um carrossel de 7 cards no modelo "Eu era a pessoa que... / Pra hoje ser..." sobre o tema indicado.
@@ -2839,7 +2973,7 @@ CARD 7 — CTA: (1) Comenta [palavra] se você está na fase do "eu era a pessoa
 Tom: humano, vulnerável e estratégico. Mostra evolução sem superioridade.`
       },
       {
-        funil:['atrair'], intencao:'Comparação', id:'ad5', nome:'X Bom / X Ruim',
+        funil:['atrair'], intencao:'Categoria Dualidade', id:'ad5', nome:'X Bom / X Ruim',
         quandoUsar:'Quando quer educar o olhar da audiência ensinando diferença de qualidade sem transformar o post em aula longa. Ótimo para topo de funil — dá clareza rápida e aumenta compartilhamento.',
         prompt:`Gere um carrossel de 7 cards no modelo "X Bom / X Ruim" sobre o tema indicado.
 
@@ -2855,7 +2989,7 @@ CARD 7 — CTA: (1) Salva pra revisar antes de criar sua próxima [X] (2) Compar
 Tom: educativo e direto. Clareza rápida sem teoria pesada.`
       },
       {
-        funil:['atrair'], intencao:'Antes e Depois', id:'ad6',
+        funil:['atrair'], intencao:'Categoria Antes e Depois', id:'ad6',
         nome:'Julgamento inicial vs resultado real',
         quandoUsar:'Quando quer mostrar a diferença entre a primeira impressão de algo e o que realmente acontece na prática.',
         prompt:`Gere um carrossel de 7 cards no modelo "Julgamento inicial vs resultado real" sobre o tema indicado.
@@ -2872,7 +3006,7 @@ CARD 7 — CTA: Adapte ao tema: (1) Comenta [palavra] se você já julgou isso a
 Tom: revelador e empático. Não condena quem julgou — mostra que o julgamento era falta de informação, não falta de inteligência.`
       },
       {
-        funil:['atrair'], intencao:'Antes e Depois', id:'ad7',
+        funil:['atrair'], intencao:'Categoria Antes e Depois', id:'ad7',
         nome:'Antes do começo x Depois da coragem',
         quandoUsar:'Quando quer mostrar a invisibilidade inicial versus o reconhecimento posterior — ideal para falar de jornada e processo.',
         prompt:`Gere um carrossel de 7 cards no modelo "Antes do começo x Depois da coragem" sobre o tema indicado.
@@ -2892,7 +3026,7 @@ Tom: inspiracional maduro — sem hype, sem promessa fácil. Honra o processo e 
   },
   {
     id:'comparacao',
-    nome:'Comparação',
+    nome:'Categoria Dualidade',
     cor:'teal',
     bgColor:'#EDE9FE',
     borderColor:'#C4B5FD',
@@ -2901,7 +3035,7 @@ Tom: inspiracional maduro — sem hype, sem promessa fácil. Honra o processo e 
     funis:['topo','meio'],
     modelos:[
       {
-        funil:['atrair'], intencao:'Comparação', id:'comp1',
+        funil:['atrair'], intencao:'Categoria Dualidade', id:'comp1',
         nome:'O que ela quer x O que ela faz',
         quandoUsar:'Para gerar choque de consciência sem agressividade. Mostra a distância entre desejo e comportamento real. Ideal para topo de funil — a pessoa se reconhece e entende sozinha por que ainda não chegou onde quer.',
         prompt:`Gere um carrossel de 9 cards no modelo "O que ela quer x O que ela faz" sobre o tema indicado.
@@ -2920,7 +3054,7 @@ CARD 9 — CTA: Escolha uma: (1) "Qual dessas partes mais parece com você hoje?
 Tom: empático, sem julgamento. A pessoa precisa se ver, não se sentir atacada.`
       },
       {
-        funil:['atrair'], intencao:'Comparação', id:'comp2',
+        funil:['atrair'], intencao:'Categoria Dualidade', id:'comp2',
         nome:'O que te contam x O que eu te conto',
         quandoUsar:'Para filtrar audiência, afastar curiosos e aproximar quem está pronta para ouvir direção, não só incentivo. Quebra promessas fáceis e discursos motivacionais vazios.',
         prompt:`Gere um carrossel de 9 cards no modelo "O que te contam x O que eu te conto" sobre o tema indicado.
@@ -2939,7 +3073,7 @@ CARD 9 — CTA: Escolha uma: (1) "Amiga de verdade não ilude, orienta. Concorda
 Tom: autoridade com vínculo. Como quem fala a verdade porque se importa, não para mostrar superioridade.`
       },
       {
-        funil:['atrair'], intencao:'Comparação', id:'comp3',
+        funil:['atrair'], intencao:'Categoria Dualidade', id:'comp3',
         nome:'Isso não é X, isso é Y',
         quandoUsar:'Quando o mercado está diluindo um conceito importante. Serve para definir termos como posicionamento, autoridade, método ou estratégia de forma que educa e posiciona como referência.',
         prompt:`Gere um carrossel de 9 cards no modelo "Isso não é X, isso é Y" sobre o tema indicado.
@@ -2958,7 +3092,7 @@ CARD 9 — CTA: Escolha uma: (1) "Depois disso, fica mais fácil identificar o q
 Tom: educativo e refinado. Posiciona sem precisar se afirmar como especialista — o conteúdo faz o trabalho.`
       },
       {
-        funil:['atrair'], intencao:'Comparação', id:'comp4',
+        funil:['atrair'], intencao:'Categoria Dualidade', id:'comp4',
         nome:'Não é difícil x Difícil é',
         quandoUsar:'Para quebrar desculpas e racionalizações. Mostra que o desconforto existe de qualquer forma — a diferença está em qual desconforto aproxima do futuro desejado. Ótimo para topo de funil e momentos em que a audiência está travada.',
         prompt:`Gere um carrossel de 7 cards no modelo "Não é difícil x Difícil é" sobre o tema indicado.
@@ -2975,7 +3109,7 @@ CARD 7 — CTA: Escolha uma: (1) "Qual difícil você escolhe hoje?" (2) "Coment
 Tom: direto e emocional. Sem julgamento, mas sem romantizar. A verdade dita com cuidado.`
       },
       {
-        funil:['atrair'], intencao:'Comparação', id:'comp5',
+        funil:['atrair'], intencao:'Categoria Dualidade', id:'comp5',
         nome:'Ilusão x Realidade',
         quandoUsar:'Para amadurecer a visão da audiência sobre um tema. Confronta o glamour com o bastidor, a fantasia com o processo. Ideal para filtro de público — atrai quem quer construir algo de verdade.',
         prompt:`Gere um carrossel de 7 cards no modelo "Ilusão x Realidade" sobre o tema indicado.
@@ -2992,7 +3126,7 @@ CARD 7 — CTA: Escolha uma: (1) "Se você prefere o jogo real, continua comigo.
 Tom: maduro e firme. Sem romantizar o processo, sem demonizar o desejo. A realidade dita com respeito.`
       },
       {
-        funil:['atrair'], intencao:'Comparação', id:'comp6',
+        funil:['atrair'], intencao:'Categoria Dualidade', id:'comp6',
         nome:'Julgamento inicial vs resultado real',
         quandoUsar:'Para falar com quem tem medo de críticas, haters ou comentários maldosos. Normaliza a rejeição inicial e mostra que ser subestimada faz parte do caminho. Cria identificação profunda e fortalece vínculo emocional.',
         prompt:`Gere um carrossel de 6 a 8 cards no modelo "Julgamento inicial vs resultado real" sobre o tema indicado.
@@ -3010,7 +3144,7 @@ EVITE: Culto à personalidade. Exagerar no final feliz apagando o processo. Tom 
 Tom: inspiracional profundo. Normaliza a rejeição sem romantizar. Fortalece identidade.`
       },
       {
-        funil:['atrair'], intencao:'Comparação', id:'comp7',
+        funil:['atrair'], intencao:'Categoria Dualidade', id:'comp7',
         nome:'Antes do começo x Depois da coragem',
         quandoUsar:'Para destravar quem está esperando validação externa para agir. Mostra que o reconhecimento vem depois da ação, nunca antes. Ideal para conteúdos inspiracionais maduros, sem hype.',
         prompt:`Gere um carrossel de 6 a 8 cards no modelo "Antes do começo x Depois da coragem" sobre o tema indicado.
@@ -3030,7 +3164,7 @@ Tom: silencioso e sofisticado. Não confronta, conduz. Inspiracional maduro que 
   },
   {
     id:'autoridade',
-    nome:'Autoridade',
+    nome:'Categoria Autoridade',
     cor:'blue',
     bgColor:'#D1FAE5',
     borderColor:'#6EE7B7',
@@ -3039,7 +3173,7 @@ Tom: silencioso e sofisticado. Não confronta, conduz. Inspiracional maduro que 
     funis:['meio','fundo'],
     modelos:[
       {
-        funil:['envolver'], intencao:'Autoridade', id:'aut1',
+        funil:['envolver'], intencao:'Categoria Autoridade', id:'aut1',
         nome:'Recorte de resultado',
         quandoUsar:'Para atrair gente prática, aumentar salvamentos e abrir espaço para ensinar critério sem precisar dar aula. Transforma resultado em critério, não em espetáculo.',
         prompt:`Gere um carrossel de 7 cards no modelo "Recorte de resultado" sobre o tema indicado.
@@ -3056,7 +3190,7 @@ CARD 7 — CTA: Escolha uma: (1) "Salva esse post pra revisar suas prioridades a
 Tom: autoridade silenciosa. Sem discurso de superioridade. O critério fala por si.`
       },
       {
-        funil:['envolver'], intencao:'Autoridade', id:'aut2',
+        funil:['envolver'], intencao:'Categoria Autoridade', id:'aut2',
         nome:'Projeção estratégica',
         quandoUsar:'Para mostrar visão de jogo e organizar expectativa. Transforma uma meta distante em raciocínio lógico: o que fazer primeiro, o que não fazer, qual ordem seguir. Educa sem virar aula longa.',
         prompt:`Gere um carrossel de 7 cards no modelo "Projeção estratégica" sobre o tema indicado.
@@ -3073,7 +3207,7 @@ CARD 7 — CTA: Escolha uma: (1) "Comenta [PALAVRA] se você quer que eu adapte 
 Tom: visão estratégica acessível. Como alguém que simplifica o complexo e mostra que crescimento é ordem, não volume.`
       },
       {
-        funil:['fidelizar'], intencao:'Autoridade', id:'aut3',
+        funil:['fidelizar'], intencao:'Categoria Autoridade', id:'aut3',
         nome:'Narrativa pra contar conquistas',
         quandoUsar:'Para mostrar que resultado não é dom, sorte ou algoritmo — é construção. Ideal para topo e meio de funil: cria identificação com quem está no começo e posiciona como referência.',
         prompt:`Gere um carrossel de 8 cards no modelo "Narrativa pra contar conquistas" sobre o tema indicado.
@@ -3091,7 +3225,7 @@ CARD 8 — CTA: Escolha uma: (1) "Comenta [PALAVRA] se você quer [resultado esp
 Tom: humano e estratégico. Sem ostentar — mostrar processo. A força está na honestidade, não na perfeição.`
       },
       {
-        funil:['envolver'], intencao:'Autoridade', id:'aut4',
+        funil:['envolver'], intencao:'Categoria Autoridade', id:'aut4',
         nome:'Identidade construída',
         quandoUsar:'Para equilibrar conteúdos técnicos com algo que fortalece identidade sem virar autoajuda. Mostra que a versão visível de hoje é consequência de escolhas invisíveis.',
         prompt:`Gere um carrossel de 7 cards no modelo "Identidade construída" sobre o tema indicado.
@@ -3108,7 +3242,7 @@ CARD 7 — CTA: Escolha uma: (1) "Comenta [PALAVRA] se você está nesse process
 Tom: silencioso e profundo. Fortalece identidade sem glamourizar. A autoridade vem da coerência, não do resultado.`
       },
       {
-        funil:['envolver'], intencao:'Autoridade', id:'aut5',
+        funil:['envolver'], intencao:'Categoria Autoridade', id:'aut5',
         nome:'Diagnóstico de mercado',
         quandoUsar:'Para nomear uma lacuna e mostrar diferença entre discurso e prática. Filtra audiência e aumenta percepção de valor. Prepara terreno para produtos mais estratégicos.',
         prompt:`Gere um carrossel de 7 cards no modelo "Diagnóstico de mercado" sobre o tema indicado.
@@ -3125,7 +3259,7 @@ CARD 7 — CTA: Escolha uma: (1) "Comenta [PALAVRA] se você quer que eu aprofun
 Tom: interpretação do mercado com clareza e sem maquiagem. Não dá conselho raso — dá critério.`
       },
       {
-        funil:['envolver'], intencao:'Autoridade', id:'aut6',
+        funil:['envolver'], intencao:'Categoria Autoridade', id:'aut6',
         nome:'Experimento consciente',
         quandoUsar:'Quando a audiência está travada, insegura ou tentando acertar de primeira. Mostra que estratégia não é adivinhação — é construção. Humaniza e posiciona ao mesmo tempo.',
         prompt:`Gere um carrossel de 7 cards no modelo "Experimento consciente" sobre o tema indicado.
@@ -3145,7 +3279,7 @@ Tom: humanizado e estratégico. Mostra que testar com critério é mais poderoso
   },
   {
     id:'narrativa',
-    nome:'Narrativa',
+    nome:'Categoria Storytelling',
     cor:'coral',
     bgColor:'#E8F4FD',
     borderColor:'#BDE0F8',
@@ -3154,7 +3288,7 @@ Tom: humanizado e estratégico. Mostra que testar com critério é mais poderoso
     funis:['topo','meio','fundo'],
     modelos:[
       {
-        funil:['relacionar'], intencao:'Narrativa', id:'nar1',
+        funil:['relacionar'], intencao:'Categoria Storytelling', id:'nar1',
         nome:'Processo invisível',
         quandoUsar:'Use quando você quer mostrar que a audiência está começando, recomeçando ou se sentindo atrasada por ainda não ter domínio, resultado ou clareza. Serve para normalizar o começo e tirar a audiência do estado de culpa por ainda não "acertar". Reposiciona erro como parte do processo e não como sinal de incapacidade.',
         prompt:`Você vai gerar um carrossel de 8 cards no modelo "Processo Invisível" sobre o tema indicado.
@@ -3172,7 +3306,7 @@ CARD 8 — CTA (escolha uma): "Comenta [PALAVRA] se você está na sua primeira 
 Tom: acolhedor, sem julgamento, que normaliza o começo. Não infantiliza — fortalece.`
       },
       {
-        funil:['relacionar'], intencao:'Narrativa', id:'nar2',
+        funil:['relacionar'], intencao:'Categoria Storytelling', id:'nar2',
         nome:'Frase que marcou',
         quandoUsar:'Use quando quiser mostrar que a audiência sofre com julgamento, críticas, desestímulo ou falta de apoio, mas que há outra opção. Escolha frases comuns que gerem identificação. Dica: use frases reais ditas pela própria audiência nos comentários e DMs.',
         prompt:`Você vai gerar um carrossel de 10 cards no modelo "Frase que Marcou" sobre o tema indicado.
@@ -3192,7 +3326,7 @@ CARD 10 — CTA: "Comenta [PALAVRA] se você já carregou uma frase que não era
 Tom: maduro, íntimo e empoderador. A frase externa vira consciência interna.`
       },
       {
-        funil:['relacionar'], intencao:'Narrativa', id:'nar3',
+        funil:['relacionar'], intencao:'Categoria Storytelling', id:'nar3',
         nome:'Narrativa com promessa',
         quandoUsar:'Use quando quiser ensinar um princípio importante por meio de história, aumentar tempo de leitura e gerar consciência sem confronto direto. Não entrega passo a passo — entrega mudança de percepção. Ideal para gerar retenção alta, desejo e preparar terreno para uma decisão futura.',
         prompt:`Você vai gerar um carrossel de 10 cards no modelo "Narrativa com Promessa" sobre o tema indicado.
@@ -3212,7 +3346,7 @@ CARD 10 — CTA (escolha uma): "Comenta [PALAVRA] se essa história se conecta c
 Tom: narrativo, humano, sem ser didático. A história conduz — não ensina.`
       },
       {
-        funil:['relacionar'], intencao:'Narrativa', id:'nar4',
+        funil:['relacionar'], intencao:'Categoria Storytelling', id:'nar4',
         nome:'Personagem',
         quandoUsar:'Use quando quiser mostrar quem sua audiência precisa se tornar para conquistar seus objetivos. Trabalha a transição entre quem ela é percebida como e quem precisa ser percebida, sem pedir que se traia ou vire outra pessoa. Fala de imagem, postura, comunicação e identidade de forma madura.',
         prompt:`Você vai gerar um carrossel de 10 cards no modelo "Personagem" sobre o tema indicado.
@@ -3232,7 +3366,7 @@ CARD 10 — CTA: "Me conta: o que você já precisou ajustar/fazer/falar pra [ob
 Tom: maduro, estratégico, sem discurso raso. Posicionamento é intenção, não falsidade.`
       },
       {
-        funil:['relacionar'], intencao:'Narrativa', id:'nar5',
+        funil:['relacionar'], intencao:'Categoria Storytelling', id:'nar5',
         nome:'Quebra de expectativa',
         quandoUsar:'Use quando quiser gerar conexão emocional, retenção alta e comentários reflexivos, especialmente em momentos de virada, maturidade ou conquista interna. Brinca com a expectativa óbvia da audiência para conduzi-la a uma resposta inesperada e mais profunda.',
         prompt:`Você vai gerar um carrossel de 8 cards no modelo "Quebra de Expectativa" sobre o tema indicado.
@@ -3250,7 +3384,7 @@ CARD 8 — CTA: "Me conta: qual foi a coisa mais cara que você já [comprou/con
 Tom: reflexivo, maduro e que provoca identificação emocional — não comparação.`
       },
       {
-        funil:['fidelizar'], intencao:'Narrativa', id:'nar6',
+        funil:['fidelizar'], intencao:'Categoria Storytelling', id:'nar6',
         nome:'A frase que virou combustível',
         quandoUsar:'Use quando quiser contar uma história de virada, mostrar evolução ao longo do tempo e transformar crítica ou desdém em aprendizado e força. Ressignifica rejeição sem romantizar dor — mostra maturidade e crescimento. Ideal para falar de trajetória, constância e construção real.',
         prompt:`Você vai gerar um carrossel de 10 cards no modelo "A Frase que Virou Combustível" sobre o tema indicado.
@@ -3273,7 +3407,7 @@ Tom: calmo, posicionado, sem revanchismo. A força vem da constância, não da r
   },
   {
     id:'analise',
-    nome:'Análise',
+    nome:'Categoria Opinião',
     cor:'amber',
     bgColor:'#D1FAE5',
     borderColor:'#6EE7B7',
@@ -3282,7 +3416,7 @@ Tom: calmo, posicionado, sem revanchismo. A força vem da constância, não da r
     funis:['meio','fundo'],
     modelos:[
       {
-        funil:['envolver'], intencao:'Análise', id:'ana1',
+        funil:['envolver'], intencao:'Categoria Opinião', id:'ana1',
         nome:'Contradição contemporânea',
         quandoUsar:'Use quando existir um discurso forte sendo repetido, mas os resultados coletivos mostram o oposto. Esse modelo existe para expor uma incoerência coletiva que todo mundo sente, mas pouca gente nomeia. Não acusa o leitor — acusa o contexto.',
         prompt:`Você vai gerar um carrossel de 10 cards no modelo "Contradição Contemporânea" sobre o tema indicado.
@@ -3304,7 +3438,7 @@ CARD 10 — CTA: "Quem percebe isso começa a agir diferente. Comenta [PALAVRA] 
 Tom: ensaístico, sem pressa. Eleva o nível da conversa sem acusar ninguém individualmente.`
       },
       {
-        funil:['envolver'], intencao:'Análise', id:'ana2',
+        funil:['envolver'], intencao:'Categoria Opinião', id:'ana2',
         nome:'O problema não é X, é Y',
         quandoUsar:'Use quando um tema está sendo simplificado demais ou tratado com soluções fáceis. Esse modelo reorganiza prioridades — pega algo que costuma ser tratado como "vilão" e mostra que o problema real está em outro lugar. Quebra explicações rasas e devolve profundidade ao debate.',
         prompt:`Você vai gerar um carrossel de 10 cards no modelo "O problema não é X, é Y" sobre o tema indicado.
@@ -3326,7 +3460,7 @@ CARD 10 — CTA: "Entender isso muda decisões. Comenta [PALAVRA] se isso fez se
 Tom: preciso e revelador. Não condena a audiência — libera ela de uma explicação errada.`
       },
       {
-        funil:['envolver'], intencao:'Análise', id:'ana3',
+        funil:['envolver'], intencao:'Categoria Opinião', id:'ana3',
         nome:'Ninguém está falando sobre isso',
         quandoUsar:'Use quando quiser abordar um assunto que está saturado, mas mal interpretado. Esse modelo ilumina o ponto cego de uma conversa popular. Cria a sensação de acesso a uma camada mais profunda da realidade, não por exclusividade, mas por clareza.',
         prompt:`Você vai gerar um carrossel de 10 cards no modelo "Ninguém Está Falando Sobre Isso" sobre o tema indicado.
@@ -3348,7 +3482,7 @@ CARD 10 — CTA: "Esse tipo de percepção muda escolhas. Comenta [PALAVRA] se v
 Tom: investigativo, de dentro para fora. Quem lê sente que ganhou um filtro novo para enxergar.`
       },
       {
-        funil:['envolver'], intencao:'Análise', id:'ana4',
+        funil:['envolver'], intencao:'Categoria Opinião', id:'ana4',
         nome:'Comportamento comum',
         quandoUsar:'Use quando quiser mostrar um comportamento comum que está sendo normalizado, mas gera cansaço, frustração ou repetição de resultados. Investiga um padrão coletivo sem julgamento — não aponta culpados individuais, revela o mecanismo por trás do padrão.',
         prompt:`Você vai gerar um carrossel de 10 cards no modelo "Comportamento Comum" sobre o tema indicado.
@@ -3370,7 +3504,7 @@ CARD 10 — CTA: "Entender o contexto muda comportamento. Comenta [PALAVRA] se i
 Tom: investigativo e acolhedor. Tira a audiência do automático sem fazer ela se sentir culpada.`
       },
       {
-        funil:['envolver'], intencao:'Análise', id:'ana5',
+        funil:['envolver'], intencao:'Categoria Opinião', id:'ana5',
         nome:'Ninguém mais acha [X]',
         quandoUsar:'Use quando um comportamento comum ainda é romantizado, mas já não gera respeito, admiração ou confiança no longo prazo. Analisa um comportamento que já foi símbolo de status mas perdeu valor — revela uma mudança cultural silenciosa que o mercado ainda não nomeou.',
         prompt:`Você vai gerar um carrossel de 10 cards no modelo "Ninguém Mais Acha [X]" sobre o tema indicado.
@@ -3395,7 +3529,7 @@ Tom: analítico e revelador. Mostra que o jogo virou — sem nostálgico e sem m
   },
   {
     id:'conexao',
-    nome:'Conexão',
+    nome:'Categoria Vínculo Emocional',
     cor:'green',
     bgColor:'#EDE9FE',
     borderColor:'#C4B5FD',
@@ -3404,7 +3538,7 @@ Tom: analítico e revelador. Mostra que o jogo virou — sem nostálgico e sem m
     funis:['topo','fundo'],
     modelos:[
       {
-        funil:['relacionar'], intencao:'Conexão', id:'con1',
+        funil:['relacionar'], intencao:'Categoria Vínculo Emocional', id:'con1',
         nome:'Se você não [ação], nada muda',
         quandoUsar:'Use quando quiser destravar sua audiência — quando ela está esperando "se sentir pronta" ou evitando agir por medo, vergonha ou insegurança. Mostra que a ausência de ação também é uma escolha, e que ela tem consequências.',
         prompt:`Você vai gerar um carrossel de 10 cards no modelo "Se você não [ação], nada muda" sobre o tema indicado.
@@ -3426,7 +3560,7 @@ CARD 10 — CTA: "Comenta [PALAVRA/EMOJI] se você está pronta."
 Tom: acolhedor e direto. Sem pressão, sem julgamento. A verdade dita com carinho.`
       },
       {
-        funil:['relacionar'], intencao:'Conexão', id:'con2',
+        funil:['relacionar'], intencao:'Categoria Vínculo Emocional', id:'con2',
         nome:'Meme de identificação',
         quandoUsar:'Use quando quiser gerar conexão leve, humanizar sua imagem, aumentar compartilhamentos e abrir espaço para CTA de link, palavra ou oferta sem parecer forçado. Cada card é completo por si só — não precisa de progressão lógica.',
         prompt:`Você vai gerar um carrossel de 8 cards no modelo "Meme de Identificação" sobre o tema indicado.
@@ -3446,7 +3580,7 @@ CARD 8 — CTA: Escolha uma: "Comenta [PALAVRA] se isso pareceu escrito pra voc�
 Tom: leve, bem-humorado, íntimo. Como uma conversa entre amigas que vivem o mesmo universo.`
       },
       {
-        funil:['relacionar'], intencao:'Conexão', id:'con3',
+        funil:['relacionar'], intencao:'Categoria Vínculo Emocional', id:'con3',
         nome:'Conselhos que ninguém pediu (mas todo mundo precisa)',
         quandoUsar:'Use quando quiser gerar reação imediata, reforçar posicionamento pessoal, fazer uma oferta de forma mais leve. Cada card é um conselho independente. O poder está no contraste entre algo que soa como conselho comum e a virada de verdade que vem logo depois.',
         prompt:`Você vai gerar um carrossel de cards no modelo "Conselhos que Ninguém Pediu" sobre o tema indicado.
@@ -3467,7 +3601,7 @@ OBSERVAÇÃO: o carrossel pode ter quantos cards de conselhos forem necessários
 Tom: direto, com personalidade forte, sem agressividade. Como uma amiga sênior que fala verdade porque se importa.`
       },
       {
-        funil:['relacionar'], intencao:'Conexão', id:'con4',
+        funil:['relacionar'], intencao:'Categoria Vínculo Emocional', id:'con4',
         nome:'Manifesto (conexão movimento)',
         quandoUsar:'Use quando quiser fortalecer comunidade, marcar posicionamento de longo prazo, gerar comentários de pertencimento e criar um "nós" claro dentro da sua audiência. Também é ótimo para datas comemorativas relacionadas ao mercado. O "eu" quase desaparece — o centro é o coletivo.',
         prompt:`Você vai gerar um carrossel de 8 cards no modelo "Manifesto" sobre o tema indicado.
@@ -3487,7 +3621,7 @@ CARD 8 — FECHAMENTO + CTA: "Hoje é dia de reconhecer a força que você carre
 Tom: coletivo, poético sem ser vago. Cada frase deve ser verdadeira e específica o suficiente para que a audiência se veja.`
       },
       {
-        funil:['relacionar'], intencao:'Conexão', id:'con5',
+        funil:['relacionar'], intencao:'Categoria Vínculo Emocional', id:'con5',
         nome:'Característica contraintuitiva',
         quandoUsar:'Use quando quiser mostrar que uma característica pessoal da audiência não é um fator limitante — gerando conexão entre você e quem se identifica. Exemplos: timidez, insegurança, pouca energia, excesso de análise, maternidade, idade, rotina cheia, falta de tempo.',
         prompt:`Você vai gerar um carrossel de 8 cards no modelo "Característica Contraintuitiva" sobre o tema indicado.
@@ -3507,7 +3641,7 @@ CARD 8 — FECHAMENTO + CTA: "Se você também é do time das [PESSOAS COM ESSA 
 Tom: empático, específico, libertador. A pessoa sai sentindo que pode avançar sendo quem é.`
       },
       {
-        funil:['ofertar'], intencao:'Conexão', id:'con6',
+        funil:['ofertar'], intencao:'Categoria Vínculo Emocional', id:'con6',
         nome:'O maior erro que eu cometi',
         quandoUsar:'Use quando quiser falar com quem está começando, recomeçando ou travada em decisões estratégicas — especialmente sobre dinheiro, posicionamento, formato de oferta ou próximos passos. Quebra a expectativa de que quem chegou longe sempre acertou desde o começo.',
         prompt:`Você vai gerar um carrossel de 10 cards no modelo "O Maior Erro que Eu Cometi" sobre o tema indicado.
@@ -3532,7 +3666,7 @@ Tom: honesto, humano, estratégico. A vulnerabilidade sobre o erro é o que abre
   },
   {
     id:'inspiracional',
-    nome:'Inspiracional',
+    nome:'Categoria Motivação',
     cor:'pink',
     bgColor:'#FBEAF0',
     borderColor:'#F4C0D1',
@@ -3540,7 +3674,7 @@ Tom: honesto, humano, estratégico. A vulnerabilidade sobre o erro é o que abre
     descricao:'Move emocionalmente — verdades difíceis ditas com cuidado e intenção',
     funis:['topo','fundo'],
     modelos:[
-      {funil:['humanizar'], intencao:'Inspiracional', id:'ins1', nome:'"Enquanto você..."', quandoUsar:'Use quando quiser gerar ruptura de mentalidade e compromisso real com a jornada. Excelente para aquecer audiência, gerar salvamentos e comentários profundos.', estrutura:`Você vai gerar um carrossel de 8 cards no modelo "Enquanto Você..." sobre o tema indicado.
+      {funil:['humanizar'], intencao:'Categoria Motivação', id:'ins1', nome:'"Enquanto você..."', quandoUsar:'Use quando quiser gerar ruptura de mentalidade e compromisso real com a jornada. Excelente para aquecer audiência, gerar salvamentos e comentários profundos.', estrutura:`Você vai gerar um carrossel de 8 cards no modelo "Enquanto Você..." sobre o tema indicado.
 
 ATENÇÃO: esse é um carrossel de RUPTURA DE MENTALIDADE — ele confronta verdades que a audiência já sabe, mas evita encarar. Não ensina nada novo, organiza o incômodo interno e coloca em palavras o que a pessoa sente mas não verbaliza. Cada card aprofunda a consciência sem explicar demais. A repetição da estrutura cria ritmo, impacto e clareza.
 
@@ -3555,7 +3689,7 @@ CARD 7 — IDEIA ROMANTIZADA + VIRADA: "Enquanto você achar que [IDEIA ROMANTIZ
 CARD 8 — ENCERRAMENTO COM COMPROMISSO: "Chega de [VERBO QUE DIMINUI A JORNADA]. Você não faz isso por [DESCULPA COMUM]. Você está construindo [IDENTIDADE / OBJETIVO MAIOR relacionado ao tema]. Pra selar esse compromisso, completa aqui nos comentários: MEU [CANAL/PERFIL/TRABALHO] NÃO É UM ________. EU NÃO ESTOU FAZENDO ISSO POR ________. EU DECIDI LEVAR ________ A SÉRIO."
 
 Tom: direto, rítmico, sem drama nem conselho vazio. Confronta com cuidado — como um espelho honesto, não uma crítica. Altamente compartilhável porque parece um recado pessoal.`},
-      {funil:['humanizar'], intencao:'Inspiracional', id:'ins2', nome:'Verdades difíceis', quandoUsar:'Use quando quiser provocar reflexão, romper desculpas internas e aquecer a audiência emocionalmente. Gera comentários profundos e alto volume de salvamentos.', estrutura:`Você vai gerar um carrossel de 7 cards no modelo "Verdades Difíceis" sobre o tema indicado.
+      {funil:['humanizar'], intencao:'Categoria Motivação', id:'ins2', nome:'Verdades difíceis', quandoUsar:'Use quando quiser provocar reflexão, romper desculpas internas e aquecer a audiência emocionalmente. Gera comentários profundos e alto volume de salvamentos.', estrutura:`Você vai gerar um carrossel de 7 cards no modelo "Verdades Difíceis" sobre o tema indicado.
 
 ATENÇÃO: esse é um carrossel de CHACOALHÃO NECESSÁRIO — ele fala o que a audiência já sabe mas evita encarar sozinha. Tira a pessoa do autoengano com frases simples, curtas e difíceis de rebater. Cada card funciona quase como uma frase de impacto independente, mas juntos constroem um movimento de consciência crescente.
 
@@ -3569,7 +3703,7 @@ CARD 6 — AMBIENTE E RESULTADO: "Se você continuar se cercando das mesmas [PES
 CARD 7 — ENCERRAMENTO + CTA: "Qual dessas verdades você mais precisava ouvir hoje? Comenta [NÚMERO / PALAVRA / EMOJI] 👇" — convite para engajamento com identificação pessoal.
 
 Tom: simples, curto, impactante. Como um espelho sem filtro — não é cruel, é necessário. Cada verdade deve ser difícil de rebater mas impossível de ignorar.`},
-      {funil:['humanizar'], intencao:'Inspiracional', id:'ins3', nome:'A realidade', quandoUsar:'Use quando quiser gerar identificação profunda, provocar reflexão silenciosa e reforçar sua visão de mundo. Prepara terreno emocional para oferta — pode terminar com CTA para venda.', estrutura:`Você vai gerar um carrossel de 9 cards no modelo "A Realidade" sobre o tema indicado.
+      {funil:['humanizar'], intencao:'Categoria Motivação', id:'ins3', nome:'A realidade', quandoUsar:'Use quando quiser gerar identificação profunda, provocar reflexão silenciosa e reforçar sua visão de mundo. Prepara terreno emocional para oferta — pode terminar com CTA para venda.', estrutura:`Você vai gerar um carrossel de 9 cards no modelo "A Realidade" sobre o tema indicado.
 
 ATENÇÃO: esse é um carrossel de RECALIBRAÇÃO DE NORMALIDADE — ele pega coisas básicas que a audiência deseja profundamente, sente falta ou acha que "é pedir demais", e afirma que isso não deveria ser exceção. Não ensina, não aconselha diretamente. Traduz o pensamento interno da audiência em palavras claras. Gera identificação profunda, salvamentos e prepara terreno emocional para oferta.
 
@@ -3585,7 +3719,7 @@ CARD 8 — DESEJO PROFUNDO REVELADO: "Você não quer [DESEJO SUPERFICIAL — ma
 CARD 9 — ENCERRAMENTO + CTA: "Se isso ecoou aí dentro, comenta [PALAVRA-ÂNCORA relacionada ao tema]. (ou: salva pra lembrar que isso não é exagero, é o mínimo.)"
 
 Tom: silencioso, acolhedor, sem dramaturgia. Valida sem vitimizar. Abre espaço sem empurrar. Pode terminar com CTA para oferta ou produto.`},
-      {funil:['humanizar'], intencao:'Inspiracional', id:'ins4', nome:'O processo', quandoUsar:'Use em fases de topo de funil, pós-lançamento ou semanas de menor energia comercial. Fortalece vínculo e posiciona como alguém que entende o estado emocional da audiência.', estrutura:`Você vai gerar um carrossel de 8 cards no modelo "O Processo" sobre o tema indicado.
+      {funil:['humanizar'], intencao:'Categoria Motivação', id:'ins4', nome:'O processo', quandoUsar:'Use em fases de topo de funil, pós-lançamento ou semanas de menor energia comercial. Fortalece vínculo e posiciona como alguém que entende o estado emocional da audiência.', estrutura:`Você vai gerar um carrossel de 8 cards no modelo "O Processo" sobre o tema indicado.
 
 ATENÇÃO: esse é um carrossel de IDENTIFICAÇÃO COGNITIVA E EMOCIONAL — ele traduz em palavras exatamente o pensamento que a audiência está vivendo mas ainda não conseguiu organizar. Não tenta ensinar, convencer ou provocar mudança imediata. O objetivo é gerar a sensação de "era isso que eu precisava ouvir" e fortalecer o vínculo. Funciona muito bem em fases de topo de funil, pós-lançamento, semanas de menor energia comercial ou como contraponto a conteúdos mais racionais.
 
@@ -3600,7 +3734,7 @@ CARD 7 — O QUE REALMENTE IMPORTA: "O que importa não é estar 100% todos os d
 CARD 8 — ENCERRAMENTO + CTA: "Se isso te lembrou que você está indo bem mesmo nos dias difíceis, comenta [SÍMBOLO ou PALAVRA relacionada ao tema] e marca alguém que precisa desse lembrete hoje."
 
 Tom: acolhedor, humano, sem drama. Fala com quem está no meio da jornada, não com quem chegou. Fortalece vínculo e posiciona como alguém que entende o estado emocional da audiência.`},
-      {funil:['humanizar'], intencao:'Inspiracional', id:'ins5', nome:'O medo', quandoUsar:'Use em momentos de transição, pré-oferta ou aquecimento emocional. Prepara o terreno mental para falar de método, estrutura ou solução — pode terminar direto na apresentação do seu produto.', estrutura:`Você vai gerar um carrossel de 8 cards no modelo "O Medo" sobre o tema indicado.
+      {funil:['humanizar'], intencao:'Categoria Motivação', id:'ins5', nome:'O medo', quandoUsar:'Use em momentos de transição, pré-oferta ou aquecimento emocional. Prepara o terreno mental para falar de método, estrutura ou solução — pode terminar direto na apresentação do seu produto.', estrutura:`Você vai gerar um carrossel de 8 cards no modelo "O Medo" sobre o tema indicado.
 
 ATENÇÃO: esse é um carrossel de CORREÇÃO DE DIAGNÓSTICO — ele corrige a narrativa que a própria audiência faz de si mesma. Em vez de reforçar "medo", "falta de capacidade" ou "bloqueio emocional", ele revela o medo real (sobrecarga, responsabilidade acumulada, falta de estrutura). Isso gera alívio imediato e identificação profunda. Funciona muito bem em momentos de transição, pré-oferta ou aquecimento emocional — e pode terminar diretamente na apresentação do seu método ou produto.
 
@@ -3628,7 +3762,7 @@ Tom: empático, preciso, sem drama. A força desse modelo está em nomear o que 
     funis:['meio','fundo'],
     modelos:[
       {
-        funil:['humanizar'], id:'live1', intencao:'Conexão', nome:'Colab',
+        funil:['humanizar'], id:'live1', intencao:'Categoria Vínculo Emocional', nome:'Colab',
         quandoUsar:'Use quando quiser fazer uma live com convidado ou parceiro. Gera autoridade por associação e aquece a audiência para uma oferta sutil no encerramento.',
         prompt:`Você vai gerar um roteiro completo de Live Colab de aproximadamente 30 minutos sobre o tema indicado.
 
@@ -3658,7 +3792,7 @@ Insira aqui a CTA definida no estoque de produção. Agradeça a presença de to
 Tom: conversa real entre duas pessoas que se respeitam. Leve, humano, sem roteiro engessado. A audiência deve sentir que está numa conversa privilegiada, não numa apresentação formal.`
       },
       {
-        funil:['envolver'], id:'live2', intencao:'Autoridade', nome:'Aula',
+        funil:['envolver'], id:'live2', intencao:'Categoria Autoridade', nome:'Aula',
         quandoUsar:'Use quando quiser ensinar um tema de forma aprofundada, posicionando-se como referência. Educa a audiência e prepara terreno para oferta no encerramento.',
         prompt:`Você vai gerar um roteiro completo de Live Aula de aproximadamente 30 minutos sobre o tema indicado.
 
@@ -3689,7 +3823,7 @@ Insira aqui a CTA definida no estoque de produção. Agradeça a presença. Conv
 Tom: professora que domina o assunto mas fala com simplicidade. Sem jargão técnico, sem didatismo excessivo. A audiência deve sair sentindo que aprendeu algo que pode usar hoje.`
       },
       {
-        funil:['humanizar'], id:'live3', intencao:'Narrativa', nome:'Bate-papo',
+        funil:['humanizar'], id:'live3', intencao:'Categoria Storytelling', nome:'Bate-papo',
         quandoUsar:'Use quando quiser compartilhar seu ponto de vista sobre um tema relevante para a audiência — pode ser um tópico da linha editorial ou um assunto do momento. Fortalece identidade, gera conexão e diferencia a criadora no mercado.',
         prompt:`Você vai gerar um roteiro completo de Live Posicionamento de aproximadamente 30 minutos sobre o tema indicado.
 
@@ -3731,7 +3865,7 @@ Tom: honesto, firme e acolhedor ao mesmo tempo. Você tem uma opinião e não te
     funis:['topo','meio','fundo'],
     modelos:[
       {
-        funil:['atrair'], id:'est1', intencao:'Narrativa', nome:'Texto escrito PAS',
+        funil:['atrair'], id:'est1', intencao:'Categoria Storytelling', nome:'Texto escrito PAS',
         quandoUsar:'Use quando quiser um post direto e impactante que espelha a dor, agita o sentimento e entrega uma reflexão transformadora. Ótimo para topo e meio de funil — gera salvamentos e identificação imediata.',
         prompt:`Você vai gerar um post estático completo (imagem + legenda) no modelo PAS sobre o tema indicado.
 
@@ -3766,7 +3900,7 @@ Sugira 5 hashtags relevantes para o tema e nicho da criadora.
 Tom: humano, preciso, sem romantizar nem dramatizar. Cada palavra tem intenção. A legenda deve parecer que foi escrita para uma pessoa específica — não para todo mundo.`
       },
       {
-        funil:['ofertar'], id:'est2', intencao:'Narrativa', nome:'Texto escrito AIDA',
+        funil:['ofertar'], id:'est2', intencao:'Categoria Storytelling', nome:'Texto escrito AIDA',
         quandoUsar:'Use quando quiser uma legenda mais desenvolvida que conduz a audiência por uma jornada emocional completa — da atenção até a ação. Funciona bem em todos os funis dependendo da CTA escolhida.',
         prompt:`Você vai gerar um post estático completo (imagem + legenda) no modelo AIDA sobre o tema indicado.
 
@@ -3810,7 +3944,7 @@ Tom: envolvente e humano. A legenda deve fluir como uma conversa — não como u
     funis:['topo','meio','fundo'],
     modelos:[
       {
-        funil:['humanizar'], id:'reels1', intencao:'Narrativa', nome:'Texto falado',
+        funil:['humanizar'], id:'reels1', intencao:'Categoria Storytelling', nome:'Texto falado',
         quandoUsar:'Use para qualquer objetivo e tópico. Estrutura narrativa completa com hook forte, desenvolvimento direto, virada emocional e CTA. Funciona para Reels de 30 a 90 segundos.',
         prompt:`Você vai gerar um roteiro completo de Reels Narrativo de 30 a 90 segundos sobre o tema indicado.
 
@@ -3847,7 +3981,7 @@ Sugira 5 hashtags relevantes para o tema e nicho da criadora.
 Tom: conversa real, ritmo natural, sem roteiro engessado. A criadora deve parecer que está falando espontaneamente — mesmo que esteja seguindo uma estrutura. Direto, humano e com intenção em cada palavra.`
       },
       {
-        funil:['atrair','relacionar'], id:'reels2', intencao:'Narrativa', nome:'Texto gravado PAS',
+        funil:['atrair','relacionar'], id:'reels2', intencao:'Categoria Storytelling', nome:'Texto gravado PAS',
         quandoUsar:'Use para espelhar a dor da audiência e apresentar a solução. Ideal para topo de funil — gera identificação imediata e salva muito. Funciona para Reels de 30 a 60 segundos.',
         prompt:`Você vai gerar um roteiro completo de Reels no formato PAS (Problema → Agitação → Solução) sobre o tema indicado.
 
@@ -3883,7 +4017,7 @@ Sugira 5 hashtags relevantes para o tema e nicho da criadora.
 Tom: próximo, humano, empático. A audiência deve sentir que a criadora entende exatamente o que ela vive.`
       },
       {
-        funil:['atrair','ofertar'], id:'reels3', intencao:'Narrativa', nome:'Texto gravado AIDA',
+        funil:['atrair','ofertar'], id:'reels3', intencao:'Categoria Storytelling', nome:'Texto gravado AIDA',
         quandoUsar:'Use para conduzir a audiência da atenção até a ação. Funciona bem para lançamentos, CTAs diretas e conteúdos que precisam converter. Reels de 30 a 60 segundos.',
         prompt:`Você vai gerar um roteiro completo de Reels no formato AIDA (Atenção → Interesse → Desejo → Ação) sobre o tema indicado.
 
@@ -4197,9 +4331,9 @@ function carregarModelosFicha(){
   } else {
     // Buscar em TODOS os formatos modelos com a intenção correspondente
     const INTENCAO_MAP = {
-      'antes-depois':'Antes e Depois','comparacao':'Comparação',
-      'autoridade':'Autoridade','narrativa':'Narrativa',
-      'analise':'Análise','conexao':'Conexão','inspiracional':'Inspiracional',
+      'antes-depois':'Categoria Antes e Depois','comparacao':'Categoria Dualidade',
+      'autoridade':'Categoria Autoridade','narrativa':'Categoria Storytelling',
+      'analise':'Categoria Opinião','conexao':'Categoria Vínculo Emocional','inspiracional':'Categoria Motivação',
     };
     const intencaoNome = INTENCAO_MAP[intencaoId]||intencaoId;
     FORMATOS_MODELOS.forEach(f=>{
@@ -4239,16 +4373,16 @@ function popularIntencoesFicha(objetivo){
   const permitidos = INTENCOES_OBJ[objetivo]||[];
   // Resetar
   sel.innerHTML = '<option value="">— Selecionar Intenção —</option>';
-  sel.innerHTML += '<option value="meus-modelos">⭐ Meus Modelos Autorais</option>';
+  sel.innerHTML += '<option value="meus-modelos">⭐ Categoria Modelos Autorais</option>';
 
   const opcoes = {
-    'antes-depois':'Antes e Depois',
-    'comparacao':'Comparação',
-    'autoridade':'Autoridade',
-    'narrativa':'Narrativa',
-    'analise':'Análise',
-    'conexao':'Conexão',
-    'inspiracional':'Inspiracional',
+    'antes-depois':'Categoria Antes e Depois',
+    'comparacao':'Categoria Dualidade',
+    'autoridade':'Categoria Autoridade',
+    'narrativa':'Categoria Storytelling',
+    'analise':'Categoria Opinião',
+    'conexao':'Categoria Vínculo Emocional',
+    'inspiracional':'Categoria Motivação',
     'live':'Live',
     'estatico':'Estático',
     'reels':'Reels',
@@ -4364,6 +4498,7 @@ function abrirFichaTecnica(idx, rodadaId){
   document.getElementById('ficha-modelo-banco').innerHTML = '<option value="">— Selecione o modelo —</option>';
   document.getElementById('ficha-modelo-preview').style.display='none';
   document.getElementById('ficha-cta').value = rodada.fichas?.[idx]?.cta||'';
+  document.getElementById('ficha-roteiro').value = rodada.fichas?.[idx]?.roteiro||'';
   document.querySelectorAll('#ficha-ctas .btn').forEach(b=>{b.style.background='transparent';b.style.fontWeight='400';});
   if(rodada.fichas?.[idx]?.formatoBanco){
     document.getElementById('ficha-formato-banco').value = rodada.fichas[idx].formatoBanco;
@@ -4423,6 +4558,7 @@ function salvarFicha(){
     formatoBanco: document.getElementById('ficha-formato-banco').value,
     modeloBanco: document.getElementById('ficha-modelo-banco').value,
     cta: document.getElementById('ficha-cta').value,
+    roteiro: document.getElementById('ficha-roteiro').value,
     linkDesign: document.getElementById('ficha-link-design').value,
     linkPost: document.getElementById('ficha-link-post').value,
     alcance: document.getElementById('ficha-alcance').value,
@@ -4479,7 +4615,7 @@ function gerarPromptTexto(idx, rodada){
 function abrirAula(){
   const modal = document.getElementById('modal-aula');
   const iframe = document.getElementById('aula-iframe');
-  iframe.src = 'https://www.youtube.com/embed/7L4hsxpv1Rc?autoplay=1';
+  iframe.src = 'https://www.youtube.com/embed/CMw2MsvUpdU?autoplay=1';
   modal.style.display='flex';
 }
 
@@ -4585,7 +4721,7 @@ function entrar(){
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
           <select class="form-input" id="ficha-formato-banco" onchange="carregarModelosFicha()" style="flex:1">
             <option value="">— Selecionar Intenção —</option>
-            <option value="meus-modelos">⭐ Meus Modelos Autorais</option>
+            <option value="meus-modelos">⭐ Categoria Modelos Autorais</option>
             <option value="antes-depois">Antes e Depois</option>
             <option value="comparacao">Comparação</option>
             <option value="autoridade">Autoridade</option>
@@ -4629,6 +4765,15 @@ function entrar(){
           <button class="btn btn-secondary btn-sm" onclick="copiarFichaPrompt()">📋 Copiar prompt</button>
         </div>
         <div id="ficha-prompt-preview" style="background:var(--cinza-light);border:1px solid var(--cinza-borda);border-radius:var(--r-md);padding:14px;font-size:12px;color:var(--texto);line-height:1.7;max-height:200px;overflow-y:auto;white-space:pre-wrap"></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ROTEIRO GERADO -->
+      <div class="form-group">
+        <label class="form-label">✍️ Roteiro gerado pela IA</label>
+        <div class="hint-azul" style="margin-bottom:8px">💡 Cole aqui o roteiro que a IA gerou — fica salvo para você consultar na hora de gravar ou escrever.</div>
+        <textarea class="form-input" id="ficha-roteiro" placeholder="Cole aqui o roteiro gerado pela IA..." style="min-height:150px;font-size:12px;line-height:1.6" oninput="autoSalvarRoteiro()"></textarea>
       </div>
 
       <div class="divider"></div>
