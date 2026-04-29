@@ -4396,18 +4396,18 @@ function popularIntencoesFicha(objetivo){
 }
 
 function atualizarPreviewFicha(){
-  const formatoId = document.getElementById('ficha-formato-banco').value;
   const modeloId = document.getElementById('ficha-modelo-banco').value;
   const preview = document.getElementById('ficha-modelo-preview');
   if(!modeloId){ preview.style.display='none'; return; }
 
+  // Buscar modelo em todos os formatos
   let modelo = null;
-  if(formatoId==='meus-modelos'){
-    modelo = meusModelos.find(m=>m.id===modeloId);
-  } else {
-    const formato = FORMATOS_MODELOS.find(f=>f.id===formatoId);
-    if(formato) modelo = formato.modelos.find(m=>m.id===modeloId);
+  for(const f of FORMATOS_MODELOS){
+    modelo = f.modelos.find(m=>m.id===modeloId);
+    if(modelo) break;
   }
+  // Verificar também em modelos autorais
+  if(!modelo) modelo = meusModelos.find(m=>m.id===modeloId);
 
   if(modelo?.quandoUsar||modelo?.quando){
     preview.style.display='block';
@@ -4607,8 +4607,27 @@ function gerarPromptTexto(idx, rodada){
   prompt += `\nTema do conteúdo: ${conteudo}`;
   prompt += `\nObjetivo: ${NOMES_OBJETIVO[rodada.objetivo]}`;
   prompt += `\nFormato: ${rodada.formato}`;
-  if(rodada.cta) prompt += `\nCTA definida: ${rodada.cta}`;
-  if(rodada.modeloPrompt) prompt += `\n\nESTRUTURA DO ROTEIRO:\n${rodada.modeloPrompt}`;
+
+  // CTA da ficha técnica ou do estoque
+  const ctaFicha = document.getElementById('ficha-cta')?.value || rodada.cta || '';
+  if(ctaFicha) prompt += `\nCTA definida: ${ctaFicha}`;
+
+  // Modelo da ficha técnica
+  const modeloId = document.getElementById('ficha-modelo-banco')?.value;
+  if(modeloId){
+    let modeloObj = null;
+    for(const f of FORMATOS_MODELOS){
+      modeloObj = f.modelos.find(m=>m.id===modeloId);
+      if(modeloObj) break;
+    }
+    if(!modeloObj) modeloObj = meusModelos.find(m=>m.id===modeloId);
+    if(modeloObj?.prompt||modeloObj?.estrutura){
+      prompt += `\n\nESTRUTURA DO ROTEIRO — ${modeloObj.nome}:\n${modeloObj.prompt||modeloObj.estrutura}`;
+    }
+  } else if(rodada.modeloPrompt){
+    prompt += `\n\nESTRUTURA DO ROTEIRO:\n${rodada.modeloPrompt}`;
+  }
+
   return prompt;
 }
 
@@ -4618,7 +4637,7 @@ function abrirAula(){
   modal.style.display='block';
   // Pequeno delay para garantir que o modal está visível antes de carregar o vídeo
   setTimeout(()=>{
-    iframe.src = `https://www.youtube.com/embed/CMw2MsvUpdU?autoplay=1&rel=0&modestbranding=1`;
+    iframe.src = `https://player.vimeo.com/video/1187558631?autoplay=1&title=0&byline=0&portrait=0`;
   }, 100);
 }
 
@@ -4865,7 +4884,7 @@ function entrar(){
       <button onclick="fecharAula()" style="background:rgba(255,255,255,.1);border:none;color:#fff;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:11px;font-weight:600">✕ Fechar</button>
     </div>
     <div style="position:relative;padding-bottom:56.25%;height:0;background:#000">
-      <iframe id="aula-iframe" width="100%" height="100%" style="position:absolute;top:0;left:0;width:100%;height:100%" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      <iframe id="aula-iframe" width="100%" height="100%" style="position:absolute;top:0;left:0;width:100%;height:100%" src="" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
     </div>
 </div>
 
