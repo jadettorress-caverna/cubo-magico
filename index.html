@@ -1249,10 +1249,6 @@ function gerarDossie(){
   .section-divider{height:1px;background:#E8EDF2;margin:5mm 0}
   .footer{position:absolute;bottom:10mm;left:18mm;right:18mm;display:flex;justify-content:space-between;font-size:9px;color:#95A5A6;border-top:1px solid #E8EDF2;padding-top:3mm}
   @media print {
-  body > *:not(#modal-relatorio-roteiros) { display:none !important; }
-  #modal-relatorio-roteiros > div:first-child { display:none !important; }
-  #modal-relatorio-roteiros { position:static !important; padding:0 !important; }
-}
     body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
     .page{page-break-after:always}
   }
@@ -2361,7 +2357,7 @@ function gerarRelatorioRoteiros(rodadaId){
   .sem-roteiro { font-size:12px; color:#aaa; font-style:italic; }
   .cta { margin-top:10px; font-size:12px; color:${cor}; font-weight:600; }
   .footer { margin-top:40px; padding-top:16px; border-top:1px solid #eee; font-size:11px; color:#aaa; text-align:center; }
-  @media print { body { padding:20px; } .item { break-inside:avoid; } }
+  @media print { body { padding:20px; } .item { break-inside:avoid; } .toolbar { display:none !important; } }
 </style>
 </head>
 <body>
