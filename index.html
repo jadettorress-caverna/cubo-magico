@@ -4615,7 +4615,7 @@ function gerarPromptTexto(idx, rodada){
 function abrirAula(){
   const modal = document.getElementById('modal-aula');
   const iframe = document.getElementById('aula-iframe');
-  iframe.src = 'https://www.youtube.com/embed/CMw2MsvUpdU?autoplay=1';
+  iframe.src = `https://www.youtube.com/embed/CMw2MsvUpdU?autoplay=1&rel=0&modestbranding=1`;
   modal.style.display='flex';
 }
 
@@ -4862,7 +4862,7 @@ function entrar(){
       <button onclick="fecharAula()" style="background:rgba(255,255,255,.1);border:none;color:#fff;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:11px;font-weight:600">✕ Fechar</button>
     </div>
     <div style="position:relative;padding-bottom:56.25%;height:0;background:#000">
-      <iframe id="aula-iframe" width="100%" height="100%" style="position:absolute;top:0;left:0;width:100%;height:100%" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <iframe id="aula-iframe" width="100%" height="100%" style="position:absolute;top:0;left:0;width:100%;height:100%" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
 </div>
 
