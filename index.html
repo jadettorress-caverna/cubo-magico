@@ -4615,8 +4615,11 @@ function gerarPromptTexto(idx, rodada){
 function abrirAula(){
   const modal = document.getElementById('modal-aula');
   const iframe = document.getElementById('aula-iframe');
-  iframe.src = `https://www.youtube.com/embed/CMw2MsvUpdU?autoplay=1&rel=0&modestbranding=1`;
-  modal.style.display='flex';
+  modal.style.display='block';
+  // Pequeno delay para garantir que o modal está visível antes de carregar o vídeo
+  setTimeout(()=>{
+    iframe.src = `https://www.youtube.com/embed/CMw2MsvUpdU?autoplay=1&rel=0&modestbranding=1`;
+  }, 100);
 }
 
 function fecharAula(){
