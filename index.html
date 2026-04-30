@@ -805,11 +805,11 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
       <div class="form-group">
         <label class="form-label">Formato</label>
         <div style="display:flex;gap:8px;flex-wrap:wrap" id="rod-formatos">
-          <button class="btn btn-ghost btn-sm" onclick="selecionarFormato('Carrossel',this)">🎴 Carrossel</button>
-          <button class="btn btn-ghost btn-sm" onclick="selecionarFormato('Reels',this)">🎬 Reels</button>
-          <button class="btn btn-ghost btn-sm" onclick="selecionarFormato('Estático',this)">🖼️ Estático</button>
-          <button class="btn btn-ghost btn-sm" onclick="selecionarFormato('Live',this)">📡 Live</button>
-          <button class="btn btn-ghost btn-sm" onclick="selecionarFormato('Stories',this)">⭕ Stories</button>
+          <button class="btn btn-ghost btn-sm" style="border:1px solid var(--cinza-borda)" onclick="selecionarFormato('Carrossel',this)">🎴 Carrossel</button>
+          <button class="btn btn-ghost btn-sm" style="border:1px solid var(--cinza-borda)" onclick="selecionarFormato('Reels',this)">🎬 Reels</button>
+          <button class="btn btn-ghost btn-sm" style="border:1px solid var(--cinza-borda)" onclick="selecionarFormato('Foto+Legenda',this)">🖼️ Foto+Legenda</button>
+          <button class="btn btn-ghost btn-sm" style="border:1px solid var(--cinza-borda)" onclick="selecionarFormato('Live',this)">📡 Live</button>
+
         </div>
       </div>
 
@@ -3860,7 +3860,7 @@ Tom: honesto, firme e acolhedor ao mesmo tempo. Você tem uma opinião e não te
   },
   {
     id:'estatico',
-    nome:'Formato Estático',
+    nome:'Formato Foto+Legenda',
     cor:'green',
     bgColor:'#D1FAE5',
     borderColor:'#6EE7B7',
@@ -3869,7 +3869,7 @@ Tom: honesto, firme e acolhedor ao mesmo tempo. Você tem uma opinião e não te
     funis:['topo','meio','fundo'],
     modelos:[
       {
-        funil:['atrair'], id:'est1', intencao:'Categoria Storytelling', nome:'Texto escrito PAS',
+        funil:['atrair'], id:'est1', intencao:'Categoria Storytelling', nome:'Texto legenda PAS',
         quandoUsar:'Use quando quiser um post direto e impactante que espelha a dor, agita o sentimento e entrega uma reflexão transformadora. Ótimo para topo e meio de funil — gera salvamentos e identificação imediata.',
         prompt:`Você vai gerar um post estático completo (imagem + legenda) no modelo PAS sobre o tema indicado.
 
@@ -3904,7 +3904,7 @@ Sugira 5 hashtags relevantes para o tema e nicho da criadora.
 Tom: humano, preciso, sem romantizar nem dramatizar. Cada palavra tem intenção. A legenda deve parecer que foi escrita para uma pessoa específica — não para todo mundo.`
       },
       {
-        funil:['ofertar'], id:'est2', intencao:'Categoria Storytelling', nome:'Texto escrito AIDA',
+        funil:['ofertar'], id:'est2', intencao:'Categoria Storytelling', nome:'Texto legenda AIDA',
         quandoUsar:'Use quando quiser uma legenda mais desenvolvida que conduz a audiência por uma jornada emocional completa — da atenção até a ação. Funciona bem em todos os funis dependendo da CTA escolhida.',
         prompt:`Você vai gerar um post estático completo (imagem + legenda) no modelo AIDA sobre o tema indicado.
 
@@ -3948,44 +3948,7 @@ Tom: envolvente e humano. A legenda deve fluir como uma conversa — não como u
     funis:['topo','meio','fundo'],
     modelos:[
       {
-        funil:['humanizar'], id:'reels1', intencao:'Categoria Storytelling', nome:'Texto falado',
-        quandoUsar:'Use para qualquer objetivo e tópico. Estrutura narrativa completa com hook forte, desenvolvimento direto, virada emocional e CTA. Funciona para Reels de 30 a 90 segundos.',
-        prompt:`Você vai gerar um roteiro completo de Reels Narrativo de 30 a 90 segundos sobre o tema indicado.
-
-IDENTIDADE DA MARCA E AUDIÊNCIA:
-Use as informações do briefing da criadora e do perfil da audiência para personalizar toda a linguagem, exemplos e tom.
-
-ESTRUTURA OBRIGATÓRIA:
-
-HOOK — PRIMEIROS 3 SEGUNDOS (1 frase)
-A frase de abertura que para o scroll imediatamente. Deve ser dita olhando direto para a câmera, com intenção. Pode ser:
-- Uma afirmação provocadora: "Você está fazendo [X] do jeito errado."
-- Uma pergunta direta: "Por que você ainda não consegue [resultado]?"
-- Uma verdade incômoda: "Ninguém te contou isso sobre [tema]."
-- Uma promessa específica: "Em 60 segundos você vai entender por que [situação]."
-
-DESENVOLVIMENTO (15–40 segundos)
-Aprofunde o tema em 3 blocos curtos e rítmicos — cada um com 1 ideia central:
-Bloco 1: Contextualize o problema ou situação — o que está acontecendo, o que a audiência vive.
-Bloco 2: Aprofunde — por que isso acontece, qual é a raiz, o que a maioria não percebe.
-Bloco 3: Plante a virada — mostre que existe outro caminho, outra perspectiva, outra possibilidade.
-
-VIRADA — O MOMENTO DE OURO (5–10 segundos)
-A frase que resume tudo — simples, memorável, que a pessoa vai querer salvar ou compartilhar. É o coração do Reels. Deve soar como uma verdade que ela sempre soube mas nunca tinha ouvido assim.
-
-CTA FINAL (3–5 segundos)
-Insira aqui a CTA definida no estoque de produção. Deve ser dito com naturalidade — não como anúncio, mas como conversa.
-
-LEGENDA SUGERIDA
-Escreva uma legenda curta (3–5 linhas) que complemente o vídeo sem repetir o roteiro. Pode ser uma reflexão adicional, uma pergunta para os comentários ou uma continuação do raciocínio.
-
-HASHTAGS
-Sugira 5 hashtags relevantes para o tema e nicho da criadora.
-
-Tom: conversa real, ritmo natural, sem roteiro engessado. A criadora deve parecer que está falando espontaneamente — mesmo que esteja seguindo uma estrutura. Direto, humano e com intenção em cada palavra.`
-      },
-      {
-        funil:['atrair','relacionar'], id:'reels2', intencao:'Categoria Storytelling', nome:'Texto gravado PAS',
+        funil:['atrair','relacionar'], id:'reels2', intencao:'Categoria Storytelling', nome:'Roteiro Reels PAS',
         quandoUsar:'Use para espelhar a dor da audiência e apresentar a solução. Ideal para topo de funil — gera identificação imediata e salva muito. Funciona para Reels de 30 a 60 segundos.',
         prompt:`Você vai gerar um roteiro completo de Reels no formato PAS (Problema → Agitação → Solução) sobre o tema indicado.
 
@@ -4021,7 +3984,7 @@ Sugira 5 hashtags relevantes para o tema e nicho da criadora.
 Tom: próximo, humano, empático. A audiência deve sentir que a criadora entende exatamente o que ela vive.`
       },
       {
-        funil:['atrair','ofertar'], id:'reels3', intencao:'Categoria Storytelling', nome:'Texto gravado AIDA',
+        funil:['atrair','ofertar'], id:'reels3', intencao:'Categoria Storytelling', nome:'Roteiro Reels AIDA',
         quandoUsar:'Use para conduzir a audiência da atenção até a ação. Funciona bem para lançamentos, CTAs diretas e conteúdos que precisam converter. Reels de 30 a 60 segundos.',
         prompt:`Você vai gerar um roteiro completo de Reels no formato AIDA (Atenção → Interesse → Desejo → Ação) sobre o tema indicado.
 
@@ -4277,6 +4240,18 @@ function renderBancoModelos(){
                   return '';
                 }).filter((v,i,a)=>a.indexOf(v)===i).join(''):''}
                 ${m.intencao?`<span style="font-size:9px;padding:2px 7px;border-radius:8px;background:#F5F5F5;color:var(--cinza);font-weight:600;border:1px solid var(--cinza-borda)">${m.intencao}</span>`:''}
+                ${(()=>{
+                  let fmt='';
+                  FORMATOS_MODELOS.forEach(f=>{
+                    if(f.modelos.find(fm=>fm.id===m.id)){
+                      if(['antes-depois','comparacao','autoridade','narrativa','analise','conexao','inspiracional'].includes(f.id)) fmt='Carrossel';
+                      else if(f.id==='live') fmt='Live';
+                      else if(f.id==='estatico') fmt='Foto+Legenda';
+                      else if(f.id==='reels') fmt='Reels';
+                    }
+                  });
+                  return fmt?`<span style="font-size:9px;padding:2px 7px;border-radius:8px;background:#EEF2FF;color:#4F46E5;font-weight:600;border:1px solid #C7D2FE">${fmt}</span>`:'';
+                })()}
               </div>
               ${m.quandoUsar?`<div class="modelo-quando">${m.quandoUsar}</div>`:''}
             </div>
@@ -4284,7 +4259,6 @@ function renderBancoModelos(){
               ? `<button onclick="toggleModelo('${m.id}',this)" class="btn btn-ghost btn-sm" style="flex-shrink:0">Ver modelo</button>`
               : '<span style="font-size:10px;color:var(--cinza)">Em breve</span>'
             }
-          </div>
           ${temConteudo?`
           <div id="modelo-body-${m.id}" style="display:none">
             <div class="modelo-prompt">
@@ -4367,7 +4341,7 @@ function carregarModelosFicha(){
       if(f.modelos.find(fm=>fm.id===m.id)){
         if(f.id.startsWith('antes')||f.id==='comparacao'||f.id==='autoridade'||f.id==='narrativa'||f.id==='analise'||f.id==='conexao'||f.id==='inspiracional') formatoLabel='Carrossel';
         else if(f.id==='live') formatoLabel='Live';
-        else if(f.id==='estatico') formatoLabel='Estático';
+        else if(f.id==='estatico') formatoLabel='Foto+Legenda';
         else if(f.id==='reels') formatoLabel='Reels';
       }
     });
@@ -4400,7 +4374,7 @@ function popularIntencoesFicha(objetivo){
     'conexao':'Categoria Vínculo Emocional',
     'inspiracional':'Categoria Motivação',
     'live':'Live',
-    'estatico':'Estático',
+    'estatico':'Foto+Legenda',
     'reels':'Reels',
   };
 
@@ -4775,7 +4749,7 @@ function entrar(){
             <option value="conexao">Categoria Vínculo Emocional</option>
             <option value="inspiracional">Categoria Motivação</option>
             <option value="live">Live</option>
-            <option value="estatico">Estático</option>
+            <option value="estatico">Foto+Legenda</option>
             <option value="reels">Reels</option>
           </select>
           <select class="form-input" id="ficha-modelo-banco" onchange="atualizarPreviewFicha();regenerarPromptFicha()" style="flex:1">
