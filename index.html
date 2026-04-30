@@ -1427,7 +1427,7 @@ function gerarDossie(){
   dossieModal.innerHTML = `
     <div style="display:flex;gap:10px;margin-bottom:16px;position:sticky;top:0;z-index:10">
       <button onclick="document.body.classList.add('print-dossie');window.print();setTimeout(()=>document.body.classList.remove('print-dossie'),1000)" style="background:#1B7FD4;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer">🖨️ Imprimir / Salvar PDF</button>
-      <button onclick="document.getElementById('modal-dossie').style.display='none'" style="background:#fff;color:#0A1628;border:1px solid #ccc;padding:10px 24px;border-radius:8px;font-size:14px;cursor:pointer">✕ Fechar</button>
+      <button onclick="document.getElementById('modal-dossie') && document.getElementById('modal-dossie').style.display='none'" style="background:#fff;color:#0A1628;border:1px solid #ccc;padding:10px 24px;border-radius:8px;font-size:14px;cursor:pointer">✕ Fechar</button>
     </div>
     <div id="dossie-conteudo" style="background:#fff;width:210mm;box-shadow:0 4px 40px rgba(0,0,0,.3)">
       ${html}
@@ -1931,7 +1931,7 @@ let ctaSelecionada = '';
 
 function selecionarCTA(cta, el){
   ctaSelecionada = cta;
-  document.getElementById('rod-cta').value = cta;
+  const _rcta = document.getElementById('rod-cta'); if(_rcta) _rcta.value = cta;
   document.querySelectorAll('#rod-ctas .btn').forEach(b=>b.className='btn btn-ghost btn-sm');
   el.className='btn btn-primary btn-sm';
 }
@@ -2039,7 +2039,7 @@ function criarRodada(){
   }
   const nome = document.getElementById('rod-nome').value ||
     `${NOMES_OBJETIVO[objetivoSelecionado]} — ${formatoSelecionado}`;
-  const mes = document.getElementById('rod-mes').value || '';
+  const mes = '';
   const rodada = {
     id: Date.now(),
     nome, objetivo: objetivoSelecionado, formato: formatoSelecionado,
@@ -2051,11 +2051,11 @@ function criarRodada(){
   closeModal('modal-nova-rodada');
   // Reset
   document.getElementById('rod-nome').value='';
-  document.getElementById('rod-mes').value='';
+  const _rmes = document.getElementById('rod-mes'); if(_rmes) _rmes.value='';
   
   
   const rmb = document.getElementById('rod-modelo-banco'); if(rmb) rmb.innerHTML='<option value="">— Selecione o modelo —</option>';
-  document.getElementById('rod-modelo-preview').style.display='none';
+  const _rmp=document.getElementById('rod-modelo-preview'); if(_rmp) _rmp.style.display='none';
   objetivoSelecionado=''; formatoSelecionado=''; ctaSelecionada='';
   document.querySelectorAll('#rod-objetivos .objetivo-card').forEach(c=>c.style.outline='none');
   document.querySelectorAll('#rod-formatos .btn').forEach(b=>b.className='btn btn-ghost btn-sm');
@@ -2835,7 +2835,7 @@ const MATRIZ = [
 const OBJETIVOS_ORDEM = ['atrair','envolver','relacionar','ofertar','fidelizar','humanizar'];
 
 function gerarDistribuicao(){
-  const id = parseInt(document.getElementById('dist-rodada').value);
+  const id = 0; // dist-rodada removido
   const rodada = rodadas.find(r=>r.id===id);
   const cont = document.getElementById('dist-conteudo');
   if(!rodada){
@@ -2886,7 +2886,7 @@ function gerarDistribuicao(){
 
 function copiarDistribuicao(){
   const topicos = dados.topicos || Array(12).fill('');
-  const id = parseInt(document.getElementById('dist-rodada').value);
+  const id = 0; // dist-rodada removido
   const rodada = rodadas.find(r=>r.id===id);
   if(!rodada){notif('Selecione uma rodada primeiro');return;}
   const objIdx = OBJETIVOS_ORDEM.indexOf(rodada.objetivo);
