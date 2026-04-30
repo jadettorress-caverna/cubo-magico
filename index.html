@@ -4628,8 +4628,6 @@ function gerarPromptTexto(idx, rodada){
     if(modeloObj?.prompt||modeloObj?.estrutura){
       prompt += `\n\nESTRUTURA DO ROTEIRO — ${modeloObj.nome}:\n${modeloObj.prompt||modeloObj.estrutura}`;
     }
-  } else if(rodada.modeloPrompt){
-    prompt += `\n\nESTRUTURA DO ROTEIRO:\n${rodada.modeloPrompt}`;
   }
 
   return prompt;
