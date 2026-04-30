@@ -4333,18 +4333,30 @@ function carregarModelosFicha(){
       .filter(m=> !objetivo || m.objetivo===objetivo)
       .map(m=>({id:m.id, nome:m.nome, quando:m.quando||'', prompt:m.prompt}));
   } else {
-    // Buscar em TODOS os formatos modelos com a intenção correspondente
     const INTENCAO_MAP = {
-      'antes-depois':'Categoria Antes e Depois','comparacao':'Categoria Dualidade',
-      'autoridade':'Categoria Autoridade','narrativa':'Categoria Storytelling',
-      'analise':'Categoria Opinião','conexao':'Categoria Vínculo Emocional','inspiracional':'Categoria Motivação',
+      'antes-depois':'Categoria Antes e Depois',
+      'comparacao':'Categoria Dualidade',
+      'autoridade':'Categoria Autoridade',
+      'narrativa':'Categoria Storytelling',
+      'analise':'Categoria Opinião',
+      'conexao':'Categoria Vínculo Emocional',
+      'inspiracional':'Categoria Motivação',
     };
-    const intencaoNome = INTENCAO_MAP[intencaoId]||intencaoId;
-    FORMATOS_MODELOS.forEach(f=>{
-      f.modelos.forEach(m=>{
-        if(m.intencao===intencaoNome) modelos.push(m);
+    const FORMATO_IDS = ['live','estatico','reels'];
+
+    if(FORMATO_IDS.includes(intencaoId)){
+      // Buscar todos os modelos do formato diretamente
+      const fmt = FORMATOS_MODELOS.find(f=>f.id===intencaoId);
+      if(fmt) modelos = fmt.modelos;
+    } else {
+      const intencaoNome = INTENCAO_MAP[intencaoId]||intencaoId;
+      FORMATOS_MODELOS.forEach(f=>{
+        f.modelos.forEach(m=>{
+          if(m.intencao===intencaoNome) modelos.push(m);
+        });
       });
-    });
+    }
+    notif(`${modelos.length} modelos encontrados`);
   }
 
   modelos.forEach(m=>{
@@ -4366,12 +4378,12 @@ function carregarModelosFicha(){
 
 function popularIntencoesFicha(objetivo){
   const INTENCOES_OBJ = {
-    atrair:    ['antes-depois','comparacao','narrativa'],
-    envolver:  ['autoridade','analise'],
-    relacionar:['narrativa','conexao'],
-    ofertar:   ['narrativa','conexao'],
-    fidelizar: ['narrativa','autoridade'],
-    humanizar: ['inspiracional','antes-depois'],
+    atrair:    ['antes-depois','comparacao','narrativa','live','estatico','reels'],
+    envolver:  ['autoridade','analise','live','estatico','reels'],
+    relacionar:['narrativa','conexao','live','estatico','reels'],
+    ofertar:   ['narrativa','conexao','live','estatico','reels'],
+    fidelizar: ['narrativa','autoridade','live','estatico','reels'],
+    humanizar: ['inspiracional','antes-depois','live','estatico','reels'],
   };
   const sel = document.getElementById('ficha-formato-banco');
   const permitidos = INTENCOES_OBJ[objetivo]||[];
@@ -4397,6 +4409,15 @@ function popularIntencoesFicha(objetivo){
       sel.innerHTML += `<option value="${val}">${label}</option>`;
     }
   });
+}
+
+function regenerarPromptFicha(){
+  const rodada = rodadas.find(r=>r.id==fichaAtual.rodadaId);
+  if(!rodada) return;
+  const promptTexto = gerarPromptTexto(fichaAtual.idx, rodada);
+  const preview = document.getElementById('ficha-prompt-preview');
+  if(preview) preview.textContent = promptTexto;
+  window._fichaPrompt = promptTexto;
 }
 
 function atualizarPreviewFicha(){
@@ -4757,7 +4778,7 @@ function entrar(){
             <option value="estatico">Estático</option>
             <option value="reels">Reels</option>
           </select>
-          <select class="form-input" id="ficha-modelo-banco" onchange="atualizarPreviewFicha()" style="flex:1">
+          <select class="form-input" id="ficha-modelo-banco" onchange="atualizarPreviewFicha();regenerarPromptFicha()" style="flex:1">
             <option value="">— Selecione o modelo —</option>
           </select>
         </div>
