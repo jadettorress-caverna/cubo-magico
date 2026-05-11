@@ -588,18 +588,9 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
           <button class="btn btn-primary btn-sm" id="btn-copiar-temas" onclick="copiarPromptTemas()" style="display:none">Copiar prompt</button>
         </div>
         <div class="card-body">
-          <div class="hint-azul" style="margin-bottom:14px">💡 Selecione o conjunto de tópicos e o objetivo, copie o prompt gerado e cole na sua IA. Ela vai sugerir 1 tema para cada tópico. Depois cole os temas ao lado de cada tópico abaixo.</div>
-          <!-- SELETOR DE CONJUNTO DE TÓPICOS -->
-          <div style="margin-bottom:16px">
-            <div style="font-size:11px;font-weight:700;color:var(--cinza);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Escolha o conjunto de tópicos:</div>
-            <div style="display:flex;gap:8px">
-              <button id="conj-metodo" onclick="selecionarConjuntoTopicos('metodo',this)" class="btn btn-sm" style="background:var(--azul);color:#fff;font-size:12px">🎯 Tópicos do Assunto Principal</button>
-              <button id="conj-audiencia" onclick="selecionarConjuntoTopicos('audiencia',this)" class="btn btn-sm" style="background:var(--cinza-light);color:var(--cinza);font-size:12px">🧠 Tópicos da Persona</button>
-              <button id="conj-territorios" onclick="selecionarConjuntoTopicos('territorios',this)" class="btn btn-sm" style="background:var(--cinza-light);color:var(--cinza);font-size:12px">🗺️ Tópicos de Conexão Emocional</button>
-            </div>
-          </div>
+          <div class="hint-azul" style="margin-bottom:14px">💡 Escolha o objetivo do seu estoque. O conjunto de tópicos indicado será selecionado automaticamente. Copie o prompt gerado e cole na sua IA. Ela vai sugerir 1 tema para cada tópico. Depois cole os temas ao lado de cada tópico abaixo.</div>
           <!-- OBJETIVOS -->
-          <div style="margin-bottom:14px">
+          <div style="margin-bottom:16px">
             <div style="font-size:11px;font-weight:700;color:var(--cinza);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Escolha o objetivo do estoque de conteúdo:</div>
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap" id="obj-temas-btns">
               <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('atrair',this)" style="border-color:var(--atrair);color:var(--atrair)">🟠 Atrair</button>
@@ -609,6 +600,15 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
               <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('fidelizar',this)" style="border-color:var(--fidelizar);color:var(--fidelizar)">🟣 Fidelizar</button>
               <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('humanizar',this)" style="border-color:var(--humanizar);color:var(--humanizar)">🔵 Humanizar</button>
               <button class="btn btn-primary btn-sm" id="btn-copiar-temas" onclick="copiarPromptTemas()" style="display:none;margin-left:auto">📋 Copiar prompt</button>
+            </div>
+          </div>
+          <!-- CONJUNTO DE TÓPICOS INDICADO -->
+          <div style="margin-bottom:14px">
+            <div style="font-size:11px;font-weight:700;color:var(--cinza);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Conjunto de tópicos indicado:</div>
+            <div style="display:flex;gap:8px">
+              <button id="conj-metodo" onclick="selecionarConjuntoTopicos('metodo',this)" class="btn btn-sm" style="background:var(--cinza-light);color:var(--cinza);font-size:12px">🎯 Tópicos do Assunto Principal</button>
+              <button id="conj-audiencia" onclick="selecionarConjuntoTopicos('audiencia',this)" class="btn btn-sm" style="background:var(--cinza-light);color:var(--cinza);font-size:12px">🧠 Tópicos da Persona</button>
+              <button id="conj-territorios" onclick="selecionarConjuntoTopicos('territorios',this)" class="btn btn-sm" style="background:var(--cinza-light);color:var(--cinza);font-size:12px">🗺️ Tópicos de Conexão Emocional</button>
             </div>
           </div>
           <div id="prompt-temas-preview" style="display:none;background:var(--cinza-light);border:1px solid var(--cinza-borda);border-radius:var(--r-md);padding:14px;font-size:13px;color:var(--texto);line-height:1.8"></div>
@@ -1633,6 +1633,48 @@ function selecionarObjetivoTema(objetivo, el){
   el.style.background = BGS[objetivo];
   el.style.fontWeight = '700';
   el.style.transform = 'scale(1.05)';
+
+  // Mapeamento de afinidade: objetivo → conjunto indicado
+  const INDICADO = {
+    atrair:    'audiencia',
+    envolver:  'metodo',
+    relacionar:'metodo',
+    ofertar:   'territorios',
+    fidelizar: 'audiencia',
+    humanizar: 'territorios'
+  };
+  const NOME_CONJUNTO = {
+    metodo:      'Tópicos do Assunto Principal',
+    audiencia:   'Tópicos da Persona',
+    territorios: 'Tópicos de Conexão Emocional'
+  };
+
+  const conjuntoIndicado = INDICADO[objetivo];
+
+  // Selecionar automaticamente o conjunto indicado
+  const btnIndicado = document.getElementById('conj-' + conjuntoIndicado);
+  if(btnIndicado) btnIndicado.click();
+
+  // Mostrar mensagem de indicação
+  let msgEl = document.getElementById('indicacao-conjunto-msg');
+  if(!msgEl){
+    msgEl = document.createElement('div');
+    msgEl.id = 'indicacao-conjunto-msg';
+    msgEl.style.cssText = 'margin-top:10px;padding:10px 14px;border-radius:8px;font-size:12px;line-height:1.5;border:1px solid;display:flex;align-items:flex-start;gap:8px;';
+    const conjBtns = document.getElementById('conj-metodo');
+    if(conjBtns && conjBtns.parentNode) conjBtns.parentNode.insertAdjacentElement('afterend', msgEl);
+  }
+  const cores_msg = {
+    metodo:      {bg:'#EBF4FF', border:'#BFDBFE', cor:'#1e40af'},
+    audiencia:   {bg:'#F5EEFF', border:'#DDD6FE', cor:'#6B21A8'},
+    territorios: {bg:'#EDFBF3', border:'#A7F3D0', cor:'#166534'}
+  };
+  const c = cores_msg[conjuntoIndicado];
+  msgEl.style.background = c.bg;
+  msgEl.style.borderColor = c.border;
+  msgEl.style.color = c.cor;
+  msgEl.innerHTML = '💡 <span>Você é livre para escolher o conjunto de tópicos, mas te indico <strong>' + NOME_CONJUNTO[conjuntoIndicado] + '</strong> para o objetivo <strong>' + objetivo.charAt(0).toUpperCase() + objetivo.slice(1) + '</strong>.</span>';
+  msgEl.style.display = 'flex';
 
   // Pré-selecionar objetivo no modal de gerar estoque
   window._objetivoTemaSelecionado = objetivo;
