@@ -585,7 +585,6 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
       <div class="card" style="margin-bottom:20px">
         <div class="card-header">
           <span class="card-title">📋 Gerar temas por objetivo</span>
-          <button class="btn btn-primary btn-sm" id="btn-copiar-temas" onclick="copiarPromptTemas()" style="display:none">Copiar prompt</button>
         </div>
         <div class="card-body">
           <div class="hint-azul" style="margin-bottom:14px">💡 Escolha o objetivo do seu estoque. O conjunto de tópicos indicado será selecionado automaticamente. Copie o prompt gerado e cole na sua IA. Ela vai sugerir 1 tema para cada tópico. Depois cole os temas ao lado de cada tópico abaixo.</div>
@@ -599,7 +598,7 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
               <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('ofertar',this)" style="border-color:var(--ofertar);color:var(--ofertar)">🔴 Ofertar</button>
               <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('fidelizar',this)" style="border-color:var(--fidelizar);color:var(--fidelizar)">🟣 Fidelizar</button>
               <button class="btn btn-ghost btn-sm" onclick="selecionarObjetivoTema('humanizar',this)" style="border-color:var(--humanizar);color:var(--humanizar)">🔵 Humanizar</button>
-              <button class="btn btn-primary btn-sm" id="btn-copiar-temas" onclick="copiarPromptTemas()" style="display:none;margin-left:auto">📋 Copiar prompt</button>
+
             </div>
           </div>
           <!-- CONJUNTO DE TÓPICOS INDICADO -->
@@ -612,6 +611,9 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
             </div>
           </div>
           <div id="prompt-temas-preview" style="display:none;background:var(--cinza-light);border:1px solid var(--cinza-borda);border-radius:var(--r-md);padding:14px;font-size:13px;color:var(--texto);line-height:1.8"></div>
+          <div id="btn-copiar-temas-wrapper" style="display:none;margin-top:10px;text-align:right">
+            <button class="btn btn-primary btn-sm" id="btn-copiar-temas" onclick="copiarPromptTemas()">📋 Copiar prompt</button>
+          </div>
         </div>
       </div>
 
@@ -890,7 +892,7 @@ function goTo(panel, btn){
     renderTopicosMontagem();
     // Limpar gerador de temas ao entrar na tela
     const prev = document.getElementById('prompt-temas-preview');
-    const btn = document.getElementById('btn-copiar-temas');
+    const btn = document.getElementById('btn-copiar-temas-wrapper');
     if(prev) prev.style.display='none';
     if(btn) btn.style.display='none';
     document.querySelectorAll('#obj-temas-btns .btn').forEach(b=>{
@@ -1614,12 +1616,29 @@ function selecionarConjuntoTopicos(conjunto, el){
     btn.style.background = c===conjunto ? cores[c].bg : 'var(--cinza-light)';
     btn.style.color = c===conjunto ? cores[c].cor : 'var(--cinza)';
   });
-  // Resetar prompt
-  window._promptTemasAtual = null;
-  const _ptp=document.getElementById('prompt-temas-preview'); if(_ptp) _ptp.style.display='none';
-  const _bct=document.getElementById('btn-copiar-temas'); if(_bct) _bct.style.display='none';
-  document.querySelectorAll('#obj-temas-btns .btn').forEach(b=>b.style.fontWeight='400');
-  window._objetivoTemaSelecionado = null;
+  // Regenerar prompt se já tem objetivo selecionado, sem criar loop
+  if(window._objetivoTemaSelecionado){
+    dados = JSON.parse(localStorage.getItem('cubo_dados')||'{}');
+    const topicos = getTopicosConjunto();
+    const nomeConjunto = getNomeConjunto();
+    const assunto = dados['top-assunto']||dados['id-assunto']||'[preencha seu assunto principal na aba Tópicos]';
+    const listaTopicos = topicos.map((t,i)=>`${i+1}. ${t||'Tópico '+(i+1)}`).join('\n');
+    const regra = REGRAS_OBJETIVO[window._objetivoTemaSelecionado];
+    const objetivo = window._objetivoTemaSelecionado;
+    const formatoFinal = objetivo === 'atrair'
+      ? `Me entregue exatamente 12 temas, numerados de 1 a 12, um por linha, identificando o eixo entre parênteses:\n1. [tema] (DOR)\n2. [tema] (DESEJO)\n...\n\nATENÇÃO: Entregue apenas o tema em uma linha — máximo 15 palavras. Sem desenvolvimento, sem explicação, sem parágrafo. Apenas o tema numerado.`
+      : objetivo === 'humanizar'
+      ? `Me entregue exatamente 12 temas, numerados de 1 a 12, um por linha, no formato:\n1. [tema] (MOMENTO PESSOAL)\n2. [tema] (TENDÊNCIA/MERCADO)\n...\n\nATENÇÃO: Entregue apenas o tema em uma linha — máximo 15 palavras. Sem desenvolvimento, sem explicação, sem parágrafo. Apenas o tema numerado.`
+      : objetivo === 'relacionar'
+      ? `Me entregue exatamente 12 temas, numerados de 1 a 12, um por linha, no formato:\n1. [tema] (OPINIÃO)\n2. [tema] (PROVOCAÇÃO)\n...\n\nATENÇÃO: Entregue apenas o tema em uma linha — máximo 15 palavras. Sem desenvolvimento, sem explicação, sem parágrafo. Apenas o tema numerado.`
+      : `Me entregue exatamente 12 temas, numerados de 1 a 12, um por linha, no formato:\n1. [tema]\n2. [tema]\n...\n\nATENÇÃO: Entregue apenas o tema em uma linha — máximo 15 palavras. Sem desenvolvimento, sem explicação, sem parágrafo. Apenas o tema numerado.`;
+    const prompt = `Meu assunto principal é: ${assunto}\n\nMeus 12 tópicos de ${nomeConjunto} são:\n${listaTopicos}\n\n${regra}\n\n${formatoFinal}`;
+    const preview = document.getElementById('prompt-temas-preview');
+    if(preview){ preview.style.display='block'; preview.textContent = prompt; }
+    const wrapper = document.getElementById('btn-copiar-temas-wrapper');
+    if(wrapper) wrapper.style.display='block';
+    window._promptTemasAtual = prompt;
+  }
   renderTopicosMontagem();
 }
 
@@ -1658,7 +1677,7 @@ function selecionarObjetivoTema(objetivo, el){
     atrair:    'audiencia',
     envolver:  'metodo',
     relacionar:'territorios',
-    ofertar:   'territorios',
+    ofertar:   'metodo',
     fidelizar: 'audiencia',
     humanizar: 'territorios'
   };
@@ -1670,9 +1689,19 @@ function selecionarObjetivoTema(objetivo, el){
 
   const conjuntoIndicado = INDICADO[objetivo];
 
-  // Selecionar automaticamente o conjunto indicado
-  const btnIndicado = document.getElementById('conj-' + conjuntoIndicado);
-  if(btnIndicado) btnIndicado.click();
+  // Selecionar automaticamente o conjunto indicado (sem disparar loop)
+  conjuntoTopicosSelecionado = conjuntoIndicado;
+  const cores_conj = {
+    metodo:      {bg:'var(--azul)', cor:'#fff'},
+    audiencia:   {bg:'#8E44AD',     cor:'#fff'},
+    territorios: {bg:'#27AE60',     cor:'#fff'},
+  };
+  ['metodo','audiencia','territorios'].forEach(c=>{
+    const b = document.getElementById('conj-'+c);
+    if(!b) return;
+    b.style.background = c===conjuntoIndicado ? cores_conj[c].bg : 'var(--cinza-light)';
+    b.style.color = c===conjuntoIndicado ? cores_conj[c].cor : 'var(--cinza)';
+  });
 
   // Mostrar mensagem de indicação
   let msgEl = document.getElementById('indicacao-conjunto-msg');
@@ -1733,7 +1762,7 @@ ${formatoFinal}`;
   const preview = document.getElementById('prompt-temas-preview');
   preview.style.display='block';
   preview.textContent = prompt;
-  const _bct2=document.getElementById('btn-copiar-temas'); if(_bct2) _bct2.style.display='inline-flex';
+  const _bct2=document.getElementById('btn-copiar-temas-wrapper'); if(_bct2) _bct2.style.display='block';
   window._promptTemasAtual = prompt;
 }
 
