@@ -2244,7 +2244,8 @@ function calcularProgressoObjetivo(objetivo){
   estoques.forEach(r=>{
     for(let i=0;i<12;i++){
       total++;
-      if(r.status?.[i]==='pronto') prontos++;
+      const s = r.status?.[i];
+      if(s==='pronto' || s==='noar' || s==='producao') prontos++;
     }
   });
   return {total, prontos, pct: total>0 ? Math.round((prontos/total)*100) : 0};
@@ -2381,7 +2382,10 @@ function carregarEstoqueProducao(id){
         <div class="card-body" style="display:flex;align-items:center;gap:12px">
           <div style="width:12px;height:12px;border-radius:50%;background:${cor}"></div>
           <div style="flex:1">
-            <div style="font-size:15px;font-weight:700;color:var(--azul-dark)">${rodada.nome}</div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span id="nome-estoque-texto" style="font-size:15px;font-weight:700;color:var(--azul-dark)">${rodada.nome}</span>
+              <button onclick="editarNomeEstoque(${rodada.id})" title="Editar nome" style="background:none;border:none;cursor:pointer;color:var(--cinza);font-size:13px;padding:2px 4px;border-radius:4px" onmouseover="this.style.background='var(--cinza-light)'" onmouseout="this.style.background='none'">✏️</button>
+            </div>
             <div style="font-size:12px;color:var(--cinza)">${NOMES_OBJETIVO[rodada.objetivo]} · ${rodada.formato} · 12 temas</div>
           </div>
           <button class="btn btn-secondary btn-sm" onclick="gerarRelatorioRoteiros(${rodada.id})">📄 Relatório de Roteiros</button>
@@ -4759,6 +4763,36 @@ function entrar(){
   document.getElementById('splash').style.display='none';
   document.getElementById('app').style.display='flex';
   inicializar();
+}
+
+function editarNomeEstoque(id){
+  const rodada = rodadas.find(r=>r.id===id);
+  if(!rodada) return;
+  const span = document.getElementById('nome-estoque-texto');
+  if(!span) return;
+  const nomeAtual = rodada.nome;
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.value = nomeAtual;
+  input.style.cssText = 'font-size:15px;font-weight:700;color:var(--azul-dark);border:1px solid var(--azul);border-radius:4px;padding:2px 6px;width:260px;outline:none';
+  span.replaceWith(input);
+  input.focus();
+  input.select();
+  const salvar = ()=>{
+    const novoNome = input.value.trim() || nomeAtual;
+    rodada.nome = novoNome;
+    save();
+    const _nte = document.getElementById('prod-estoque-titulo');
+    if(_nte) _nte.textContent = novoNome;
+    const novoSpan = document.createElement('span');
+    novoSpan.id = 'nome-estoque-texto';
+    novoSpan.style.cssText = 'font-size:15px;font-weight:700;color:var(--azul-dark)';
+    novoSpan.textContent = novoNome;
+    input.replaceWith(novoSpan);
+    notif('Nome atualizado.');
+  };
+  input.addEventListener('blur', salvar);
+  input.addEventListener('keydown', e=>{ if(e.key==='Enter') input.blur(); if(e.key==='Escape'){ input.value=nomeAtual; input.blur(); } });
 }
 
 </script>
