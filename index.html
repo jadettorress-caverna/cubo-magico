@@ -4784,6 +4784,7 @@ function editarNomeEstoque(id){
     save();
     const _nte = document.getElementById('prod-estoque-titulo');
     if(_nte) _nte.textContent = novoNome;
+    carregarRodadasLista();
     const novoSpan = document.createElement('span');
     novoSpan.id = 'nome-estoque-texto';
     novoSpan.style.cssText = 'font-size:15px;font-weight:700;color:var(--azul-dark)';
