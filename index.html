@@ -1702,10 +1702,16 @@ function selecionarObjetivoTema(objetivo, el){
   const regra = REGRAS_OBJETIVO[objetivo];
 
   const formatoFinal = objetivo === 'atrair'
-    ? `Me entregue exatamente 12 temas, numerados de 1 a 12, um por linha, identificando o eixo entre parênteses:\n1. [tema] (DOR)\n2. [tema] (DESEJO)\n...`
+    ? `Me entregue exatamente 12 temas, numerados de 1 a 12, um por linha, identificando o eixo entre parênteses:\n1. [tema] (DOR)\n2. [tema] (DESEJO)\n...
+
+ATENÇÃO: Entregue apenas o tema em uma linha — máximo 15 palavras. Sem desenvolvimento, sem explicação, sem parágrafo. Apenas o tema numerado.`
     : objetivo === 'humanizar'
-    ? `Me entregue exatamente 12 temas, numerados de 1 a 12, um por linha, no formato:\n1. [tema] (MOMENTO PESSOAL)\n2. [tema] (TENDÊNCIA/MERCADO)\n...`
-    : `Me entregue exatamente 12 temas, numerados de 1 a 12, um por linha, no formato:\n1. [tema]\n2. [tema]\n...`;
+    ? `Me entregue exatamente 12 temas, numerados de 1 a 12, um por linha, no formato:\n1. [tema] (MOMENTO PESSOAL)\n2. [tema] (TENDÊNCIA/MERCADO)\n...
+
+ATENÇÃO: Entregue apenas o tema em uma linha — máximo 15 palavras. Sem desenvolvimento, sem explicação, sem parágrafo. Apenas o tema numerado.`
+    : `Me entregue exatamente 12 temas, numerados de 1 a 12, um por linha, no formato:\n1. [tema]\n2. [tema]\n...
+
+ATENÇÃO: Entregue apenas o tema em uma linha — máximo 15 palavras. Sem desenvolvimento, sem explicação, sem parágrafo. Apenas o tema numerado.`;
 
   const prompt = `Meu assunto principal é: ${assunto}
 
