@@ -1268,7 +1268,7 @@ function gerarDossie(){
     body.print-relatorio #modal-relatorio-roteiros { position:static !important; padding:0 !important; box-shadow:none !important; }
     body.print-relatorio #modal-relatorio-roteiros > div:first-child { display:none !important; }
     body.print-dossie > *:not(#modal-dossie) { display:none !important; }
-    body.print-dossie #modal-dossie { position:static !important; background:none !important; }
+    body.print-dossie #modal-dossie { position:static !important; background:none !important; padding:0 !important; }
     body.print-dossie #modal-dossie > div:first-child { display:none !important; }
   }
 </style>
@@ -4953,16 +4953,16 @@ function gerarPDFTodosEstoques(){
     const temas = d['temas_'+rodada.objetivo] || d.temas || Array(12).fill('');
 
     const linhas = Array.from({length:12}).map((_,i)=>`
-      <div style="display:flex;gap:10px;padding:4mm 0;border-bottom:1px solid #F0F2F5;align-items:flex-start">
+      <div style="display:flex;gap:10px;padding:2.2mm 0;border-bottom:1px solid #F0F2F5;align-items:baseline">
         <span style="font-weight:700;color:#95A5A6;min-width:18px">${i+1}.</span>
-        <div style="flex:1">
-          <div style="font-size:9px;color:#95A5A6;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1mm">${topicos[i]||'Tópico '+(i+1)+' (não preenchido)'}</div>
-          <div style="font-size:11px;color:#0A1628">${temas[i]||'Tema não gerado'}</div>
+        <div style="flex:1;font-size:11px;line-height:1.3">
+          <span style="font-size:9px;font-weight:700;color:${cor};text-transform:uppercase;letter-spacing:.3px">${topicos[i]||'Tópico '+(i+1)+' (não preenchido)'}</span>
+          <span style="font-size:11px;color:#0A1628"> — ${temas[i]||'Tema não gerado'}</span>
         </div>
       </div>`).join('');
 
     return `
-<div class="page" style="${idx>0?'page-break-before:always;':''}border-top:8px solid ${cor}">
+<div class="page" style="${idx>0?'page-break-before:always;':''}border-top:4px solid ${cor};padding-top:16mm">
   <div class="header">
     <div>
       <div class="logo-text" style="color:${cor}">🎲 Cubo Mágico</div>
@@ -5005,15 +5005,15 @@ function gerarPDFTodosEstoques(){
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:'Inter',sans-serif;color:#0A1628;background:#fff}
   .page{width:210mm;min-height:297mm;padding:20mm 18mm;position:relative}
-  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10mm;padding-bottom:5mm;border-bottom:2px solid #E8EDF2}
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8mm;padding-bottom:4mm;border-bottom:2px solid #E8EDF2}
   .logo-text{font-family:'Playfair Display',serif;font-size:22px;font-weight:700}
   .logo-sub{font-size:10px;color:#95A5A6;text-transform:uppercase;letter-spacing:2px;margin-top:2px}
   .header-right{text-align:right;font-size:10px;color:#95A5A6}
   .header-right strong{display:block;font-size:13px;color:#0A1628;font-weight:700}
   .page-title{font-family:'Playfair Display',serif;font-size:18px;color:#0A1628;margin-bottom:3mm}
-  .meta{display:flex;gap:16px;flex-wrap:wrap;font-size:10px;color:#95A5A6;margin-bottom:8mm;padding-bottom:5mm;border-bottom:1px solid #E8EDF2}
+  .meta{display:flex;gap:16px;flex-wrap:wrap;font-size:10px;color:#95A5A6;margin-bottom:6mm;padding-bottom:4mm;border-bottom:1px solid #E8EDF2}
   .meta strong{color:#0A1628}
-  .conjunto-tag{display:inline-block;font-size:10px;font-weight:700;padding:2mm 4mm;border-radius:4px;margin-bottom:6mm}
+  .conjunto-tag{display:inline-block;font-size:10px;font-weight:700;padding:2mm 4mm;border-radius:4px;margin-bottom:4mm}
   .card{border:1px solid #E8EDF2;border-radius:8px;overflow:hidden;border-left:4px solid}
   .card-head{padding:3mm 5mm;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #E8EDF2}
   .card-body{padding:2mm 5mm}
@@ -5021,7 +5021,7 @@ function gerarPDFTodosEstoques(){
   @media print {
     body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
     body.print-todos-estoques > *:not(#modal-todos-estoques-pdf) { display:none !important; }
-    body.print-todos-estoques #modal-todos-estoques-pdf { position:static !important; background:none !important; }
+    body.print-todos-estoques #modal-todos-estoques-pdf { position:static !important; background:none !important; padding:0 !important; }
     body.print-todos-estoques #modal-todos-estoques-pdf > div:first-child { display:none !important; }
   }
 </style>
@@ -5077,11 +5077,11 @@ function gerarPDFEstoque(rodadaId){
   const temas = d['temas_'+rodada.objetivo] || d.temas || Array(12).fill('');
 
   const linhas = Array.from({length:12}).map((_,i)=>`
-    <div style="display:flex;gap:10px;padding:4mm 0;border-bottom:1px solid #F0F2F5;align-items:flex-start">
+    <div style="display:flex;gap:10px;padding:2.2mm 0;border-bottom:1px solid #F0F2F5;align-items:baseline">
       <span style="font-weight:700;color:#95A5A6;min-width:18px">${i+1}.</span>
-      <div style="flex:1">
-        <div style="font-size:9px;color:#95A5A6;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1mm">${topicos[i]||'Tópico '+(i+1)+' (não preenchido)'}</div>
-        <div style="font-size:11px;color:#0A1628">${temas[i]||'Tema não gerado'}</div>
+      <div style="flex:1;font-size:11px;line-height:1.3">
+        <span style="font-size:9px;font-weight:700;color:${cor};text-transform:uppercase;letter-spacing:.3px">${topicos[i]||'Tópico '+(i+1)+' (não preenchido)'}</span>
+        <span style="font-size:11px;color:#0A1628"> — ${temas[i]||'Tema não gerado'}</span>
       </div>
     </div>`).join('');
 
@@ -5095,15 +5095,15 @@ function gerarPDFEstoque(rodadaId){
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:'Inter',sans-serif;color:#0A1628;background:#fff}
   .page{width:210mm;min-height:297mm;padding:20mm 18mm;position:relative}
-  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10mm;padding-bottom:5mm;border-bottom:2px solid ${cor}}
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8mm;padding-bottom:4mm;border-bottom:2px solid ${cor}}
   .logo-text{font-family:'Playfair Display',serif;font-size:22px;color:${cor};font-weight:700}
   .logo-sub{font-size:10px;color:#95A5A6;text-transform:uppercase;letter-spacing:2px;margin-top:2px}
   .header-right{text-align:right;font-size:10px;color:#95A5A6}
   .header-right strong{display:block;font-size:13px;color:#0A1628;font-weight:700}
   .page-title{font-family:'Playfair Display',serif;font-size:18px;color:#0A1628;margin-bottom:3mm}
-  .meta{display:flex;gap:16px;flex-wrap:wrap;font-size:10px;color:#95A5A6;margin-bottom:8mm;padding-bottom:5mm;border-bottom:1px solid #E8EDF2}
+  .meta{display:flex;gap:16px;flex-wrap:wrap;font-size:10px;color:#95A5A6;margin-bottom:6mm;padding-bottom:4mm;border-bottom:1px solid #E8EDF2}
   .meta strong{color:#0A1628}
-  .conjunto-tag{display:inline-block;background:${cor}18;color:${cor};font-size:10px;font-weight:700;padding:2mm 4mm;border-radius:4px;margin-bottom:6mm}
+  .conjunto-tag{display:inline-block;background:${cor}18;color:${cor};font-size:10px;font-weight:700;padding:2mm 4mm;border-radius:4px;margin-bottom:4mm}
   .card{border:1px solid #E8EDF2;border-radius:8px;overflow:hidden;border-left:4px solid ${cor}}
   .card-head{background:${cor}10;padding:3mm 5mm;font-size:10px;font-weight:700;color:${cor};text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #E8EDF2}
   .card-body{padding:2mm 5mm}
@@ -5111,7 +5111,7 @@ function gerarPDFEstoque(rodadaId){
   @media print {
     body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
     body.print-estoque > *:not(#modal-estoque-pdf) { display:none !important; }
-    body.print-estoque #modal-estoque-pdf { position:static !important; background:none !important; }
+    body.print-estoque #modal-estoque-pdf { position:static !important; background:none !important; padding:0 !important; }
     body.print-estoque #modal-estoque-pdf > div:first-child { display:none !important; }
   }
 </style>
@@ -5221,7 +5221,7 @@ function gerarPDFTopicos(){
     body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
     .page{page-break-after:always}
     body.print-topicos > *:not(#modal-topicos-pdf) { display:none !important; }
-    body.print-topicos #modal-topicos-pdf { position:static !important; background:none !important; }
+    body.print-topicos #modal-topicos-pdf { position:static !important; background:none !important; padding:0 !important; }
     body.print-topicos #modal-topicos-pdf > div:first-child { display:none !important; }
   }
 </style>
