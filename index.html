@@ -650,12 +650,12 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
       <div class="card">
         <div class="card-header">
           <span class="card-title">Montagem do Cubo</span>
-          <div style="display:flex;gap:8px">
-            <button class="btn btn-ghost btn-sm" onclick="gerarPDFTodosEstoques()">📚 Baixar todos os estoques</button>
-            <button class="btn btn-primary btn-sm" onclick="openModal('modal-nova-rodada')">⚡ Gerar estoque</button>
-          </div>
+          <button class="btn btn-primary btn-sm" onclick="openModal('modal-nova-rodada')">⚡ Gerar estoque</button>
         </div>
         <div class="card-body">
+          <div style="display:flex;justify-content:flex-end;margin-bottom:14px">
+            <button class="btn btn-ghost btn-sm" onclick="gerarPDFTodosEstoques()">📚 Baixar todos os estoques</button>
+          </div>
           <div id="rodadas-lista">
             <div class="empty"><div class="empty-icon">🎲</div><div class="empty-text">Nenhum estoque criado ainda.<br>Crie seu primeiro objetivo de produção.</div></div>
           </div>
