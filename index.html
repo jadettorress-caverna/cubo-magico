@@ -1707,15 +1707,68 @@ function montarListaTopicosComPergunta(topicos, detalhes){
 // Quebra o texto colado em blocos de tópico estruturado (Nome / Definição / Fala sobre / Pergunta central),
 // separados por uma linha de travessões. Se não achar blocos, cai no modo simples (1 linha = 1 tópico).
 function parseTopicosEstruturados(texto){
-  // Se a IA repetiu uma lista simples antes do formato estruturado, descarta esse trecho duplicado.
+  // Descarta qualquer linha introdutória antes do primeiro tópico numerado
+  const primeiroNum = texto.search(/^\s*\d+[\.)]/m);
+  if(primeiroNum > 0) texto = texto.slice(primeiroNum);
+
+  // Se a IA repetiu lista simples antes do estruturado, descarta esse trecho
   const marcador = texto.search(/defini[cç][aã]o\s*:|fala sobre\s*:|pergunta central\s*:/i);
   if(marcador !== -1){
     const antes = texto.slice(0, marcador);
     const linhasAntes = antes.split('\n');
     let idxTitulo = -1;
     for(let i=linhasAntes.length-1;i>=0;i--){
-      if(/^\s*\d+[\.\)\-\s]+\S/.test(linhasAntes[i])){ idxTitulo = i; break; }
+      if(/^\s*\d+[\.)\-\s]+\S/.test(linhasAntes[i])){ idxTitulo = i; break; }
     }
+    if(idxTitulo > 0){
+      texto = linhasAntes.slice(idxTitulo).join('\n') + texto.slice(marcador);
+    }
+  }
+
+  let blocos = texto.split(/\n\s*[─\-—]{3,}\s*\n/).map(b=>b.trim()).filter(Boolean);
+  // Filtra blocos sem número no início (introductions/titles from AI)
+  blocos = blocos.filter(b => /^\s*\d+[\.)\-\s]/.test(b) || /\n\s*(defini|fala sobre|pergunta central)/i.test(b));
+
+  if(blocos.length<=1){
+    const linhas = texto.split('\n')
+      .map(l=>l.replace(/^\d+[\.)\-\s]+/,'').replace(/\*+/g,'').trim())
+      .filter(l=>l.length>0);
+    return linhas.slice(0,12).map(nome=>({nome, definicao:'', falaSobre:'', pergunta:''}));
+  }
+
+  return blocos.slice(0,12).map(bloco=>{
+    const linhas = bloco.split('\n').map(l=>l.trim()).filter(l=>l.length>0);
+    let nome = linhas[0] ? linhas[0].replace(/^\d+[\.)\-\s]+/,'').replace(/\*+/g,'').trim() : '';
+    let definicao='', falaSobreItens=[], pergunta='';
+    let modo = null;
+    for(let i=1;i<linhas.length;i++){
+      const l = linhas[i];
+      if(/^defini[cç][aã]o\s*:/i.test(l)){
+        modo='def';
+        const val = l.replace(/^defini[cç][aã]o\s*:/i,'').replace(/\*+/g,'').trim();
+        if(val) definicao = val;
+      } else if(/^(aqui voc[eê] fala sobre|fala sobre)\s*:?/i.test(l)){
+        modo='fala';
+        const val = l.replace(/^(aqui voc[eê] fala sobre|fala sobre)\s*:?/i,'').replace(/\*+/g,'').trim();
+        if(val) falaSobreItens.push(val);
+      } else if(/^pergunta central\s*:?/i.test(l)){
+        modo='pergunta';
+        const val = l.replace(/^pergunta central\s*:?/i,'').replace(/\*+/g,'').replace(/^[\u201c"']+|[\u201d"']+$/g,'').trim();
+        if(val) pergunta = val;
+      } else if(/^[\*\-•]/.test(l)){
+        if(modo==='fala') falaSobreItens.push(l.replace(/^[\*\-•]\s*/,'').replace(/\*+/g,'').trim());
+      } else {
+        // Linha de continuação — associa ao campo ativo
+        const val = l.replace(/\*+/g,'').replace(/^[\u201c"']+|[\u201d"']+$/g,'').trim();
+        if(!val) continue;
+        if(modo==='def' && !definicao) definicao = val;
+        else if(modo==='pergunta' && !pergunta) pergunta = val;
+        else if(modo==='fala') falaSobreItens.push(val);
+      }
+    }
+    return { nome, definicao, falaSobre: falaSobreItens.join(', '), pergunta };
+  });
+}
     if(idxTitulo > 0){
       texto = linhasAntes.slice(idxTitulo).join('\n') + texto.slice(marcador);
     }
@@ -5191,11 +5244,27 @@ function gerarPDFTopicos(){
   const topicosAudiencia = (d.topicosAudiencia||Array(12).fill('')).map((t,i)=>t||`Tópico ${i+1} (não preenchido)`);
   const topicosTerritorios = (d.topicosTerritorios||Array(12).fill('')).map((t,i)=>t||`Tópico ${i+1} (não preenchido)`);
 
-  const listaHTML = (lista) => lista.map((t,i)=>`
-    <div style="display:flex;gap:8px;padding:3mm 0;border-bottom:1px solid #F0F2F5">
-      <span style="font-weight:700;color:#95A5A6;min-width:18px">${i+1}.</span>
-      <span style="color:#0A1628">${t}</span>
-    </div>`).join('');
+  const detalhesMetodo = d.topicosDetalhe||Array(12).fill(null);
+  const detalhesAudiencia = d.topicosAudienciaDetalhe||Array(12).fill(null);
+  const detalhesTerritorios = d.topicosTerritoriosDetalhe||Array(12).fill(null);
+
+  const listaHTML = (lista, detalhes, cor) => lista.map((t,i)=>{
+    const det = detalhes && detalhes[i];
+    const explicacao = det ? [
+      det.definicao ? `<div style="font-size:9px;color:#555;margin-top:1.5mm"><em>${det.definicao}</em></div>` : '',
+      det.pergunta  ? `<div style="font-size:9px;color:${cor||'#1B7FD4'};margin-top:1mm;font-style:italic">"${det.pergunta}"</div>` : ''
+    ].join('') : '';
+    return `
+    <div style="padding:3mm 0;border-bottom:1px solid #F0F2F5">
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <span style="font-weight:700;color:#95A5A6;min-width:18px;font-size:11px">${i+1}.</span>
+        <div style="flex:1">
+          <span style="color:#0A1628;font-weight:600">${t}</span>
+          ${explicacao}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
 
   const html = `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -5257,7 +5326,7 @@ function gerarPDFTopicos(){
 
   <div class="card">
     <div class="card-head">12 tópicos estruturais — Método</div>
-    <div class="card-body">${listaHTML(topicosMetodo)}</div>
+    <div class="card-body">${listaHTML(topicosMetodo, detalhesMetodo, '#1B7FD4')}</div>
   </div>
 
   <div class="footer">
@@ -5283,7 +5352,7 @@ function gerarPDFTopicos(){
 
   <div class="card purple">
     <div class="card-head">12 territórios emocionais — Mapa Psicoemocional</div>
-    <div class="card-body">${listaHTML(topicosAudiencia)}</div>
+    <div class="card-body">${listaHTML(topicosAudiencia, detalhesAudiencia, '#8E44AD')}</div>
   </div>
 
   <div class="footer">
@@ -5309,7 +5378,7 @@ function gerarPDFTopicos(){
 
   <div class="card green">
     <div class="card-head">12 territórios de conexão humana</div>
-    <div class="card-body">${listaHTML(topicosTerritorios)}</div>
+    <div class="card-body">${listaHTML(topicosTerritorios, detalhesTerritorios, '#27AE60')}</div>
   </div>
 
   <div class="footer">
