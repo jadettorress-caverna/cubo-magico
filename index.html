@@ -1729,7 +1729,7 @@ function parseTopicosEstruturados(texto){
   }
   return blocos.slice(0,12).map(bloco=>{
     const linhas = bloco.split('\n').map(l=>l.trim()).filter(l=>l.length>0);
-    let nome = linhas[0] ? linhas[0].replace(/^\d+[\.\)\-\s]+/,'').trim() : '';
+    let nome = linhas[0] ? linhas[0].replace(/^\d+[\.\)\-\s]+/,'').replace(/\*+/g,'').trim() : '';
     let definicao='', falaSobreItens=[], pergunta='';
     let modo = null;
     for(let i=1;i<linhas.length;i++){
