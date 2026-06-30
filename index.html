@@ -2604,7 +2604,7 @@ function carregarEstoqueProducao(id){
         const sc = statusConfig[status]||statusConfig.pendente;
         return `
         <div class="prod-item" id="prod-item-${i}" style="border-left:3px solid ${status==='noar'?'var(--fidelizar)':status==='pronto'?'var(--relacionar)':status==='producao'?'#F5C400':'var(--cinza-borda)'}">
-          <div class="prod-num" style="background:${cor}">${posicao+1}</div>
+          <div class="prod-num" style="background:${cor}">${i+1}</div>
           <div class="prod-info" style="flex:1;min-width:0">
             <div class="prod-topico" style="font-size:13px">${tema||'<em style="color:var(--cinza);font-weight:400">Tema '+(i+1)+' não definido</em>'}</div>
             <div class="prod-meta">${NOMES_OBJETIVO[rodada.objetivo]} · ${rodada.formato}${rodada.modeloNome?' · '+rodada.modeloNome:''}${topicos[i]?' · <span style="color:var(--azul)">T'+(i+1)+': '+topicos[i]+'</span>':''}</div>
@@ -4982,7 +4982,7 @@ function gerarCronogramaProducao(rodadaId){
 
   const linhas = ordemExibicao.map((i,posicao)=>`
     <div style="display:flex;gap:10px;padding:3mm 0;border-bottom:1px solid #F0F2F5;align-items:baseline">
-      <span style="font-weight:700;color:#95A5A6;min-width:18px">${posicao+1}.</span>
+      <span style="font-weight:700;color:#95A5A6;min-width:18px">T${i+1}.</span>
       <div style="flex:1;font-size:11px;line-height:1.3">
         <span style="font-size:9px;font-weight:700;color:${cor};text-transform:uppercase;letter-spacing:.3px">${topicos[i]||'Tópico '+(i+1)+' (não preenchido)'}</span>
         <span style="font-size:11px;color:#0A1628"> — ${temas[i]||'Tema não gerado'}</span>
