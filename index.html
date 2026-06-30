@@ -2586,6 +2586,7 @@ function carregarEstoqueProducao(id){
             </div>
             <div style="font-size:12px;color:var(--cinza)">${NOMES_OBJETIVO[rodada.objetivo]} · ${rodada.formato} · 12 temas</div>
           </div>
+          <button class="btn btn-ghost btn-sm" onclick="gerarCronogramaProducao(${rodada.id})">🗓️ Cronograma de Produção</button>
           <button class="btn btn-secondary btn-sm" onclick="gerarRelatorioRoteiros(${rodada.id})">📄 Relatório de Roteiros</button>
         </div>
       </div>
@@ -4962,6 +4963,118 @@ function entrar(){
   document.getElementById('splash').style.display='none';
   document.getElementById('app').style.display='flex';
   inicializar();
+}
+
+function gerarCronogramaProducao(rodadaId){
+  const rodada = rodadas.find(r=>r.id==rodadaId);
+  if(!rodada) return;
+
+  const temas = dados['temas_'+rodada.objetivo] || dados.temas || Array(12).fill('');
+  const topicos = dados.topicos || Array(12).fill('');
+  const cor = CORES_OBJETIVO[rodada.objetivo]||'#1B7FD4';
+  const cfg = OBJ_CONFIG[rodada.objetivo];
+  const nome = dados['id-nome']||'—';
+  const data = new Date().toLocaleDateString('pt-BR');
+
+  const objIdxOrdem = OBJETIVOS_ORDEM.indexOf(rodada.objetivo);
+  const sequenciaOrdem = objIdxOrdem>=0 ? MATRIZ_EMBARALHAMENTO[objIdxOrdem] : [1,2,3,4,5,6,7,8,9,10,11,12];
+  const ordemExibicao = sequenciaOrdem.map(n=>n-1);
+
+  const linhas = ordemExibicao.map((i,posicao)=>`
+    <div style="display:flex;gap:10px;padding:3mm 0;border-bottom:1px solid #F0F2F5;align-items:baseline">
+      <span style="font-weight:700;color:#95A5A6;min-width:18px">${posicao+1}.</span>
+      <div style="flex:1;font-size:11px;line-height:1.3">
+        <span style="font-size:9px;font-weight:700;color:${cor};text-transform:uppercase;letter-spacing:.3px">${topicos[i]||'Tópico '+(i+1)+' (não preenchido)'}</span>
+        <span style="font-size:11px;color:#0A1628"> — ${temas[i]||'Tema não gerado'}</span>
+      </div>
+    </div>`).join('');
+
+  const html = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Cronograma de Produção — ${rodada.nome}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;color:#0A1628;background:#fff}
+  .page{width:210mm;min-height:297mm;padding:20mm 18mm;position:relative}
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8mm;padding-bottom:4mm;border-bottom:2px solid ${cor}}
+  .logo-text{font-family:'Playfair Display',serif;font-size:22px;color:${cor};font-weight:700}
+  .logo-sub{font-size:10px;color:#95A5A6;text-transform:uppercase;letter-spacing:2px;margin-top:2px}
+  .header-right{text-align:right;font-size:10px;color:#95A5A6}
+  .header-right strong{display:block;font-size:13px;color:#0A1628;font-weight:700}
+  .page-title{font-family:'Playfair Display',serif;font-size:18px;color:#0A1628;margin-bottom:3mm}
+  .meta{display:flex;gap:16px;flex-wrap:wrap;font-size:10px;color:#95A5A6;margin-bottom:6mm;padding-bottom:4mm;border-bottom:1px solid #E8EDF2}
+  .meta strong{color:#0A1628}
+  .hint-box{background:${cor}10;border:1px solid ${cor}30;border-left:4px solid ${cor};border-radius:8px;padding:3mm 5mm;font-size:10px;color:#0A1628;line-height:1.5;margin-bottom:6mm}
+  .card{border:1px solid #E8EDF2;border-radius:8px;overflow:hidden;border-left:4px solid ${cor}}
+  .card-head{background:${cor}10;padding:3mm 5mm;font-size:10px;font-weight:700;color:${cor};text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #E8EDF2}
+  .card-body{padding:2mm 5mm}
+  .footer{position:absolute;bottom:10mm;left:18mm;right:18mm;display:flex;justify-content:space-between;font-size:9px;color:#95A5A6;border-top:1px solid #E8EDF2;padding-top:3mm}
+  @media print {
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body.print-cronograma > *:not(#modal-cronograma-pdf) { display:none !important; }
+    body.print-cronograma #modal-cronograma-pdf { position:static !important; background:none !important; padding:0 !important; }
+    body.print-cronograma #modal-cronograma-pdf > div:first-child { display:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="header">
+    <div>
+      <div class="logo-text">🎲 Cubo Mágico</div>
+      <div class="logo-sub">Cronograma de Produção</div>
+    </div>
+    <div class="header-right">
+      <strong>${nome}</strong>
+      Gerado em ${data}
+    </div>
+  </div>
+
+  <div class="page-title">${rodada.nome}</div>
+  <div class="meta">
+    <span><strong>Objetivo:</strong> ${NOMES_OBJETIVO[rodada.objetivo]||rodada.objetivo}</span>
+    <span><strong>Formato:</strong> ${rodada.formato}</span>
+  </div>
+
+  <div class="hint-box">📌 Sequência embaralhada do Cubo Mágico — mesma ordem que aparece na aba Produzir. Siga essa ordem para variar o ritmo emocional do seu conteúdo.</div>
+
+  <div class="card">
+    <div class="card-head">Ordem de produção sugerida</div>
+    <div class="card-body">${linhas}</div>
+  </div>
+
+  <div class="footer">
+    <span>Cronograma — ${rodada.nome}</span>
+    <span>${nome}</span>
+  </div>
+</div>
+
+</body>
+</html>`;
+
+  let modal = document.getElementById('modal-cronograma-pdf');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'modal-cronograma-pdf';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;flex-direction:column;align-items:center;overflow-y:auto;padding:20px';
+    document.body.appendChild(modal);
+  }
+
+  modal.innerHTML = `
+    <div style="display:flex;gap:10px;margin-bottom:16px;position:sticky;top:0;z-index:10">
+      <button onclick="document.body.classList.add('print-cronograma');var _ap=function(){document.body.classList.remove('print-cronograma');window.removeEventListener('afterprint',_ap);};window.addEventListener('afterprint',_ap);window.print();" style="background:${cor};color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer">🖨️ Imprimir / Salvar PDF</button>
+      <button onclick="document.body.classList.remove('print-cronograma');var m=document.getElementById('modal-cronograma-pdf');if(m){m.style.display='none';}" style="background:#fff;color:#0A1628;border:1px solid #ccc;padding:10px 24px;border-radius:8px;font-size:14px;cursor:pointer">✕ Fechar</button>
+    </div>
+    <div style="background:#fff;width:210mm;box-shadow:0 4px 40px rgba(0,0,0,.3)">
+      ${html}
+    </div>
+  `;
+
+  modal.style.display = 'flex';
 }
 
 
